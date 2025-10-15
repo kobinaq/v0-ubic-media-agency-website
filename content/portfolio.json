@@ -11,14 +11,14 @@
     {
       "id": "gordon-university",
       "title": "Gordon University ISO",
-      "category": "Print Design",
+      "category": "Videography",
       "image": "/placeholder.svg?height=600&width=800",
       "description": "Documentary-style storytelling for international students"
     },
     {
       "id": "nexus-it",
-      "title": "Nexus IT Systems",
-      "category": "Brand Identity",
+      "title": "Nexus IT Systems Website",
+      "category": "Web Design",
       "image": "/placeholder.svg?height=600&width=800",
       "description": "Professional digital presence for IT solutions company"
     },
@@ -31,14 +31,14 @@
     },
     {
       "id": "event-coverage",
-      "title": "Starbites Sip and Paint",
+      "title": "Corporate Event Coverage",
       "category": "Photography",
       "image": "/placeholder.svg?height=600&width=800",
       "description": "High-quality event photography and documentation"
     },
     {
       "id": "real-estate",
-      "title": "KNUST Real Estate Photography",
+      "title": "Real Estate Photography",
       "category": "Photography",
       "image": "/placeholder.svg?height=600&width=800",
       "description": "Professional property photography for listings"
@@ -52,15 +52,8 @@
     },
     {
       "id": "brand-video",
-      "title": "Corps Africa Mini Documentary",
+      "title": "Brand Story Video",
       "category": "Videography",
-      "image": "/placeholder.svg?height=600&width=800",
-      "description": "Cinematic brand storytelling and video production"
-    },
-    {
-      "id": "growth-solutions",
-      "title": "Growth Solution Website Design",
-      "category": "Web Design",
       "image": "/placeholder.svg?height=600&width=800",
       "description": "Cinematic brand storytelling and video production"
     }

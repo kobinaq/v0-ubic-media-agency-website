@@ -1,0 +1,61 @@
+{
+  "categories": ["All", "Photography", "Videography", "Web Design", "Brand Identity", "Print Design"],
+  "projects": [
+    {
+      "id": "starbites-food",
+      "title": "Starbites Menu Photography",
+      "category": "Photography",
+      "image": "/placeholder.svg?height=600&width=800",
+      "description": "Professional menu photography for social media content"
+    },
+    {
+      "id": "gordon-university",
+      "title": "Gordon University ISO",
+      "category": "Videography",
+      "image": "/placeholder.svg?height=600&width=800",
+      "description": "Documentary-style storytelling for international students"
+    },
+    {
+      "id": "nexus-it",
+      "title": "Nexus IT Systems Website",
+      "category": "Web Design",
+      "image": "/placeholder.svg?height=600&width=800",
+      "description": "Professional digital presence for IT solutions company"
+    },
+    {
+      "id": "haircessorize",
+      "title": "Haircessorize Brand Identity",
+      "category": "Brand Identity",
+      "image": "/placeholder.svg?height=600&width=800",
+      "description": "Bold brand identity for beauty products"
+    },
+    {
+      "id": "event-coverage",
+      "title": "Corporate Event Coverage",
+      "category": "Photography",
+      "image": "/placeholder.svg?height=600&width=800",
+      "description": "High-quality event photography and documentation"
+    },
+    {
+      "id": "real-estate",
+      "title": "Real Estate Photography",
+      "category": "Photography",
+      "image": "/placeholder.svg?height=600&width=800",
+      "description": "Professional property photography for listings"
+    },
+    {
+      "id": "print-materials",
+      "title": "Print Design Collection",
+      "category": "Print Design",
+      "image": "/placeholder.svg?height=600&width=800",
+      "description": "Flyers, posters, and promotional materials"
+    },
+    {
+      "id": "brand-video",
+      "title": "Brand Story Video",
+      "category": "Videography",
+      "image": "/placeholder.svg?height=600&width=800",
+      "description": "Cinematic brand storytelling and video production"
+    }
+  ]
+}

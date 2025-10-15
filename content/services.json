@@ -1,0 +1,40 @@
+{
+  "services": [
+    {
+      "id": "social-media",
+      "title": "Social Media Content Creation & Management",
+      "description": "From strategy to execution, we create thumb-stopping social content that builds communities and drives conversations.",
+      "icon": "share-2"
+    },
+    {
+      "id": "web-design",
+      "title": "Website Design & Development",
+      "description": "We design and develop clean, responsive, and user-centric websites that not only look great but also convert.",
+      "icon": "monitor"
+    },
+    {
+      "id": "brand-identity",
+      "title": "Brand Identity Development",
+      "description": "Whether you're launching or rebranding, we help define your brand's voice, look, and essence to stand out in a crowded marketplace.",
+      "icon": "palette"
+    },
+    {
+      "id": "brand-strategy",
+      "title": "Brand Strategy Consulting",
+      "description": "With deep market insights, we guide businesses to make smart brand decisions—from positioning to messaging to growth planning.",
+      "icon": "target"
+    },
+    {
+      "id": "photography-videography",
+      "title": "Photography & Videography",
+      "description": "Our in-house production team delivers high-quality visuals that bring your brand story to life across platforms.",
+      "icon": "camera"
+    },
+    {
+      "id": "print-production",
+      "title": "Print & Production",
+      "description": "From flyers and posters to banners and calendars, we deliver professional print materials that make your brand tangible.",
+      "icon": "printer"
+    }
+  ]
+}

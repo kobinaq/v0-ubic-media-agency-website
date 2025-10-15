@@ -1,0 +1,55 @@
+{
+  "packages": [
+    {
+      "id": "starter",
+      "name": "Brand Starter",
+      "description": "Perfect for startups and small businesses looking to establish their brand presence.",
+      "features": [
+        "Brand Identity Design (Logo + Color Palette)",
+        "Social Media Setup (3 Platforms)",
+        "Basic Website (5 Pages)",
+        "1 Month Social Media Management",
+        "Brand Guidelines Document"
+      ],
+      "priceGHS": 5000,
+      "priceUSD": 350,
+      "popular": false
+    },
+    {
+      "id": "growth",
+      "name": "Brand Growth",
+      "description": "Ideal for growing businesses ready to scale their brand and digital presence.",
+      "features": [
+        "Complete Brand Identity Package",
+        "Professional Website (10 Pages)",
+        "3 Months Social Media Management",
+        "Content Creation (20 Posts/Month)",
+        "1 Professional Photoshoot",
+        "Email Marketing Setup",
+        "Monthly Analytics Reports"
+      ],
+      "priceGHS": 12000,
+      "priceUSD": 850,
+      "popular": true
+    },
+    {
+      "id": "enterprise",
+      "name": "Brand Enterprise",
+      "description": "Comprehensive solution for established brands seeking full-service support.",
+      "features": [
+        "Full Brand Strategy & Positioning",
+        "Custom Website with Advanced Features",
+        "6 Months Social Media Management",
+        "Content Creation (40 Posts/Month)",
+        "2 Professional Photoshoots",
+        "1 Brand Video Production",
+        "Email Marketing Campaigns",
+        "Quarterly Brand Audits",
+        "Priority Support"
+      ],
+      "priceGHS": 25000,
+      "priceUSD": 1750,
+      "popular": false
+    }
+  ]
+}

@@ -26,11 +26,7 @@ export default function HomePage() {
           </div>
 
           <div className="mx-auto max-w-5xl text-center relative z-10">
-            <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full border border-accent/30 bg-accent/5">
-              <Sparkles className="h-4 w-4 text-accent" />
-              <span className="text-sm font-medium text-accent">Creative Excellence</span>
-            </div>
-
+           
             <h1 className="text-6xl md:text-7xl lg:text-8xl font-serif font-bold tracking-tight mb-8 text-balance leading-tight">
               Bold Brands That <span className="text-accent">Move Culture</span>
             </h1>

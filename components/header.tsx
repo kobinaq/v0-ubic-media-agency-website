@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 import Image from "next/image"
 import { useState } from "react"
@@ -77,10 +79,10 @@ export function Header() {
                 <Image
                   src="/logo.png"
                   alt={siteConfig.siteName}
-                  width={90}
-                  height={24}
+                  width={72}
+                  height={20}
                   priority
-                  className="h-auto w-auto max-h-8 md:max-h-10""
+                  className="h-auto w-auto max-h-8 md:max-h-10"
                 />
               </Link>
               <button

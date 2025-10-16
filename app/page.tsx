@@ -14,13 +14,18 @@ export default function HomePage() {
       <Header />
       <main>
         <section className="relative min-h-screen flex items-center justify-center px-6 pt-32 pb-20 overflow-hidden">
-          {/* Background gradient effect */}
           <div className="absolute inset-0 -z-10">
+            <img
+              src="/hero-creative-workspace.jpg"
+              alt="Creative workspace"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-black/60" />
             <div className="absolute top-0 left-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl opacity-30" />
             <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl opacity-20" />
           </div>
 
-          <div className="mx-auto max-w-5xl text-center">
+          <div className="mx-auto max-w-5xl text-center relative z-10">
             <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full border border-accent/30 bg-accent/5">
               <Sparkles className="h-4 w-4 text-accent" />
               <span className="text-sm font-medium text-accent">Creative Excellence</span>
@@ -66,10 +71,18 @@ export default function HomePage() {
               {services.services.slice(0, 6).map((service, index) => (
                 <Card
                   key={service.id}
-                  className={`border-accent/20 bg-card/50 backdrop-blur hover:border-accent/50 transition-all duration-300 hover:shadow-lg hover:shadow-accent/10 ${
+                  className={`border-accent/20 bg-card/50 backdrop-blur hover:border-accent/50 transition-all duration-300 hover:shadow-lg hover:shadow-accent/10 overflow-hidden group ${
                     index === 1 || index === 4 ? "md:row-span-2" : ""
                   }`}
                 >
+                  <div className="relative h-40 overflow-hidden bg-muted">
+                    <img
+                      src={`/service-${index + 1}.jpg`}
+                      alt={service.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  </div>
                   <CardContent className="p-8">
                     <div className="mb-6">
                       <div className="w-14 h-14 rounded-lg bg-accent/10 flex items-center justify-center border border-accent/20">
@@ -94,6 +107,38 @@ export default function HomePage() {
                   View All Services <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-32 px-6 bg-black/20">
+          <div className="mx-auto max-w-7xl">
+            <div className="mb-20">
+              <h2 className="text-5xl md:text-6xl font-serif font-bold mb-6 text-balance">Featured Work</h2>
+              <p className="text-lg text-muted-foreground max-w-2xl">
+                Explore our latest campaigns and brand transformations that have made an impact.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3, 4, 5, 6].map((item) => (
+                <div
+                  key={item}
+                  className="group relative aspect-square rounded-xl overflow-hidden border border-accent/20 hover:border-accent/50 transition-all duration-300 cursor-pointer"
+                >
+                  <img
+                    src={`/portfolio-${item}.jpg`}
+                    alt={`Portfolio project ${item}`}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                    <div>
+                      <h3 className="text-xl font-serif font-bold text-white mb-2">Project {item}</h3>
+                      <p className="text-sm text-white/80">Brand Strategy & Design</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>

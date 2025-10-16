@@ -1,5 +1,3 @@
-"use client"
-
 import Link from "next/link"
 import Image from "next/image"
 import { useState } from "react"
@@ -20,17 +18,17 @@ export function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
       <nav className="mx-auto max-w-7xl px-6 lg:px-8" aria-label="Global">
-        <div className="flex items-center justify-between py-6">
+        <div className="flex items-center justify-between py-4">
           {/* Logo Section */}
           <div className="flex lg:flex-1 items-center">
             <Link href="/" className="-m-1.5 p-1.5 flex items-center">
               <Image
                 src="/logo.png"
                 alt={siteConfig.siteName}
-                width={42}
-                height={12}
+                width={90}
+                height={24}
                 priority
-                className="h-auto w-auto"
+                className="h-auto w-auto max-h-8 md:max-h-10"
               />
             </Link>
           </div>
@@ -68,7 +66,7 @@ export function Header() {
           </div>
         </div>
       </nav>
-
+      
       {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className="lg:hidden" role="dialog" aria-modal="true">
@@ -77,11 +75,12 @@ export function Header() {
             <div className="flex items-center justify-between">
               <Link href="/" className="-m-1.5 p-1.5" onClick={() => setMobileMenuOpen(false)}>
                 <Image
-                  src="/logo.svg"
+                  src="/logo.png"
                   alt={siteConfig.siteName}
-                  width={120}
-                  height={34}
-                  className="h-auto w-auto"
+                  width={90}
+                  height={24}
+                  priority
+                  className="h-auto w-auto max-h-8 md:max-h-10""
                 />
               </Link>
               <button

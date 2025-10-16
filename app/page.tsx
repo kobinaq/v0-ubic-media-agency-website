@@ -1,13 +1,56 @@
+"use client"
+
 import Link from "next/link"
-import { ArrowRight, Sparkles } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { services } from "@/lib/content"
 import { Analytics } from "@/components/analytics"
+import portfolioData from "@/content/portfolio.json"
+
+// Helper: pick up to `n` projects from different categories
+function pickFeatured(projects, n = 3) {
+  const byCategory = projects.reduce((acc, p) => {
+    acc[p.category] = acc[p.category] || []
+    acc[p.category].push(p)
+    return acc
+  }, {})
+
+  const categories = Object.keys(byCategory)
+  const chosen = []
+
+  // Shuffle categories for variety
+  for (let i = categories.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[categories[i], categories[j]] = [categories[j], categories[i]]
+  }
+
+  for (const cat of categories) {
+    if (chosen.length >= n) break
+    const list = byCategory[cat]
+    if (list && list.length) {
+      // pick a random project from that category
+      const project = list[Math.floor(Math.random() * list.length)]
+      chosen.push(project)
+    }
+  }
+
+  // If not enough distinct categories, fill with remaining projects
+  if (chosen.length < n) {
+    const remaining = projects.filter((p) => !chosen.find((c) => c.id === p.id))
+    while (chosen.length < n && remaining.length) {
+      chosen.push(remaining.shift())
+    }
+  }
+
+  return chosen
+}
 
 export default function HomePage() {
+  const featured = pickFeatured(portfolioData.projects, 3)
+
   return (
     <>
       <Analytics />
@@ -26,7 +69,6 @@ export default function HomePage() {
           </div>
 
           <div className="mx-auto max-w-5xl text-center relative z-10">
-           
             <h1 className="text-6xl md:text-7xl lg:text-8xl font-serif font-bold tracking-tight mb-8 text-balance leading-tight">
               Bold Brands That <span className="text-accent">Move Culture</span>
             </h1>
@@ -111,21 +153,21 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[1, 2, 3, 4, 5, 6].map((item) => (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {featured.map((p) => (
                 <div
-                  key={item}
+                  key={p.id}
                   className="group relative aspect-square rounded-xl overflow-hidden border border-accent/20 hover:border-accent/50 transition-all duration-300 cursor-pointer"
                 >
                   <img
-                    src={`/portfolio-${item}.jpg`}
-                    alt={`Portfolio project ${item}`}
+                    src={p.image}
+                    alt={p.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                     <div>
-                      <h3 className="text-xl font-serif font-bold text-white mb-2">Project {item}</h3>
-                      <p className="text-sm text-white/80">Brand Strategy & Design</p>
+                      <h3 className="text-xl font-serif font-bold text-white mb-2">{p.title}</h3>
+                      <p className="text-sm text-white/80">{p.category} · {p.description}</p>
                     </div>
                   </div>
                 </div>

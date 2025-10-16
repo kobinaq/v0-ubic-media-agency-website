@@ -173,9 +173,23 @@ export default function HomePage() {
                 </div>
               ))}
             </div>
+            
+            {/* Button below grid */}
+            <div className="text-center mt-16">
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-accent/30 hover:bg-accent/10 bg-transparent"
+                asChild
+              >
+                <Link href="/portfolio">
+                  View Full Portfolio <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
           </div>
         </section>
-
+         
         <section className="py-32 px-6">
           <div className="mx-auto max-w-7xl">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">

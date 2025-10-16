@@ -80,11 +80,6 @@ export default function HomePage() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                   </div>
                   <CardContent className="p-8">
-                    <div className="mb-6">
-                      <div className="w-14 h-14 rounded-lg bg-accent/10 flex items-center justify-center border border-accent/20">
-                        <Sparkles className="h-7 w-7 text-accent" />
-                      </div>
-                    </div>
                     <h3 className="text-2xl font-serif font-bold mb-4">{service.title}</h3>
                     <p className="text-muted-foreground leading-relaxed">{service.description}</p>
                   </CardContent>

@@ -5,57 +5,57 @@
       "id": "starbites-food",
       "title": "Starbites Menu Photography",
       "category": "Photography",
-      "image": "/placeholder.svg?height=600&width=800",
-      "description": "Professional menu photography for social media content"
+      "image": "public/portfolio-1.jpg?height=600&width=800",
+      "description": "Professional menu photography for social media campaign"
     },
     {
       "id": "gordon-university",
       "title": "Gordon University ISO",
-      "category": "Videography",
-      "image": "/placeholder.svg?height=600&width=800",
-      "description": "Documentary-style storytelling for international students"
+      "category": "Print Design",
+      "image": "public/portfolio-2.jpg?height=600&width=800",
+      "description": "Shirt designs for international students at Gordon University"
     },
     {
       "id": "nexus-it",
       "title": "Nexus IT Systems Website",
-      "category": "Web Design",
-      "image": "/placeholder.svg?height=600&width=800",
-      "description": "Professional digital presence for IT solutions company"
+      "category": "Brand Identity",
+      "image": "public/portfolio-3.jpgg?height=600&width=800",
+      "description": "Professional redesign of Nexus IT Systems' visual identity"
     },
     {
       "id": "haircessorize",
-      "title": "Haircessorize Brand Identity",
+      "title": "Haircessorize Social Media Content",
       "category": "Brand Identity",
-      "image": "/placeholder.svg?height=600&width=800",
-      "description": "Bold brand identity for beauty products"
+      "image": "public/portfolio-4.jpg?height=600&width=800",
+      "description": "Bold social media content for Haircessorize"
     },
     {
-      "id": "event-coverage",
-      "title": "Corporate Event Coverage",
+      "id": "starbites-event-coverage",
+      "title": "Karaoke Event Coverage",
       "category": "Photography",
-      "image": "/placeholder.svg?height=600&width=800",
-      "description": "High-quality event photography and documentation"
+      "image": "public/portfolio-5.jpg?height=600&width=800",
+      "description": "High-quality event photography of a karaoke event at startbites"
     },
     {
       "id": "real-estate",
       "title": "Real Estate Photography",
       "category": "Photography",
-      "image": "/placeholder.svg?height=600&width=800",
+      "image": "public/portfolio-6.jpg?height=600&width=800",
       "description": "Professional property photography for listings"
     },
     {
       "id": "print-materials",
       "title": "Print Design Collection",
       "category": "Print Design",
-      "image": "/placeholder.svg?height=600&width=800",
-      "description": "Flyers, posters, and promotional materials"
+      "image": "public/portfolio-7.jpg?height=600&width=800",
+      "description": "Design and print of pull up banners for Sweat to gain"
     },
     {
       "id": "brand-video",
-      "title": "Brand Story Video",
+      "title": "Corps Africa Mini Documentary",
       "category": "Videography",
-      "image": "/placeholder.svg?height=600&width=800",
-      "description": "Cinematic brand storytelling and video production"
+      "image": "public/portfolio-8.jpg?height=600&width=800",
+      "description": "Cinematic storytelling of Corps Africa's training program"
     }
   ]
 }

@@ -27,8 +27,8 @@ export function Header() {
               <Image
                 src="/logo.svg" // Update this path to your actual logo file in public/
                 alt={siteConfig.siteName}
-                width={42}
-                height={12}
+                width={110}
+                height={32}
                 priority
                 className="h-auto w-auto"
               />

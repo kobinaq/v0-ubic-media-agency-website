@@ -1,10 +1,10 @@
 import Link from "next/link"
-import { ArrowRight, CheckCircle2 } from "lucide-react"
+import { ArrowRight, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { siteConfig, services } from "@/lib/content"
+import { services } from "@/lib/content"
 import { Analytics } from "@/components/analytics"
 
 export default function HomePage() {
@@ -13,55 +13,96 @@ export default function HomePage() {
       <Analytics />
       <Header />
       <main>
-        {/* Hero Section */}
-        <section className="relative min-h-screen flex items-center justify-center px-6 pt-24">
-          <div className="absolute inset-0 -z-10 bg-gradient-to-b from-muted/50 to-background" />
-          <div className="mx-auto max-w-4xl text-center">
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold tracking-tight mb-6 text-balance">
-              Building Brands That Resonate, Inspire, and Lead
+        <section className="relative min-h-screen flex items-center justify-center px-6 pt-32 pb-20 overflow-hidden">
+          <div className="absolute inset-0 -z-10">
+            <img
+              src="/hero-creative-workspace.jpg"
+              alt="Creative workspace"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-black/60" />
+            <div className="absolute top-0 left-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl opacity-30" />
+            <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl opacity-20" />
+          </div>
+
+          <div className="mx-auto max-w-5xl text-center relative z-10">
+            <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full border border-accent/30 bg-accent/5">
+              <Sparkles className="h-4 w-4 text-accent" />
+              <span className="text-sm font-medium text-accent">Creative Excellence</span>
+            </div>
+
+            <h1 className="text-6xl md:text-7xl lg:text-8xl font-serif font-bold tracking-tight mb-8 text-balance leading-tight">
+              Bold Brands That <span className="text-accent">Move Culture</span>
             </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto text-pretty leading-relaxed">
-              {siteConfig.description}
+
+            <p className="text-lg md:text-xl text-muted-foreground mb-12 max-w-3xl mx-auto text-pretty leading-relaxed">
+              We craft transformative brand experiences that captivate audiences, drive engagement, and create lasting
+              cultural impact across Africa and beyond.
             </p>
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" asChild>
+              <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground" asChild>
                 <Link href="/contact">
-                  Get Started <ArrowRight className="ml-2 h-4 w-4" />
+                  Start Your Journey <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" asChild>
-                <Link href="/portfolio">See Our Work</Link>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-accent/30 hover:bg-accent/10 bg-transparent"
+                asChild
+              >
+                <Link href="/portfolio">Explore Our Work</Link>
               </Button>
             </div>
           </div>
         </section>
 
-        {/* Services Preview */}
-        <section className="py-24 px-6 bg-muted/30">
+        <section className="py-32 px-6 bg-secondary/30 border-t border-border">
           <div className="mx-auto max-w-7xl">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-serif font-bold mb-4">What We Do</h2>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
-                Full-service brand development to elevate your business
+            <div className="mb-20">
+              <h2 className="text-5xl md:text-6xl font-serif font-bold mb-6 text-balance">What We Create</h2>
+              <p className="text-lg text-muted-foreground max-w-2xl">
+                Full-spectrum brand solutions designed to elevate your presence and drive measurable results.
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {services.services.slice(0, 6).map((service) => (
-                <Card key={service.id} className="border-2 hover:border-accent transition-colors">
-                  <CardContent className="p-6">
-                    <div className="mb-4">
-                      <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center">
-                        <CheckCircle2 className="h-6 w-6 text-accent" />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-max">
+              {services.services.slice(0, 6).map((service, index) => (
+                <Card
+                  key={service.id}
+                  className={`border-accent/20 bg-card/50 backdrop-blur hover:border-accent/50 transition-all duration-300 hover:shadow-lg hover:shadow-accent/10 overflow-hidden group ${
+                    index === 1 || index === 4 ? "md:row-span-2" : ""
+                  }`}
+                >
+                  <div className="relative h-40 overflow-hidden bg-muted">
+                    <img
+                      src={`/service-${index + 1}.jpg`}
+                      alt={service.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  </div>
+                  <CardContent className="p-8">
+                    <div className="mb-6">
+                      <div className="w-14 h-14 rounded-lg bg-accent/10 flex items-center justify-center border border-accent/20">
+                        <Sparkles className="h-7 w-7 text-accent" />
                       </div>
                     </div>
-                    <h3 className="text-xl font-semibold mb-3">{service.title}</h3>
+                    <h3 className="text-2xl font-serif font-bold mb-4">{service.title}</h3>
                     <p className="text-muted-foreground leading-relaxed">{service.description}</p>
                   </CardContent>
                 </Card>
               ))}
             </div>
-            <div className="text-center mt-12">
-              <Button variant="outline" size="lg" asChild>
+
+            <div className="text-center mt-16">
+              <Button
+                variant="outline"
+                size="lg"
+                className="border-accent/30 hover:bg-accent/10 bg-transparent"
+                asChild
+              >
                 <Link href="/services">
                   View All Services <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
@@ -70,66 +111,97 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Why Choose Us */}
-        <section className="py-24 px-6">
+        <section className="py-32 px-6 bg-black/20">
           <div className="mx-auto max-w-7xl">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="mb-20">
+              <h2 className="text-5xl md:text-6xl font-serif font-bold mb-6 text-balance">Featured Work</h2>
+              <p className="text-lg text-muted-foreground max-w-2xl">
+                Explore our latest campaigns and brand transformations that have made an impact.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3, 4, 5, 6].map((item) => (
+                <div
+                  key={item}
+                  className="group relative aspect-square rounded-xl overflow-hidden border border-accent/20 hover:border-accent/50 transition-all duration-300 cursor-pointer"
+                >
+                  <img
+                    src={`/portfolio-${item}.jpg`}
+                    alt={`Portfolio project ${item}`}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                    <div>
+                      <h3 className="text-xl font-serif font-bold text-white mb-2">Project {item}</h3>
+                      <p className="text-sm text-white/80">Brand Strategy & Design</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="py-32 px-6">
+          <div className="mx-auto max-w-7xl">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <div>
-                <h2 className="text-4xl md:text-5xl font-serif font-bold mb-6">Why Choose Ubic Media Agency?</h2>
-                <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                  We don't just deliver creative services—we help your brand grow, stand out, and stay relevant in a
-                  fast-moving digital world.
+                <h2 className="text-5xl md:text-6xl font-serif font-bold mb-8 text-balance leading-tight">
+                  Why Brands Choose <span className="text-accent">Ubic</span>
+                </h2>
+                <p className="text-lg text-muted-foreground mb-10 leading-relaxed">
+                  We don't just deliver creative services—we become strategic partners in your brand's evolution,
+                  helping you navigate complexity and seize opportunity.
                 </p>
-                <ul className="space-y-4">
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="h-6 w-6 text-accent flex-shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="font-semibold mb-1">Strategic Approach</h4>
-                      <p className="text-muted-foreground">We understand your brand deeply before creating anything</p>
+
+                <div className="space-y-6">
+                  {[
+                    { title: "Strategic Depth", desc: "Deep market insights inform every creative decision" },
+                    { title: "Cultural Fluency", desc: "We understand African markets and global audiences" },
+                    { title: "Proven Excellence", desc: "Trusted by leading brands across multiple industries" },
+                  ].map((item, i) => (
+                    <div key={i} className="flex gap-4">
+                      <div className="w-1 bg-accent rounded-full flex-shrink-0" />
+                      <div>
+                        <h4 className="font-semibold text-lg mb-2">{item.title}</h4>
+                        <p className="text-muted-foreground">{item.desc}</p>
+                      </div>
                     </div>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="h-6 w-6 text-accent flex-shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="font-semibold mb-1">Full-Service Excellence</h4>
-                      <p className="text-muted-foreground">Everything from strategy to execution under one roof</p>
-                    </div>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="h-6 w-6 text-accent flex-shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="font-semibold mb-1">Proven Results</h4>
-                      <p className="text-muted-foreground">Trusted by leading brands across Ghana and beyond</p>
-                    </div>
-                  </li>
-                </ul>
-                <div className="mt-8">
-                  <Button size="lg" asChild>
+                  ))}
+                </div>
+
+                <div className="mt-12">
+                  <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground" asChild>
                     <Link href="/about">
-                      Learn More About Us <ArrowRight className="ml-2 h-4 w-4" />
+                      Learn Our Story <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>
                 </div>
               </div>
-              <div className="relative aspect-square rounded-lg overflow-hidden">
+
+              <div className="relative aspect-square rounded-xl overflow-hidden border border-accent/20">
                 <img
-                  src="/creative-team-working-on-brand-strategy.jpg"
+                  src="/creative-team-collaboration-modern-office.jpg"
                   alt="Ubic Media Agency team"
                   className="object-cover w-full h-full"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
               </div>
             </div>
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="py-24 px-6 bg-primary text-primary-foreground">
+        <section className="py-32 px-6 bg-accent text-accent-foreground">
           <div className="mx-auto max-w-4xl text-center">
-            <h2 className="text-4xl md:text-5xl font-serif font-bold mb-6">Ready to Build Something Bold?</h2>
-            <p className="text-xl mb-8 text-primary-foreground/90 text-pretty">
-              Let's transform your brand into a market-ready experience that drives growth and lasting engagement.
+            <h2 className="text-5xl md:text-6xl font-serif font-bold mb-8 text-balance">
+              Ready to Transform Your Brand?
+            </h2>
+            <p className="text-lg mb-12 text-accent-foreground/90 text-pretty leading-relaxed max-w-2xl mx-auto">
+              Let's collaborate to create something extraordinary that resonates with your audience and drives real
+              business impact.
             </p>
-            <Button size="lg" variant="secondary" asChild>
+            <Button size="lg" className="bg-accent-foreground hover:bg-accent-foreground/90 text-accent" asChild>
               <Link href="/contact">Get in Touch</Link>
             </Button>
           </div>

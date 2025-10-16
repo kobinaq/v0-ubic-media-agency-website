@@ -43,28 +43,35 @@
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
   --font-serif: "Playfair Display", Georgia, serif;
 
-  /* Colors - Inspired by design references with Ubic branding */
-  --color-background: #fafafa;
-  --color-foreground: #0a0a0a;
+  /* Updated color scheme for bold, modern aesthetic */
+  /* Primary: Deep black for sophistication */
+  --color-background: #0a0a0a;
+  --color-foreground: #ffffff;
 
-  --color-card: #ffffff;
-  --color-card-foreground: #0a0a0a;
+  /* Cards and surfaces */
+  --color-card: #1a1a1a;
+  --color-card-foreground: #ffffff;
 
-  --color-primary: #1a1a1a;
-  --color-primary-foreground: #fafafa;
+  /* Primary: Black with white text */
+  --color-primary: #000000;
+  --color-primary-foreground: #ffffff;
 
-  --color-secondary: #f5f5f5;
-  --color-secondary-foreground: #1a1a1a;
+  /* Secondary: Dark gray */
+  --color-secondary: #1a1a1a;
+  --color-secondary-foreground: #ffffff;
 
-  --color-accent: #2d5f3f;
-  --color-accent-foreground: #ffffff;
+  /* Accent: Emerald green for creative energy */
+  --color-accent: #10b981;
+  --color-accent-foreground: #000000;
 
-  --color-muted: #f5f5f5;
-  --color-muted-foreground: #737373;
+  /* Muted: Medium gray */
+  --color-muted: #2d2d2d;
+  --color-muted-foreground: #a0a0a0;
 
-  --color-border: #e5e5e5;
-  --color-input: #e5e5e5;
-  --color-ring: #1a1a1a;
+  /* Borders and inputs */
+  --color-border: #2d2d2d;
+  --color-input: #2d2d2d;
+  --color-ring: #10b981;
 
   --radius: 0.5rem;
 

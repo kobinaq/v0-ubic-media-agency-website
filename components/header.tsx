@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { useState } from "react"
 import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -20,13 +21,21 @@ export function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
       <nav className="mx-auto max-w-7xl px-6 lg:px-8" aria-label="Global">
         <div className="flex items-center justify-between py-6">
-          <div className="flex lg:flex-1">
-            <Link href="/" className="-m-1.5 p-1.5">
-              <span className="text-2xl font-serif font-bold tracking-tight bg-gradient-to-r from-white to-accent bg-clip-text text-transparent">
-                {siteConfig.siteName}
-              </span>
+          {/* Logo Section */}
+          <div className="flex lg:flex-1 items-center">
+            <Link href="/" className="-m-1.5 p-1.5 flex items-center">
+              <Image
+                src="/logo.svg" // Update this path to your actual logo file in public/
+                alt={siteConfig.siteName}
+                width={140}
+                height={40}
+                priority
+                className="h-auto w-auto"
+              />
             </Link>
           </div>
+
+          {/* Mobile Menu Button */}
           <div className="flex lg:hidden">
             <button
               type="button"
@@ -37,6 +46,8 @@ export function Header() {
               <Menu className="h-6 w-6" aria-hidden="true" />
             </button>
           </div>
+
+          {/* Desktop Navigation */}
           <div className="hidden lg:flex lg:gap-x-12">
             {navigation.map((item) => (
               <Link
@@ -48,6 +59,8 @@ export function Header() {
               </Link>
             ))}
           </div>
+
+          {/* Desktop CTA Button */}
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
             <Button className="bg-accent hover:bg-accent/90 text-accent-foreground" asChild>
               <Link href="/contact">Get Started</Link>
@@ -55,14 +68,21 @@ export function Header() {
           </div>
         </div>
       </nav>
-      {/* Mobile menu */}
+
+      {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className="lg:hidden" role="dialog" aria-modal="true">
           <div className="fixed inset-0 z-50" />
           <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-background px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-border">
             <div className="flex items-center justify-between">
               <Link href="/" className="-m-1.5 p-1.5" onClick={() => setMobileMenuOpen(false)}>
-                <span className="text-2xl font-serif font-bold tracking-tight">{siteConfig.siteName}</span>
+                <Image
+                  src="/logo.svg"
+                  alt={siteConfig.siteName}
+                  width={120}
+                  height={34}
+                  className="h-auto w-auto"
+                />
               </Link>
               <button
                 type="button"

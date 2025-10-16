@@ -35,7 +35,7 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-accent transition-colors"
-                aria-label="Twitter / X"
+                aria-label="Twitter"
               >
                 <Twitter className="h-5 w-5" />
               </a>

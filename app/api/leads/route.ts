@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { query } from "@/lib/db"
+import { sendLeadConfirmationEmail, sendAdminLeadNotification } from "@/lib/email"
 
 export async function POST(request: Request) {
   try {
@@ -12,6 +13,14 @@ export async function POST(request: Request) {
 
     // Insert lead into database
     await query("INSERT INTO leads (name, email, message) VALUES ($1, $2, $3)", [name, email, message])
+
+    try {
+      await sendLeadConfirmationEmail(email, name)
+      await sendAdminLeadNotification({ customerName: name, customerEmail: email, message })
+    } catch (emailError) {
+      console.error("[v0] Error sending emails:", emailError)
+      // Don't fail the request if emails fail - lead is already saved
+    }
 
     return NextResponse.json({ success: true }, { status: 200 })
   } catch (error) {

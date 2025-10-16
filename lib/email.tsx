@@ -120,3 +120,100 @@ export async function sendAdminOrderNotification(orderDetails: {
 
   await transporter.sendMail(mailOptions)
 }
+
+export async function sendLeadConfirmationEmail(customerEmail: string, customerName: string) {
+  const mailOptions = {
+    from: `"Ubic Media Agency" <${process.env.SMTP_USER}>`,
+    to: customerEmail,
+    subject: "We've Received Your Message - Ubic Media Agency",
+    html: `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background-color: #1a1a1a; color: white; padding: 30px; text-align: center; }
+            .content { background-color: #f9f9f9; padding: 30px; }
+            .footer { text-align: center; padding: 20px; color: #666; font-size: 14px; }
+            .button { display: inline-block; background-color: #2d5f3f; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>Thank You for Reaching Out!</h1>
+            </div>
+            <div class="content">
+              <p>Hi ${customerName},</p>
+              <p>We've received your message and we're excited to connect with you. Our team will review your inquiry and get back to you within 24 hours.</p>
+              
+              <p>In the meantime, feel free to explore more about our services on our website or reach out directly:</p>
+              <p>
+                <strong>Phone:</strong> +233 533 904 720<br>
+                <strong>Email:</strong> info@weareubic.com
+              </p>
+              
+              <a href="${process.env.NEXT_PUBLIC_SITE_URL}" class="button">Visit Our Website</a>
+            </div>
+            <div class="footer">
+              <p>© ${new Date().getFullYear()} Ubic Media Agency. All rights reserved.</p>
+              <p>Building Brands That Resonate, Inspire, and Lead</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `,
+  }
+
+  await transporter.sendMail(mailOptions)
+}
+
+export async function sendAdminLeadNotification(leadDetails: {
+  customerName: string
+  customerEmail: string
+  message: string
+}) {
+  const mailOptions = {
+    from: `"Ubic Media Agency" <${process.env.SMTP_USER}>`,
+    to: process.env.SMTP_USER,
+    subject: `New Lead: ${leadDetails.customerName}`,
+    html: `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background-color: #2d5f3f; color: white; padding: 20px; }
+            .content { padding: 20px; }
+            .details { background-color: #f9f9f9; padding: 15px; margin: 15px 0; border-left: 4px solid #2d5f3f; }
+            .message { background-color: white; padding: 15px; border: 1px solid #ddd; border-radius: 5px; margin: 15px 0; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h2>New Lead Received</h2>
+            </div>
+            <div class="content">
+              <div class="details">
+                <p><strong>Name:</strong> ${leadDetails.customerName}</p>
+                <p><strong>Email:</strong> ${leadDetails.customerEmail}</p>
+              </div>
+              
+              <h3>Message:</h3>
+              <div class="message">
+                ${leadDetails.message.replace(/\n/g, "<br>")}
+              </div>
+              
+              <p>Please follow up with this lead as soon as possible.</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `,
+  }
+
+  await transporter.sendMail(mailOptions)
+}

@@ -25,10 +25,10 @@ export function Header() {
           <div className="flex lg:flex-1 items-center">
             <Link href="/" className="-m-1.5 p-1.5 flex items-center">
               <Image
-                src="/logo.png" // Update this path to your actual logo file in public/
+                src="/logo.svg" // Update this path to your actual logo file in public/
                 alt={siteConfig.siteName}
-                width={140}
-                height={40}
+                width={42}
+                height={12}
                 priority
                 className="h-auto w-auto"
               />

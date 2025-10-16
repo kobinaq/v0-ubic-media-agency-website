@@ -4,19 +4,21 @@ import { siteConfig } from "@/lib/content"
 
 export function Footer() {
   return (
-    <footer className="bg-primary text-primary-foreground">
-      <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
+    <footer className="bg-secondary text-foreground border-t border-border">
+      <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-4">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <h3 className="text-3xl font-serif font-bold mb-4">{siteConfig.siteName}</h3>
-            <p className="text-primary-foreground/80 max-w-md leading-relaxed">{siteConfig.tagline}</p>
-            <div className="flex gap-4 mt-6">
+            <h3 className="text-3xl font-serif font-bold mb-4 bg-gradient-to-r from-white to-accent bg-clip-text text-transparent">
+              {siteConfig.siteName}
+            </h3>
+            <p className="text-muted-foreground max-w-md leading-relaxed mb-8">{siteConfig.tagline}</p>
+            <div className="flex gap-4">
               <a
                 href={siteConfig.social.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-accent transition-colors"
+                className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center hover:bg-accent/20 transition-colors text-accent"
                 aria-label="Instagram"
               >
                 <Instagram className="h-5 w-5" />
@@ -25,7 +27,7 @@ export function Footer() {
                 href={siteConfig.social.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-accent transition-colors"
+                className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center hover:bg-accent/20 transition-colors text-accent"
                 aria-label="LinkedIn"
               >
                 <Linkedin className="h-5 w-5" />
@@ -34,7 +36,7 @@ export function Footer() {
                 href={siteConfig.social.twitter}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-accent transition-colors"
+                className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center hover:bg-accent/20 transition-colors text-accent"
                 aria-label="Twitter"
               >
                 <Twitter className="h-5 w-5" />
@@ -44,20 +46,20 @@ export function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-semibold mb-4">Quick Links</h4>
-            <ul className="space-y-2">
+            <h4 className="font-semibold mb-6 text-lg">Quick Links</h4>
+            <ul className="space-y-3">
               <li>
-                <Link href="/about" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                <Link href="/about" className="text-muted-foreground hover:text-accent transition-colors">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="/services" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                <Link href="/services" className="text-muted-foreground hover:text-accent transition-colors">
                   Services
                 </Link>
               </li>
               <li>
-                <Link href="/portfolio" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                <Link href="/portfolio" className="text-muted-foreground hover:text-accent transition-colors">
                   Portfolio
                 </Link>
               </li>
@@ -66,33 +68,29 @@ export function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="font-semibold mb-4">Get in Touch</h4>
-            <ul className="space-y-3">
-              <li className="flex items-center gap-2 text-primary-foreground/80">
-                <Phone className="h-4 w-4" />
-                <a href={`tel:${siteConfig.contact.phone}`} className="hover:text-accent transition-colors">
-                  {siteConfig.contact.phone}
-                </a>
+            <h4 className="font-semibold mb-6 text-lg">Get in Touch</h4>
+            <ul className="space-y-4">
+              <li className="flex items-center gap-3 text-muted-foreground hover:text-accent transition-colors">
+                <Phone className="h-4 w-4 flex-shrink-0" />
+                <a href={`tel:${siteConfig.contact.phone}`}>{siteConfig.contact.phone}</a>
               </li>
-              <li className="flex items-center gap-2 text-primary-foreground/80">
-                <Mail className="h-4 w-4" />
-                <a href={`mailto:${siteConfig.contact.email}`} className="hover:text-accent transition-colors">
-                  {siteConfig.contact.email}
-                </a>
+              <li className="flex items-center gap-3 text-muted-foreground hover:text-accent transition-colors">
+                <Mail className="h-4 w-4 flex-shrink-0" />
+                <a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-12 border-t border-primary-foreground/10 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-primary-foreground/60">
+        <div className="mt-16 border-t border-border pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <p className="text-sm text-muted-foreground">
             © {new Date().getFullYear()} {siteConfig.siteName}. All rights reserved.
           </p>
           <div className="flex gap-6 text-sm">
-            <Link href="/legal/privacy" className="text-primary-foreground/60 hover:text-accent transition-colors">
+            <Link href="/legal/privacy" className="text-muted-foreground hover:text-accent transition-colors">
               Privacy Policy
             </Link>
-            <Link href="/legal/terms" className="text-primary-foreground/60 hover:text-accent transition-colors">
+            <Link href="/legal/terms" className="text-muted-foreground hover:text-accent transition-colors">
               Terms of Service
             </Link>
           </div>

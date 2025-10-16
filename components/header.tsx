@@ -22,7 +22,9 @@ export function Header() {
         <div className="flex items-center justify-between py-6">
           <div className="flex lg:flex-1">
             <Link href="/" className="-m-1.5 p-1.5">
-              <span className="text-2xl font-serif font-bold tracking-tight">{siteConfig.siteName}</span>
+              <span className="text-2xl font-serif font-bold tracking-tight bg-gradient-to-r from-white to-accent bg-clip-text text-transparent">
+                {siteConfig.siteName}
+              </span>
             </Link>
           </div>
           <div className="flex lg:hidden">
@@ -47,7 +49,7 @@ export function Header() {
             ))}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <Button asChild>
+            <Button className="bg-accent hover:bg-accent/90 text-accent-foreground" asChild>
               <Link href="/contact">Get Started</Link>
             </Button>
           </div>
@@ -86,7 +88,7 @@ export function Header() {
                   ))}
                 </div>
                 <div className="py-6">
-                  <Button asChild className="w-full">
+                  <Button className="bg-accent hover:bg-accent/90 text-accent-foreground" asChild>
                     <Link href="/contact" onClick={() => setMobileMenuOpen(false)}>
                       Get Started
                     </Link>

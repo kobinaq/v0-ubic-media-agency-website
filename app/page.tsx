@@ -70,12 +70,12 @@ export default function HomePage() {
 
           <div className="mx-auto max-w-5xl text-center relative z-10">
             <h1 className="text-6xl md:text-7xl lg:text-8xl font-serif font-bold tracking-tight mb-8 text-balance leading-tight">
-              Bold Brands That <span className="text-accent">Move Culture</span>
+              Bold Ideas. <span className="text-accent">Real Impact.</span>
             </h1>
 
             <p className="text-lg md:text-xl text-muted-foreground mb-12 max-w-3xl mx-auto text-pretty leading-relaxed">
-              We craft transformative brand experiences that captivate audiences, drive engagement, and create lasting
-              cultural impact across Africa and beyond.
+              We help ambitious brands stand out through design, strategy, and storytelling that spark emotion. 
+              From websites to social media, photography, video, and print, we turn bold ideas into visuals that move people.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

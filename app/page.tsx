@@ -105,19 +105,17 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-max">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {services.services.slice(0, 6).map((service, index) => (
                 <Card
                   key={service.id}
-                  className={`border-accent/20 bg-card/50 backdrop-blur hover:border-accent/50 transition-all duration-300 hover:shadow-lg hover:shadow-accent/10 overflow-hidden group ${
-                    index === 1 || index === 4 ? "md:row-span-2" : ""
-                  }`}
+                  className="border-accent/20 bg-card/50 backdrop-blur hover:border-accent/50 transition-all duration-300 hover:shadow-lg hover:shadow-accent/10 overflow-hidden group"
                 >
-                  <div className="relative h-40 overflow-hidden bg-muted">
+                  <div className="relative h-40 overflow-hidden bg-muted rounded-t-xl">
                     <img
                       src={`/service-${index + 1}.jpg`}
                       alt={service.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300 rounded-t-xl"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                   </div>

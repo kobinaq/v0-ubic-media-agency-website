@@ -5,7 +5,6 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Analytics } from "@/components/analytics"
-
 export default function ServicesPage() {
   return (
     <>
@@ -21,13 +20,20 @@ export default function ServicesPage() {
             </p>
           </div>
         </section>
-
         {/* Services Grid */}
         <section className="py-24 px-6">
           <div className="mx-auto max-w-7xl">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {services.services.map((service, index) => (
-                <Card key={service.id} className="border-2 hover:border-accent transition-all hover:shadow-lg">
+                <Card key={service.id} className="border-2 hover:border-accent transition-all hover:shadow-lg overflow-hidden group">
+                  <div className="relative h-48 overflow-hidden bg-muted">
+                    <img
+                      src={`/service-${index + 1}.jpg`}
+                      alt={service.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300 rounded-t-xl"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  </div>
                   <CardContent className="p-8">
                     <div className="text-4xl font-serif font-bold text-accent mb-4">
                       {(index + 1).toString().padStart(2, "0")}
@@ -40,7 +46,6 @@ export default function ServicesPage() {
             </div>
           </div>
         </section>
-
         {/* CTA */}
         <section className="py-24 px-6 bg-primary text-primary-foreground">
           <div className="mx-auto max-w-4xl text-center">

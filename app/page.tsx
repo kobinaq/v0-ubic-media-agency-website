@@ -133,7 +133,7 @@ function pickFeatured(projects: any[], n = 3) {
 }
 
 export default function HomePage() {
-  const featured = pickFeatured(portfolioData.projects, 6)
+  const [featured] = useState(() => pickFeatured(portfolioData.projects, 6))
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const typedService = useTypedText(['Photography', 'Websites', 'Brands', 'Stories', 'Campaigns'])
   
@@ -142,8 +142,8 @@ export default function HomePage() {
   const [statsRef, statsInView] = useInView()
   const [whyRef, whyInView] = useInView()
 
-  const projectsCount = useCounter(50, 2000, statsInView)
-  const clientsCount = useCounter(30, 2000, statsInView)
+  const projectsCount = useCounter(123, 2000, statsInView)
+  const clientsCount = useCounter(96, 2000, statsInView)
   const yearsCount = useCounter(5, 2000, statsInView)
 
   useEffect(() => {
@@ -251,27 +251,51 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-accent/20 border border-accent/20 rounded-2xl overflow-hidden">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {services.services.slice(0, 6).map((service, index) => (
                 <div
                   key={service.id}
-                  className={`group relative bg-background p-10 hover:bg-accent/5 transition-all duration-700 cursor-pointer ${
+                  className={`group relative overflow-hidden rounded-2xl border-2 border-accent/20 bg-card hover:border-accent/50 transition-all duration-700 cursor-pointer hover:shadow-2xl hover:shadow-accent/20 ${
                     servicesInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                   }`}
-                  style={{ transitionDelay: `${index * 100}ms` }}
+                  style={{ 
+                    transitionDelay: `${index * 100}ms`,
+                    transformStyle: 'preserve-3d'
+                  }}
                 >
-                  <div className="absolute top-10 right-10 text-7xl font-serif font-bold text-accent/10 group-hover:text-accent/20 transition-colors duration-300">
-                    {String(index + 1).padStart(2, '0')}
+                  {/* Service Icon/Number with animated gradient */}
+                  <div className="absolute top-0 right-0 w-32 h-32 overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-accent/20 to-accent/5 group-hover:from-accent/30 group-hover:to-accent/10 transition-all duration-500" />
+                    <div className="absolute bottom-2 right-2 text-5xl font-serif font-bold text-accent/20 group-hover:text-accent/40 transition-colors duration-300">
+                      {String(index + 1).padStart(2, '0')}
+                    </div>
                   </div>
-                  <div className="relative z-10">
+
+                  {/* Content */}
+                  <div className="relative p-8 group-hover:translate-y-[-4px] transition-transform duration-300">
+                    <div className="w-12 h-12 rounded-full bg-accent/10 group-hover:bg-accent/20 flex items-center justify-center mb-6 transition-all duration-300 group-hover:scale-110">
+                      <div className="w-6 h-6 rounded-full bg-accent group-hover:animate-pulse" />
+                    </div>
+                    
                     <h3 className="text-2xl font-serif font-bold mb-4 group-hover:text-accent transition-colors duration-300">
                       {service.title}
                     </h3>
-                    <p className="text-muted-foreground leading-relaxed">
+                    <p className="text-muted-foreground leading-relaxed group-hover:text-foreground transition-colors duration-300">
                       {service.description}
                     </p>
                   </div>
-                  <div className="absolute bottom-0 left-0 w-0 h-1 bg-accent group-hover:w-full transition-all duration-500" />
+
+                  {/* Animated border gradient */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-accent to-transparent animate-shimmer" />
+                    <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-accent to-transparent animate-shimmer-reverse" />
+                  </div>
+
+                  {/* Glow effect */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-accent/20 rounded-full blur-2xl" />
+                    <div className="absolute bottom-0 left-0 w-32 h-32 bg-accent/10 rounded-full blur-2xl" />
+                  </div>
                 </div>
               ))}
             </div>
@@ -415,52 +439,19 @@ export default function HomePage() {
             <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent-foreground/10 rounded-full blur-3xl animate-float-delayed" />
           </div>
 
-          <div className="mx-auto max-w-7xl">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div className="text-accent-foreground">
-                <h2 className="text-5xl md:text-6xl font-serif font-bold mb-8 text-balance">
-                  Ready to Transform Your Brand?
-                </h2>
-                <p className="text-lg mb-8 text-accent-foreground/90 leading-relaxed">
-                  Let's collaborate to create something extraordinary that resonates with your audience and drives real
-                  business impact.
-                </p>
-                <Button size="lg" className="bg-accent-foreground hover:bg-accent-foreground/90 text-accent group" asChild>
-                  <Link href="/contact">
-                    Get in Touch <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </Button>
-              </div>
-
-              <Card className="bg-accent-foreground/10 backdrop-blur border-accent-foreground/20">
-                <CardContent className="p-8">
-                  <h3 className="text-2xl font-serif font-bold text-accent-foreground mb-6">Quick Contact</h3>
-                  <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); window.location.href = '/contact' }}>
-                    <input 
-                      type="text" 
-                      placeholder="Your Name" 
-                      className="w-full px-4 py-3 rounded-lg bg-accent-foreground/90 text-accent placeholder:text-accent/60 focus:outline-none focus:ring-2 focus:ring-accent-foreground"
-                      required
-                    />
-                    <input 
-                      type="email" 
-                      placeholder="Your Email" 
-                      className="w-full px-4 py-3 rounded-lg bg-accent-foreground/90 text-accent placeholder:text-accent/60 focus:outline-none focus:ring-2 focus:ring-accent-foreground"
-                      required
-                    />
-                    <textarea 
-                      placeholder="Tell us about your project..." 
-                      rows={4}
-                      className="w-full px-4 py-3 rounded-lg bg-accent-foreground/90 text-accent placeholder:text-accent/60 focus:outline-none focus:ring-2 focus:ring-accent-foreground resize-none"
-                      required
-                    />
-                    <Button type="submit" size="lg" className="w-full bg-accent-foreground hover:bg-accent-foreground/90 text-accent">
-                      Send Message
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
-            </div>
+          <div className="mx-auto max-w-4xl text-center text-accent-foreground">
+            <h2 className="text-5xl md:text-6xl font-serif font-bold mb-8 text-balance">
+              Ready to Transform Your Brand?
+            </h2>
+            <p className="text-lg md:text-xl mb-12 text-accent-foreground/90 leading-relaxed max-w-2xl mx-auto">
+              Let's collaborate to create something extraordinary that resonates with your audience and drives real
+              business impact.
+            </p>
+            <Button size="lg" className="bg-accent-foreground hover:bg-accent-foreground/90 text-accent group" asChild>
+              <Link href="/contact">
+                Get in Touch <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </Button>
           </div>
         </section>
       </main>
@@ -487,6 +478,14 @@ export default function HomePage() {
           0%, 100% { opacity: 1; }
           50% { opacity: 0; }
         }
+        @keyframes shimmer {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+        @keyframes shimmer-reverse {
+          0% { transform: translateX(100%); }
+          100% { transform: translateX(-100%); }
+        }
         .animate-float {
           animation: float 20s ease-in-out infinite;
         }
@@ -511,6 +510,12 @@ export default function HomePage() {
         }
         .animate-blink {
           animation: blink 1s step-end infinite;
+        }
+        .animate-shimmer {
+          animation: shimmer 2s ease-in-out infinite;
+        }
+        .animate-shimmer-reverse {
+          animation: shimmer-reverse 2s ease-in-out infinite;
         }
       `}</style>
     </>

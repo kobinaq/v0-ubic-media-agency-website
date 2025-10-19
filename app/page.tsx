@@ -241,8 +241,8 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Enhanced Services Section */}
-        <section ref={servicesRef} className="py-32 px-6 bg-secondary/30 border-b border-border">
+        {/* Enhanced Services Section - 3D Floating Cards */}
+        <section ref={servicesRef} className="py-32 px-6 bg-secondary/30 border-b border-border overflow-hidden">
           <div className="mx-auto max-w-7xl">
             <div className={`mb-20 transition-all duration-700 ${servicesInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               <h2 className="text-5xl md:text-6xl font-serif font-bold mb-6 text-balance">What We Create</h2>
@@ -251,50 +251,94 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div 
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+              style={{ perspective: '1500px' }}
+            >
               {services.services.slice(0, 6).map((service, index) => (
                 <div
                   key={service.id}
-                  className={`group relative overflow-hidden rounded-2xl border-2 border-accent/20 bg-card hover:border-accent/50 transition-all duration-700 cursor-pointer hover:shadow-2xl hover:shadow-accent/20 ${
-                    servicesInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                  className={`service-card group relative transition-all duration-700 ${
+                    servicesInView ? 'opacity-100' : 'opacity-0'
                   }`}
                   style={{ 
                     transitionDelay: `${index * 100}ms`,
-                    transformStyle: 'preserve-3d'
+                    transformStyle: 'preserve-3d',
+                    transform: servicesInView ? 'translateZ(0)' : 'translateZ(-100px)'
+                  }}
+                  onMouseMove={(e) => {
+                    const card = e.currentTarget
+                    const rect = card.getBoundingClientRect()
+                    const x = e.clientX - rect.left
+                    const y = e.clientY - rect.top
+                    const centerX = rect.width / 2
+                    const centerY = rect.height / 2
+                    const rotateX = (y - centerY) / 10
+                    const rotateY = (centerX - x) / 10
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(20px)`
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)'
                   }}
                 >
-                  {/* Service Icon/Number with animated gradient */}
-                  <div className="absolute top-0 right-0 w-32 h-32 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-accent/20 to-accent/5 group-hover:from-accent/30 group-hover:to-accent/10 transition-all duration-500" />
-                    <div className="absolute bottom-2 right-2 text-5xl font-serif font-bold text-accent/20 group-hover:text-accent/40 transition-colors duration-300">
-                      {String(index + 1).padStart(2, '0')}
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="relative p-8 group-hover:translate-y-[-4px] transition-transform duration-300">
-                    <div className="w-12 h-12 rounded-full bg-accent/10 group-hover:bg-accent/20 flex items-center justify-center mb-6 transition-all duration-300 group-hover:scale-110">
-                      <div className="w-6 h-6 rounded-full bg-accent group-hover:animate-pulse" />
-                    </div>
+                  <div className="relative h-full bg-card rounded-2xl border-2 border-accent/20 overflow-hidden shadow-2xl group-hover:shadow-accent/20 transition-shadow duration-500">
+                    {/* Floating gradient orb */}
+                    <div className="absolute top-0 right-0 w-40 h-40 bg-accent/20 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700" 
+                         style={{ transform: 'translateZ(30px)' }} />
                     
-                    <h3 className="text-2xl font-serif font-bold mb-4 group-hover:text-accent transition-colors duration-300">
-                      {service.title}
-                    </h3>
-                    <p className="text-muted-foreground leading-relaxed group-hover:text-foreground transition-colors duration-300">
-                      {service.description}
-                    </p>
-                  </div>
+                    {/* Content */}
+                    <div className="relative p-8 h-full flex flex-col" style={{ transformStyle: 'preserve-3d' }}>
+                      {/* Number Badge */}
+                      <div 
+                        className="absolute top-6 right-6 w-16 h-16 rounded-full bg-accent/10 group-hover:bg-accent/20 flex items-center justify-center transition-all duration-300 group-hover:scale-110"
+                        style={{ transform: 'translateZ(50px)' }}
+                      >
+                        <span className="text-2xl font-serif font-bold text-accent">
+                          {String(index + 1).padStart(2, '0')}
+                        </span>
+                      </div>
 
-                  {/* Animated border gradient */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-accent to-transparent animate-shimmer" />
-                    <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-accent to-transparent animate-shimmer-reverse" />
-                  </div>
+                      {/* Icon */}
+                      <div 
+                        className="w-14 h-14 rounded-xl bg-gradient-to-br from-accent/20 to-accent/5 group-hover:from-accent/30 group-hover:to-accent/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-all duration-300"
+                        style={{ transform: 'translateZ(40px)' }}
+                      >
+                        <div className="w-6 h-6 rounded-full bg-accent" />
+                      </div>
 
-                  {/* Glow effect */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-accent/20 rounded-full blur-2xl" />
-                    <div className="absolute bottom-0 left-0 w-32 h-32 bg-accent/10 rounded-full blur-2xl" />
+                      {/* Title */}
+                      <h3 
+                        className="text-2xl font-serif font-bold mb-4 group-hover:text-accent transition-colors duration-300"
+                        style={{ transform: 'translateZ(30px)' }}
+                      >
+                        {service.title}
+                      </h3>
+
+                      {/* Description */}
+                      <p 
+                        className="text-muted-foreground leading-relaxed flex-grow"
+                        style={{ transform: 'translateZ(20px)' }}
+                      >
+                        {service.description}
+                      </p>
+
+                      {/* Hover indicator */}
+                      <div 
+                        className="mt-6 flex items-center gap-2 text-accent opacity-0 group-hover:opacity-100 transition-all duration-300 font-medium"
+                        style={{ transform: 'translateZ(40px)' }}
+                      >
+                        <span className="text-sm">Learn More</span>
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </div>
+
+                    {/* Shine effect on hover */}
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                      <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-accent/5 to-transparent group-hover:translate-x-full transition-transform duration-1000" />
+                    </div>
+
+                    {/* Bottom glow */}
+                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-accent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   </div>
                 </div>
               ))}

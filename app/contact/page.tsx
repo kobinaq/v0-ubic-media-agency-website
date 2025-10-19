@@ -100,49 +100,6 @@ export default function ContactPage() {
                     Ready to transform your brand? Get in touch and let's start building your success story together.
                   </p>
                 </div>
-
-                {/* Animated Contact Cards */}
-                <div className="space-y-4">
-                  {[
-                    { icon: Phone, label: "Phone", value: siteConfig.contact.phone, href: `tel:${siteConfig.contact.phone}`, delay: 200 },
-                    { icon: Mail, label: "Email", value: siteConfig.contact.email, href: `mailto:${siteConfig.contact.email}`, delay: 300 },
-                    { icon: MapPin, label: "Location", value: siteConfig.contact.address, href: null, delay: 400 }
-                  ].map((item, index) => (
-                    <div
-                      key={item.label}
-                      className={`group transition-all duration-700 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}
-                      style={{ transitionDelay: `${item.delay}ms` }}
-                    >
-                      {item.href ? (
-                        <a href={item.href} className="block">
-                          <Card className="border-accent/20 hover:border-accent/50 transition-all duration-300 hover:shadow-lg hover:shadow-accent/10 cursor-pointer">
-                            <CardContent className="p-6 flex items-center gap-4">
-                              <div className="w-12 h-12 rounded-full bg-accent/10 group-hover:bg-accent/20 flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:scale-110">
-                                <item.icon className="h-5 w-5 text-accent" />
-                              </div>
-                              <div>
-                                <h3 className="font-semibold text-sm text-muted-foreground mb-1">{item.label}</h3>
-                                <p className="font-medium group-hover:text-accent transition-colors">{item.value}</p>
-                              </div>
-                            </CardContent>
-                          </Card>
-                        </a>
-                      ) : (
-                        <Card className="border-accent/20">
-                          <CardContent className="p-6 flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
-                              <item.icon className="h-5 w-5 text-accent" />
-                            </div>
-                            <div>
-                              <h3 className="font-semibold text-sm text-muted-foreground mb-1">{item.label}</h3>
-                              <p className="font-medium">{item.value}</p>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      )}
-                    </div>
-                  ))}
-                </div>
               </div>
 
               {/* Right Side - Floating Glass Form */}
@@ -320,6 +277,34 @@ export default function ContactPage() {
                         </div>
                       )}
                     </form>
+
+                    {/* Contact Information Below Form */}
+                    <div className="mt-10 pt-8 border-t border-border">
+                      <p className="text-sm text-muted-foreground mb-6">Or reach out directly:</p>
+                      <div className="space-y-4">
+                        {[
+                          { icon: Phone, label: "Phone", value: siteConfig.contact.phone, href: `tel:${siteConfig.contact.phone}` },
+                          { icon: Mail, label: "Email", value: siteConfig.contact.email, href: `mailto:${siteConfig.contact.email}` },
+                          { icon: MapPin, label: "Location", value: siteConfig.contact.address, href: null }
+                        ].map((item) => (
+                          <div key={item.label} className="flex items-start gap-3">
+                            <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
+                              <item.icon className="h-4 w-4 text-accent" />
+                            </div>
+                            <div>
+                              <p className="text-xs font-medium text-muted-foreground mb-1">{item.label}</p>
+                              {item.href ? (
+                                <a href={item.href} className="text-sm font-medium hover:text-accent transition-colors">
+                                  {item.value}
+                                </a>
+                              ) : (
+                                <p className="text-sm font-medium">{item.value}</p>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               </div>

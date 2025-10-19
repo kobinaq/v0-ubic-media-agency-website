@@ -22,13 +22,13 @@ export default function ServicesPage() {
 
       const scrollTop = window.scrollY
       const windowHeight = window.innerHeight
-      const totalHeight = windowHeight * services.services.length
+      const totalHeight = windowHeight * (services.services.length + 1)
       
-      const progress = Math.min(Math.max(scrollTop / totalHeight, 0), 0.99)
-      const index = Math.floor(progress * services.services.length)
+      const progress = Math.min(Math.max(scrollTop / totalHeight, 0), 1)
+      const index = Math.min(Math.floor(progress * (services.services.length + 1)), services.services.length - 1)
       
       setCurrentIndex(index)
-      const localProgress = (progress * services.services.length) % 1
+      const localProgress = (progress * (services.services.length + 1)) % 1
       setScrollProgress(localProgress)
       
       // Show final CTA when on last service and scrolled past 60%
@@ -59,8 +59,8 @@ export default function ServicesPage() {
       <Header />
       
       <div ref={containerRef} className="bg-background text-foreground">
-        {/* Spacer to enable scrolling */}
-        <div style={{ height: `${services.services.length * 100}vh` }} />
+        {/* Spacer to enable scrolling - extra space for footer */}
+        <div style={{ height: `${(services.services.length + 1) * 100}vh` }} />
         
         {/* Fixed viewport container */}
         <div className="fixed inset-0 overflow-hidden pt-[72px]">
@@ -135,7 +135,8 @@ export default function ServicesPage() {
                       opacity,
                       zIndex,
                       filter,
-                      transformStyle: 'preserve-3d'
+                      transformStyle: 'preserve-3d',
+                      pointerEvents: isActive ? 'auto' : 'none'
                     }}
                   >
                     <div className="relative h-full bg-card rounded-3xl border-2 border-accent/20 overflow-hidden shadow-2xl">
@@ -161,15 +162,17 @@ export default function ServicesPage() {
                           </p>
                           
                           {/* CTA */}
-                          <Button 
-                            size="lg"
-                            className="bg-accent hover:bg-accent/90 text-accent-foreground"
-                            asChild
-                          >
-                            <Link href="/contact">
-                              Get Started <ArrowRight className="ml-2 w-4 h-4" />
-                            </Link>
-                          </Button>
+                          <div className="flex gap-4">
+                            <Button 
+                              size="lg"
+                              className="bg-accent hover:bg-accent/90 text-accent-foreground"
+                              asChild
+                            >
+                              <Link href="/contact">
+                                Get Started <ArrowRight className="ml-2 w-4 h-4" />
+                              </Link>
+                            </Button>
+                          </div>
                         </div>
                       </div>
 
@@ -230,7 +233,10 @@ export default function ServicesPage() {
         `}</style>
       </div>
       
-      <Footer />
+      {/* Footer - only visible when scrolled past all cards */}
+      <div className="relative" style={{ marginTop: `${services.services.length * 100}vh` }}>
+        <Footer />
+      </div>
     </>
   )
 }

@@ -241,7 +241,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Enhanced Services Section - 3D Floating Cards */}
+        {/* Stacked Cards Services Section */}
         <section ref={servicesRef} className="py-32 px-6 bg-secondary/30 border-b border-border overflow-hidden">
           <div className="mx-auto max-w-7xl">
             <div className={`mb-20 transition-all duration-700 ${servicesInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
@@ -251,100 +251,115 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div 
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-              style={{ perspective: '1500px' }}
-            >
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16">
               {services.services.slice(0, 6).map((service, index) => (
                 <div
                   key={service.id}
-                  className={`service-card group relative transition-all duration-700 ${
-                    servicesInView ? 'opacity-100' : 'opacity-0'
+                  className={`relative transition-all duration-700 ${
+                    servicesInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                   }`}
                   style={{ 
                     transitionDelay: `${index * 100}ms`,
-                    transformStyle: 'preserve-3d',
-                    transform: servicesInView ? 'translateZ(0)' : 'translateZ(-100px)'
-                  }}
-                  onMouseMove={(e) => {
-                    const card = e.currentTarget
-                    const rect = card.getBoundingClientRect()
-                    const x = e.clientX - rect.left
-                    const y = e.clientY - rect.top
-                    const centerX = rect.width / 2
-                    const centerY = rect.height / 2
-                    const rotateX = (y - centerY) / 10
-                    const rotateY = (centerX - x) / 10
-                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(20px)`
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)'
+                    perspective: '1000px',
+                    height: '350px'
                   }}
                 >
-                  <div className="relative h-full bg-card rounded-2xl border-2 border-accent/20 overflow-hidden shadow-2xl group-hover:shadow-accent/20 transition-shadow duration-500">
-                    {/* Floating gradient orb */}
-                    <div className="absolute top-0 right-0 w-40 h-40 bg-accent/20 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700" 
-                         style={{ transform: 'translateZ(30px)' }} />
+                  {/* Stack of cards effect - background cards */}
+                  <div 
+                    className="absolute inset-0 bg-card rounded-lg border border-border shadow-lg"
+                    style={{
+                      transform: 'translateY(8px) translateX(-4px) rotateZ(-2deg)',
+                      zIndex: 1
+                    }}
+                  />
+                  <div 
+                    className="absolute inset-0 bg-card rounded-lg border border-border shadow-lg"
+                    style={{
+                      transform: 'translateY(4px) translateX(-2px) rotateZ(-1deg)',
+                      zIndex: 2
+                    }}
+                  />
+                  
+                  {/* Main card */}
+                  <div
+                    className="card-stack relative h-full bg-card rounded-lg border-2 border-accent/30 shadow-2xl cursor-pointer transition-all duration-500 hover:shadow-accent/20"
+                    style={{
+                      transform: 'rotateX(5deg) rotateY(-5deg) rotateZ(2deg)',
+                      transformStyle: 'preserve-3d',
+                      zIndex: 3
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'rotateX(0deg) rotateY(0deg) rotateZ(0deg) translateY(-10px) scale(1.02)'
+                      e.currentTarget.style.zIndex = '10'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'rotateX(5deg) rotateY(-5deg) rotateZ(2deg)'
+                      e.currentTarget.style.zIndex = '3'
+                    }}
+                  >
+                    {/* Card edge/thickness effect */}
+                    <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-muted to-muted/50" 
+                         style={{ transform: 'translateZ(-5px)' }} />
                     
-                    {/* Content */}
-                    <div className="relative p-8 h-full flex flex-col" style={{ transformStyle: 'preserve-3d' }}>
-                      {/* Number Badge */}
-                      <div 
-                        className="absolute top-6 right-6 w-16 h-16 rounded-full bg-accent/10 group-hover:bg-accent/20 flex items-center justify-center transition-all duration-300 group-hover:scale-110"
-                        style={{ transform: 'translateZ(50px)' }}
-                      >
-                        <span className="text-2xl font-serif font-bold text-accent">
+                    {/* Card content */}
+                    <div className="relative h-full p-8 flex flex-col bg-card rounded-lg overflow-hidden">
+                      {/* Top gradient accent */}
+                      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-accent via-accent/50 to-transparent" />
+                      
+                      {/* Number badge */}
+                      <div className="absolute top-6 right-6 w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center">
+                        <span className="text-xl font-serif font-bold text-accent">
                           {String(index + 1).padStart(2, '0')}
                         </span>
                       </div>
 
-                      {/* Icon */}
-                      <div 
-                        className="w-14 h-14 rounded-xl bg-gradient-to-br from-accent/20 to-accent/5 group-hover:from-accent/30 group-hover:to-accent/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-all duration-300"
-                        style={{ transform: 'translateZ(40px)' }}
-                      >
-                        <div className="w-6 h-6 rounded-full bg-accent" />
+                      {/* Service icon */}
+                      <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-accent/20 to-accent/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <div className="w-7 h-7 rounded-full bg-accent" />
                       </div>
 
                       {/* Title */}
-                      <h3 
-                        className="text-2xl font-serif font-bold mb-4 group-hover:text-accent transition-colors duration-300"
-                        style={{ transform: 'translateZ(30px)' }}
-                      >
+                      <h3 className="text-2xl font-serif font-bold mb-4 text-foreground">
                         {service.title}
                       </h3>
 
                       {/* Description */}
-                      <p 
-                        className="text-muted-foreground leading-relaxed flex-grow"
-                        style={{ transform: 'translateZ(20px)' }}
-                      >
+                      <p className="text-muted-foreground leading-relaxed text-sm flex-grow">
                         {service.description}
                       </p>
 
-                      {/* Hover indicator */}
-                      <div 
-                        className="mt-6 flex items-center gap-2 text-accent opacity-0 group-hover:opacity-100 transition-all duration-300 font-medium"
-                        style={{ transform: 'translateZ(40px)' }}
-                      >
-                        <span className="text-sm">Learn More</span>
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      {/* Bottom indicator line */}
+                      <div className="mt-6 pt-4 border-t border-border/50">
+                        <div className="flex items-center gap-2 text-accent text-sm font-medium">
+                          <span>Explore</span>
+                          <ArrowRight className="w-4 h-4" />
+                        </div>
                       </div>
+
+                      {/* Corner fold effect */}
+                      <div 
+                        className="absolute bottom-0 right-0 w-16 h-16 bg-accent/5"
+                        style={{
+                          clipPath: 'polygon(100% 0, 100% 100%, 0 100%)',
+                          transform: 'translateZ(1px)'
+                        }}
+                      />
                     </div>
 
-                    {/* Shine effect on hover */}
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                      <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-accent/5 to-transparent group-hover:translate-x-full transition-transform duration-1000" />
-                    </div>
-
-                    {/* Bottom glow */}
-                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-accent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    {/* Subtle shadow on card face */}
+                    <div 
+                      className="absolute inset-0 rounded-lg pointer-events-none"
+                      style={{
+                        background: 'linear-gradient(135deg, transparent 0%, rgba(0,0,0,0.05) 100%)',
+                        transform: 'translateZ(1px)'
+                      }}
+                    />
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="text-center mt-16">
+            <div className="text-center mt-20">
               <Button
                 variant="outline"
                 size="lg"

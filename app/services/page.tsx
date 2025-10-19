@@ -112,7 +112,7 @@ export default function ServicesPage() {
                     scale(${1 - progress * 0.1})
                   `
                   opacity = 1 - progress * 0.5
-                  zIndex = 20
+                  zIndex = 50
                 } else if (isPast) {
                   transform = 'translateX(-120%) translateZ(-300px) rotateY(-20deg) scale(0.8)'
                   opacity = 0
@@ -122,7 +122,7 @@ export default function ServicesPage() {
                   const distance = index - currentIndex
                   transform = `translateX(${20 * distance}%) translateZ(-${100 * distance}px) scale(${1 - 0.1 * distance})`
                   opacity = Math.max(0, 1 - (distance - 1) * 0.5)
-                  zIndex = 30 - distance
+                  zIndex = 40 - distance
                   filter = `blur(${distance * 2}px)`
                 }
                 

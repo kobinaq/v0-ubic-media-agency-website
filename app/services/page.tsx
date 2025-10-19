@@ -144,7 +144,7 @@ export default function ServicesPage() {
                       <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-accent/5" />
                       
                       {/* Content */}
-                      <div className="relative h-full flex flex-col justify-center p-8 md:p-12 lg:p-16">
+                      <div className="relative h-full flex flex-col justify-center p-8 md:p-12 lg:p-16 z-10">
                         <div className="max-w-3xl">
                           {/* Number */}
                           <div className="text-7xl md:text-8xl lg:text-9xl font-serif font-bold text-accent/10 mb-4">
@@ -165,7 +165,7 @@ export default function ServicesPage() {
                           <div className="flex gap-4">
                             <Button 
                               size="lg"
-                              className="bg-accent hover:bg-accent/90 text-accent-foreground"
+                              className="bg-accent hover:bg-accent/90 text-accent-foreground relative z-20"
                               asChild
                             >
                               <Link href="/contact">
@@ -233,12 +233,10 @@ export default function ServicesPage() {
         `}</style>
       </div>
       
-      {/* Footer - positioned right after final CTA */}
-      {showFinalCTA && (
-        <div className="relative bg-background">
-          <Footer />
-        </div>
-      )}
+      {/* Footer - always rendered below the scrolling section */}
+      <div className="relative bg-background" style={{ marginTop: `${services.services.length * 100}vh` }}>
+        <Footer />
+      </div>
     </>
   )
 }

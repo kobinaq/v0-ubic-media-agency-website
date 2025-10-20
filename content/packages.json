@@ -290,5 +290,23 @@
       "priceUSD": 455,
       "popular": false
     }
+    {
+      "id": "print-enterprise",
+      "name": "Print Enterprise",
+      "description": "Full marketing collateral",
+      "service": "Print & Production",
+      "features": [
+        "Complete Stationery Suite",
+        "Brochure Design & Printing (20 units)",
+        "Flyer Design & Printing (10 units)",
+        "Banner Design & Printing",
+        "Packaging Design & Printing",
+        "All Digital Files",
+        "Unlimited Revisions"
+      ],
+      "priceGHS": 2,
+      "priceUSD": 0.1,
+      "popular": false
+    }
   ]
 }

@@ -14,6 +14,7 @@ export type Package = {
   priceGHS: number
   priceUSD: number
   popular: boolean
+  service?: string
 }
 
 export type Service = {

@@ -68,6 +68,29 @@ export default function PackagesPage() {
     }
   }
 
+  const groupedPackages = packages.packages.reduce(
+    (acc, pkg) => {
+      const service = (pkg as any).service || "Other"
+      if (!acc[service]) {
+        acc[service] = []
+      }
+      acc[service].push(pkg)
+      return acc
+    },
+    {} as Record<string, Package[]>,
+  )
+
+  const serviceOrder = [
+    "Website Design & Development",
+    "Brand Identity Development",
+    "Social Media Content Creation & Management",
+    "Brand Strategy Consulting",
+    "Photography & Videography",
+    "Print & Production",
+  ]
+
+  const sortedServices = serviceOrder.filter((service) => groupedPackages[service])
+
   return (
     <>
       <Analytics />
@@ -78,7 +101,7 @@ export default function PackagesPage() {
           <div className="mx-auto max-w-4xl text-center">
             <h1 className="text-5xl md:text-6xl font-serif font-bold mb-6 text-balance">Our Packages</h1>
             <p className="text-xl text-muted-foreground text-pretty leading-relaxed">
-              Choose the perfect package to elevate your brand
+              Choose the perfect package for each service to elevate your brand
             </p>
             <div className="mt-6 flex items-center justify-center gap-4">
               <span className="text-sm text-muted-foreground">Currency:</span>
@@ -102,45 +125,47 @@ export default function PackagesPage() {
           </div>
         </section>
 
-        {/* Packages Grid */}
-        <section className="py-24 px-6">
-          <div className="mx-auto max-w-7xl">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {packages.packages.map((pkg) => (
-                <Card
-                  key={pkg.id}
-                  className={`border-2 ${pkg.popular ? "border-accent shadow-lg scale-105" : ""} relative`}
-                >
-                  {pkg.popular && (
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-accent text-accent-foreground px-4 py-1 rounded-full text-sm font-semibold">
-                      Most Popular
-                    </div>
-                  )}
-                  <CardHeader className="text-center pb-8 pt-8">
-                    <h3 className="text-2xl font-serif font-bold mb-2">{pkg.name}</h3>
-                    <p className="text-muted-foreground mb-4">{pkg.description}</p>
-                    <div className="text-4xl font-bold">
-                      {formatPrice(currency === "GHS" ? pkg.priceGHS : pkg.priceUSD, currency)}
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-3 mb-8">
-                      {pkg.features.map((feature, index) => (
-                        <li key={index} className="flex items-start gap-3">
-                          <CheckCircle2 className="h-5 w-5 text-accent flex-shrink-0 mt-0.5" />
-                          <span className="text-sm">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    <Button className="w-full" size="lg" onClick={() => handlePurchase(pkg)}>
-                      Get Started
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
+        {sortedServices.map((service) => (
+          <section key={service} className="py-24 px-6 border-t border-border">
+            <div className="mx-auto max-w-7xl">
+              <h2 className="text-3xl md:text-4xl font-serif font-bold mb-12 text-center">{service}</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {groupedPackages[service].map((pkg) => (
+                  <Card
+                    key={pkg.id}
+                    className={`border-2 ${pkg.popular ? "border-accent shadow-lg scale-105" : ""} relative`}
+                  >
+                    {pkg.popular && (
+                      <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-accent text-accent-foreground px-4 py-1 rounded-full text-sm font-semibold">
+                        Most Popular
+                      </div>
+                    )}
+                    <CardHeader className="text-center pb-8 pt-8">
+                      <h3 className="text-2xl font-serif font-bold mb-2">{pkg.name}</h3>
+                      <p className="text-muted-foreground mb-4">{pkg.description}</p>
+                      <div className="text-4xl font-bold">
+                        {formatPrice(currency === "GHS" ? pkg.priceGHS : pkg.priceUSD, currency)}
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="space-y-3 mb-8">
+                        {pkg.features.map((feature, index) => (
+                          <li key={index} className="flex items-start gap-3">
+                            <CheckCircle2 className="h-5 w-5 text-accent flex-shrink-0 mt-0.5" />
+                            <span className="text-sm">{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <Button className="w-full" size="lg" onClick={() => handlePurchase(pkg)}>
+                        Get Started
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        ))}
 
         {/* Checkout Modal */}
         {selectedPackage && (

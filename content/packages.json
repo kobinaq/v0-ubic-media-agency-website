@@ -226,15 +226,15 @@
       "name": "Professional",
       "description": "Comprehensive photo and video production.",
       "features": [
-        "First hour: GH₵ 3,000",
-        "Additional hours: GH₵ 1000/hour",
+        "First hour: GH₵ 1,000",
+        "Additional hours: GH₵ 500/hour",
         "Professional editing",
         "Color grading",
         "Multiple format delivery",
         "Commercial usage rights"
       ],
-      "priceGHS": 3000,
-      "priceUSD": 200,
+      "priceGHS": 1000,
+      "priceUSD": 60,
       "popular": true,
       "isHourly": true
     },
@@ -244,16 +244,16 @@
       "name": "Enterprise",
       "description": "Full-scale production with team.",
       "features": [
-        "First hour: GH₵ 8,000",
-        "Additional hours: GH₵ 3000/hour",
+        "First hour: GH₵ 1,000",
+        "Additional hours: GH₵ 500/hour",
         "Multi-camera setup",
         "Professional crew",
         "Advanced post-production",
         "4K video delivery",
         "Unlimited revisions"
       ],
-      "priceGHS": 8000,
-      "priceUSD": 1000,
+      "priceGHS": 1000,
+      "priceUSD": 60,
       "popular": false,
       "isHourly": true
     },

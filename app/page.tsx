@@ -124,10 +124,29 @@ export default function HomePage() {
                     </h3>
                     <p className="text-muted-foreground leading-relaxed mb-4">{service.description}</p>
                     {service.startingPrice && (
-                      <p className="text-sm font-semibold text-accent">
+                      <p className="text-sm font-semibold text-accent mb-6">
                         Starting from GH₵ {service.startingPrice.toLocaleString()}
                       </p>
                     )}
+                    <div className="flex gap-3 flex-wrap">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="border-accent/30 hover:bg-accent/10 bg-transparent text-xs"
+                        asChild
+                      >
+                        <Link href="/packages">View Packages</Link>
+                      </Button>
+                      <Button size="sm" className="bg-accent hover:bg-accent/90 text-accent-foreground text-xs" asChild>
+                        <a
+                          href="https://calendar.app.google/TPjTbTnJ5f9ztbvz5"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Book a Meeting
+                        </a>
+                      </Button>
+                    </div>
                   </div>
                   <div className="absolute bottom-0 left-0 w-0 h-1 bg-accent group-hover:w-full transition-all duration-500" />
                 </div>

@@ -183,6 +183,20 @@ export default function ServicesPage() {
                                 View Packages <ArrowRight className="ml-2 w-4 h-4" />
                               </Link>
                             </Button>
+                            <Button
+                              size="lg"
+                              variant="outline"
+                              className="border-accent/30 hover:bg-accent/10 bg-transparent relative z-20"
+                              asChild
+                            >
+                              <a
+                                href="https://calendar.app.google/TPjTbTnJ5f9ztbvz5"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                Book a Meeting <ArrowRight className="ml-2 w-4 h-4" />
+                              </a>
+                            </Button>
                           </div>
                         </div>
                       </div>

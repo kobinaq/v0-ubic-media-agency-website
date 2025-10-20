@@ -14,7 +14,7 @@ export type Package = {
   priceGHS: number
   priceUSD: number
   popular: boolean
-  service?: string
+  isHourly?: boolean
 }
 
 export type Service = {
@@ -22,6 +22,7 @@ export type Service = {
   title: string
   description: string
   icon: string
+  startingPrice: number
 }
 
 export type PortfolioProject = {

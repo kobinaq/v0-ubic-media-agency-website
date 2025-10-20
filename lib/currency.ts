@@ -1,15 +1,30 @@
+"use client"
+
+import { useEffect, useState } from "react"
+
 export type Currency = "GHS" | "USD"
 
-export function detectCurrency(locale?: string): Currency {
-  // Check if user is from Ghana based on locale or other indicators
-  if (locale?.includes("GH") || locale?.includes("gh")) {
-    return "GHS"
+export async function detectCurrency(locale?: string): Promise<Currency> {
+  try {
+    // First check locale
+    if (locale?.includes("GH") || locale?.includes("gh")) {
+      return "GHS"
+    }
+
+    // Try to detect from timezone
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+    if (timezone?.includes("Africa/Accra")) {
+      return "GHS"
+    }
+
+    // Default to USD for international users
+    return "USD"
+  } catch {
+    return "USD"
   }
-  // Default to USD for international users
-  return "USD"
 }
 
-export function formatPrice(amount: number, currency: Currency): string {
+export function formatPriceWithCurrency(amount: number, currency: Currency): string {
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: currency,
@@ -17,4 +32,27 @@ export function formatPrice(amount: number, currency: Currency): string {
     maximumFractionDigits: 0,
   })
   return formatter.format(amount)
+}
+
+export const formatPrice = formatPriceWithCurrency
+
+export function useCurrency() {
+  const [currency, setCurrency] = useState<Currency>("USD")
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const detectAndSetCurrency = async () => {
+      const detected = await detectCurrency()
+      setCurrency(detected)
+      setIsLoading(false)
+    }
+
+    detectAndSetCurrency()
+  }, [])
+
+  const formatPrice = (amount: number): string => {
+    return formatPriceWithCurrency(amount, currency)
+  }
+
+  return { currency, formatPrice, isLoading }
 }

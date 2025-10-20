@@ -1,311 +1,309 @@
 {
   "packages": [
     {
-      "id": "web-basic",
-      "name": "Starter Website",
-      "description": "Perfect for small businesses launching online",
-      "service": "Website Design & Development",
+      "id": "website-starter",
+      "service": "Website Design",
+      "name": "Starter",
+      "description": "Perfect for small businesses launching their online presence.",
       "features": [
-        "5 Page Website",
-        "Mobile Responsive Design",
-        "Basic SEO Optimization",
-        "Contact Form",
-        "1 Month Support"
+        "5-page responsive website",
+        "Mobile optimization",
+        "Basic SEO setup",
+        "Contact form integration",
+        "1 month support"
       ],
       "priceGHS": 3000,
-      "priceUSD": 200,
+      "priceUSD": 180,
       "popular": false
     },
     {
-      "id": "web-professional",
-      "name": "Professional Website",
-      "description": "Ideal for growing businesses",
-      "service": "Website Design & Development",
+      "id": "website-professional",
+      "service": "Website Design",
+      "name": "Professional",
+      "description": "Ideal for growing businesses with more complex needs.",
       "features": [
-        "10 Page Website",
-        "Advanced Responsive Design",
-        "SEO Optimization",
-        "Blog Integration",
-        "Contact & Booking Forms",
-        "Analytics Setup",
-        "3 Months Support"
+        "10-page custom website",
+        "Advanced SEO optimization",
+        "Blog integration",
+        "E-commerce ready",
+        "Analytics setup",
+        "3 months support"
       ],
       "priceGHS": 5500,
-      "priceUSD": 380,
+      "priceUSD": 330,
       "popular": true
     },
     {
-      "id": "web-enterprise",
-      "name": "Enterprise Website",
-      "description": "Comprehensive solution for established brands",
-      "service": "Website Design & Development",
+      "id": "website-enterprise",
+      "service": "Website Design",
+      "name": "Enterprise",
+      "description": "Comprehensive solution for established brands.",
       "features": [
-        "Unlimited Pages",
-        "E-commerce Integration",
-        "Advanced SEO",
-        "Blog & CMS",
-        "Payment Gateway Integration",
-        "Advanced Analytics",
-        "6 Months Support",
-        "Monthly Maintenance"
+        "Unlimited pages",
+        "Full e-commerce integration",
+        "Advanced security features",
+        "Custom integrations",
+        "Performance optimization",
+        "6 months support"
       ],
       "priceGHS": 10000,
-      "priceUSD": 700,
-      "popular": false
-    },
-    {
-      "id": "brand-starter",
-      "name": "Brand Essentials",
-      "description": "Foundation for your brand identity",
-      "service": "Brand Identity Development",
-      "features": ["Logo Design", "Color Palette", "Typography Guidelines", "Basic Brand Guidelines"],
-      "priceGHS": 1000,
-      "priceUSD": 70,
-      "popular": false
-    },
-    {
-      "id": "brand-professional",
-      "name": "Complete Brand Identity",
-      "description": "Full brand identity package",
-      "service": "Brand Identity Development",
-      "features": [
-        "Logo Design (3 Concepts)",
-        "Complete Color Palette",
-        "Typography System",
-        "Brand Guidelines Document",
-        "Business Card Design",
-        "Email Signature Template",
-        "Social Media Templates"
-      ],
-      "priceGHS": 3000,
-      "priceUSD": 210,
-      "popular": true
-    },
-    {
-      "id": "brand-enterprise",
-      "name": "Premium Brand Package",
-      "description": "Comprehensive brand development",
-      "service": "Brand Identity Development",
-      "features": [
-        "Logo Design (5 Concepts)",
-        "Complete Visual Identity System",
-        "Comprehensive Brand Guidelines",
-        "Stationery Design Suite",
-        "Packaging Design",
-        "Brand Presentation Deck",
-        "Social Media Brand Kit",
-        "Brand Strategy Consultation"
-      ],
-      "priceGHS": 8500,
       "priceUSD": 600,
       "popular": false
     },
     {
-      "id": "social-starter",
-      "name": "Social Media Starter",
-      "description": "Get started with social media",
-      "service": "Social Media Content Creation & Management",
+      "id": "brand-starter",
+      "service": "Brand Identity",
+      "name": "Starter",
+      "description": "Essential branding for new businesses.",
       "features": [
-        "Account Setup (3 Platforms)",
-        "Content Calendar (1 Month)",
-        "8 Posts/Month",
-        "Basic Community Management",
-        "Monthly Report"
+        "Logo design (3 concepts)",
+        "Color palette",
+        "Typography guidelines",
+        "Basic brand guidelines",
+        "Social media templates"
+      ],
+      "priceGHS": 1000,
+      "priceUSD": 60,
+      "popular": false
+    },
+    {
+      "id": "brand-professional",
+      "service": "Brand Identity",
+      "name": "Professional",
+      "description": "Complete brand identity package.",
+      "features": [
+        "Logo design (5 concepts)",
+        "Complete color system",
+        "Typography & iconography",
+        "Comprehensive brand guidelines",
+        "Business card & letterhead design",
+        "Social media kit"
+      ],
+      "priceGHS": 3000,
+      "priceUSD": 180,
+      "popular": true
+    },
+    {
+      "id": "brand-enterprise",
+      "service": "Brand Identity",
+      "name": "Enterprise",
+      "description": "Full-service brand development.",
+      "features": [
+        "Logo design (unlimited concepts)",
+        "Brand strategy & positioning",
+        "Complete visual identity system",
+        "Detailed brand guidelines",
+        "Packaging design",
+        "Brand collateral suite",
+        "Brand voice & messaging guide"
+      ],
+      "priceGHS": 8500,
+      "priceUSD": 510,
+      "popular": false
+    },
+    {
+      "id": "social-starter",
+      "service": "Social Media Management",
+      "name": "Starter",
+      "description": "Build your social presence.",
+      "features": [
+        "1 platform management",
+        "4 posts per week",
+        "Basic community engagement",
+        "Monthly performance report",
+        "1 month commitment"
       ],
       "priceGHS": 1500,
-      "priceUSD": 105,
+      "priceUSD": 90,
       "popular": false
     },
     {
       "id": "social-professional",
-      "name": "Social Media Professional",
-      "description": "Grow your social presence",
-      "service": "Social Media Content Creation & Management",
+      "service": "Social Media Management",
+      "name": "Professional",
+      "description": "Comprehensive social media strategy.",
       "features": [
-        "Multi-Platform Management (4 Platforms)",
-        "Content Calendar (3 Months)",
-        "20 Posts/Month",
-        "Community Management & Engagement",
-        "Hashtag Strategy",
-        "Monthly Analytics Report",
-        "Quarterly Strategy Review"
+        "3 platforms management",
+        "8 posts per week",
+        "Community engagement & moderation",
+        "Content calendar planning",
+        "Weekly performance reports",
+        "3 months commitment"
       ],
-      "priceGHS": 4000,
-      "priceUSD": 280,
+      "priceGHS": 3500,
+      "priceUSD": 210,
       "popular": true
     },
     {
       "id": "social-enterprise",
-      "name": "Social Media Enterprise",
-      "description": "Full-service social media management",
-      "service": "Social Media Content Creation & Management",
+      "service": "Social Media Management",
+      "name": "Enterprise",
+      "description": "Full-scale social media presence.",
       "features": [
-        "All Platform Management",
-        "Content Calendar (6 Months)",
-        "40 Posts/Month",
-        "24/7 Community Management",
-        "Influencer Collaboration",
-        "Paid Social Strategy",
-        "Weekly Analytics Reports",
-        "Monthly Strategy Sessions"
+        "5+ platforms management",
+        "Daily content posting",
+        "Influencer collaboration",
+        "Paid social campaigns",
+        "Real-time engagement",
+        "Weekly strategy sessions",
+        "6 months commitment"
       ],
-      "priceGHS": 9000,
-      "priceUSD": 630,
+      "priceGHS": 7500,
+      "priceUSD": 450,
       "popular": false
     },
     {
       "id": "strategy-starter",
-      "name": "Brand Strategy Starter",
-      "description": "Define your brand foundation",
-      "service": "Brand Strategy Consulting",
-      "features": ["Brand Audit", "Competitor Analysis", "Brand Positioning Workshop", "Strategy Document"],
+      "service": "Brand Strategy",
+      "name": "Starter",
+      "description": "Foundation for your brand strategy.",
+      "features": [
+        "Market research",
+        "Competitor analysis",
+        "Brand positioning",
+        "Strategy document",
+        "1 consultation session"
+      ],
       "priceGHS": 2000,
-      "priceUSD": 140,
+      "priceUSD": 120,
       "popular": false
     },
     {
       "id": "strategy-professional",
-      "name": "Brand Strategy Professional",
-      "description": "Comprehensive brand strategy",
-      "service": "Brand Strategy Consulting",
+      "service": "Brand Strategy",
+      "name": "Professional",
+      "description": "Comprehensive brand strategy.",
       "features": [
-        "Full Brand Audit",
-        "Market Research & Analysis",
-        "Positioning & Messaging Strategy",
-        "Growth Roadmap",
-        "Quarterly Reviews",
-        "Strategy Implementation Support"
+        "In-depth market analysis",
+        "Competitive landscape review",
+        "Brand positioning & messaging",
+        "Customer journey mapping",
+        "Strategic recommendations",
+        "3 consultation sessions"
       ],
-      "priceGHS": 5000,
-      "priceUSD": 350,
+      "priceGHS": 4500,
+      "priceUSD": 270,
       "popular": true
     },
     {
       "id": "strategy-enterprise",
-      "name": "Brand Strategy Enterprise",
-      "description": "Full-service strategic consulting",
-      "service": "Brand Strategy Consulting",
+      "service": "Brand Strategy",
+      "name": "Enterprise",
+      "description": "Full strategic brand transformation.",
       "features": [
-        "Comprehensive Brand Audit",
-        "Deep Market Research",
-        "Complete Strategy Development",
-        "12-Month Implementation Plan",
-        "Monthly Strategy Sessions",
-        "Ongoing Support & Optimization",
-        "Competitive Intelligence Reports"
+        "Complete brand audit",
+        "Market & consumer research",
+        "Competitive intelligence",
+        "Brand architecture",
+        "Go-to-market strategy",
+        "Implementation roadmap",
+        "Ongoing strategic guidance"
       ],
-      "priceGHS": 12000,
-      "priceUSD": 850,
+      "priceGHS": 9000,
+      "priceUSD": 540,
       "popular": false
     },
     {
       "id": "photo-starter",
-      "name": "Photography Starter",
-      "description": "Professional product photography",
       "service": "Photography & Videography",
-      "features": ["1 Photoshoot (4 Hours)", "50 Edited Photos", "Basic Retouching", "Digital Delivery"],
-      "priceGHS": 2500,
-      "priceUSD": 175,
-      "popular": false
+      "name": "Starter",
+      "description": "Perfect for product and event coverage.",
+      "features": [
+        "First hour: GH₵ 1,000",
+        "Additional hours: GH₵ 500/hour",
+        "Basic editing included",
+        "Digital delivery",
+        "Usage rights included"
+      ],
+      "priceGHS": 1000,
+      "priceUSD": 60,
+      "popular": false,
+      "isHourly": true
     },
     {
       "id": "photo-professional",
-      "name": "Photography Professional",
-      "description": "Comprehensive photography package",
       "service": "Photography & Videography",
+      "name": "Professional",
+      "description": "Comprehensive photo and video production.",
       "features": [
-        "2 Photoshoots (8 Hours Total)",
-        "150 Edited Photos",
-        "Professional Retouching",
-        "Video Highlights Reel (30 sec)",
-        "Digital & Print Delivery"
+        "First hour: GH₵ 1,000",
+        "Additional hours: GH₵ 500/hour",
+        "Professional editing",
+        "Color grading",
+        "Multiple format delivery",
+        "Commercial usage rights"
       ],
-      "priceGHS": 6000,
-      "priceUSD": 420,
-      "popular": true
+      "priceGHS": 1000,
+      "priceUSD": 60,
+      "popular": true,
+      "isHourly": true
     },
     {
       "id": "photo-enterprise",
-      "name": "Photography & Video Enterprise",
-      "description": "Full production package",
       "service": "Photography & Videography",
+      "name": "Enterprise",
+      "description": "Full-scale production with team.",
       "features": [
-        "4 Photoshoots (16 Hours)",
-        "300+ Edited Photos",
-        "Professional Retouching & Color Grading",
-        "2 Video Productions (1-2 min each)",
-        "Drone Footage (if applicable)",
-        "Digital & Print Delivery",
-        "Unlimited Revisions"
+        "First hour: GH₵ 1,000",
+        "Additional hours: GH₵ 500/hour",
+        "Multi-camera setup",
+        "Professional crew",
+        "Advanced post-production",
+        "4K video delivery",
+        "Unlimited revisions"
       ],
-      "priceGHS": 15000,
-      "priceUSD": 1050,
-      "popular": false
+      "priceGHS": 1000,
+      "priceUSD": 60,
+      "popular": false,
+      "isHourly": true
     },
     {
       "id": "print-starter",
-      "name": "Print Starter",
-      "description": "Essential print materials",
-      "service": "Print & Production",
+      "service": "Print & Collateral",
+      "name": "Starter",
+      "description": "Essential print materials.",
       "features": [
-        "Business Card Design & Printing (500 units)",
-        "Letterhead Design & Printing (250 units)",
-        "Digital Files Included"
+        "Business cards (500 units)",
+        "Letterhead design",
+        "Envelope design",
+        "Print-ready files",
+        "1 revision round"
       ],
       "priceGHS": 800,
-      "priceUSD": 55,
+      "priceUSD": 48,
       "popular": false
     },
     {
       "id": "print-professional",
-      "name": "Print Professional",
-      "description": "Complete stationery suite",
-      "service": "Print & Production",
+      "service": "Print & Collateral",
+      "name": "Professional",
+      "description": "Complete collateral suite.",
       "features": [
-        "Business Card (500 units)",
-        "Letterhead (500 units)",
-        "Envelope Design & Printing (500 units)",
-        "Folder Design & Printing (250 units)",
-        "All Digital Files"
+        "Business cards, letterhead, envelopes",
+        "Brochure design (tri-fold)",
+        "Flyer design",
+        "Print specifications",
+        "3 revision rounds"
       ],
-      "priceGHS": 2200,
-      "priceUSD": 155,
+      "priceGHS": 2000,
+      "priceUSD": 120,
       "popular": true
     },
     {
       "id": "print-enterprise",
-      "name": "Print Enterprise",
-      "description": "Full marketing collateral",
-      "service": "Print & Production",
+      "service": "Print & Collateral",
+      "name": "Enterprise",
+      "description": "Full print marketing suite.",
       "features": [
-        "Complete Stationery Suite",
-        "Brochure Design & Printing (1000 units)",
-        "Flyer Design & Printing (1000 units)",
-        "Banner Design & Printing",
-        "Packaging Design & Printing",
-        "All Digital Files",
-        "Unlimited Revisions"
+        "Complete collateral package",
+        "Packaging design",
+        "Poster & signage design",
+        "Print production management",
+        "Unlimited revisions",
+        "Print vendor coordination"
       ],
-      "priceGHS": 6500,
-      "priceUSD": 455,
-      "popular": false
-    },
-    {
-      "id": "print-enterprise",
-      "name": "Print Enterprise",
-      "description": "Full marketing collateral",
-      "service": "Print & Production",
-      "features": [
-        "Complete Stationery Suite",
-        "Brochure Design & Printing (20 units)",
-        "Flyer Design & Printing (10 units)",
-        "Banner Design & Printing",
-        "Packaging Design & Printing",
-        "All Digital Files",
-        "Unlimited Revisions"
-      ],
-      "priceGHS": 2,
-      "priceUSD": 0.1,
+      "priceGHS": 5000,
+      "priceUSD": 300,
       "popular": false
     }
   ]

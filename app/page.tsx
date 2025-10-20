@@ -3,12 +3,12 @@
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { services } from "@/lib/content"
 import { Analytics } from "@/components/analytics"
 import portfolioData from "@/content/portfolio.json"
+import packagesData from "@/content/packages.json"
 
 // Helper: pick up to `n` projects from different categories
 function pickFeatured(projects, n = 3) {
@@ -31,13 +31,11 @@ function pickFeatured(projects, n = 3) {
     if (chosen.length >= n) break
     const list = byCategory[cat]
     if (list && list.length) {
-      // pick a random project from that category
       const project = list[Math.floor(Math.random() * list.length)]
       chosen.push(project)
     }
   }
 
-  // If not enough distinct categories, fill with remaining projects
   if (chosen.length < n) {
     const remaining = projects.filter((p) => !chosen.find((c) => c.id === p.id))
     while (chosen.length < n && remaining.length) {
@@ -50,6 +48,12 @@ function pickFeatured(projects, n = 3) {
 
 export default function HomePage() {
   const featured = pickFeatured(portfolioData.projects, 3)
+
+  const serviceStartingPrices = services.services.map((service) => {
+    const servicePackages = packagesData.packages.filter((pkg: any) => pkg.service === service.title)
+    const minPrice = servicePackages.length > 0 ? Math.min(...servicePackages.map((p: any) => p.priceGHS)) : null
+    return { ...service, startingPrice: minPrice }
+  })
 
   return (
     <>
@@ -74,8 +78,8 @@ export default function HomePage() {
             </h1>
 
             <p className="text-lg md:text-xl text-muted-foreground mb-12 max-w-3xl mx-auto text-pretty leading-relaxed">
-              We help ambitious brands stand out through design, strategy, and storytelling that spark emotion. 
-              From websites to social media, photography, video, and print, we turn bold ideas into visuals that move people.
+              We help ambitious brands stand out through design, strategy, and storytelling that spark emotion. From
+              websites to social media, photography, video, and print, we turn bold ideas into visuals that move people.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -106,28 +110,31 @@ export default function HomePage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-accent/20 border border-accent/20 rounded-2xl overflow-hidden">
-              {services.services.slice(0, 6).map((service, index) => (
+              {serviceStartingPrices.slice(0, 6).map((service, index) => (
                 <div
                   key={service.id}
                   className="group relative bg-background p-10 hover:bg-accent/5 transition-all duration-300"
                 >
                   <div className="absolute top-10 right-10 text-7xl font-serif font-bold text-accent/10 group-hover:text-accent/20 transition-colors duration-300">
-                    {String(index + 1).padStart(2, '0')}
+                    {String(index + 1).padStart(2, "0")}
                   </div>
                   <div className="relative z-10">
                     <h3 className="text-2xl font-serif font-bold mb-4 group-hover:text-accent transition-colors duration-300">
                       {service.title}
                     </h3>
-                    <p className="text-muted-foreground leading-relaxed">
-                      {service.description}
-                    </p>
+                    <p className="text-muted-foreground leading-relaxed mb-4">{service.description}</p>
+                    {service.startingPrice && (
+                      <p className="text-sm font-semibold text-accent">
+                        Starting from GH₵ {service.startingPrice.toLocaleString()}
+                      </p>
+                    )}
                   </div>
                   <div className="absolute bottom-0 left-0 w-0 h-1 bg-accent group-hover:w-full transition-all duration-500" />
                 </div>
               ))}
             </div>
 
-            <div className="text-center mt-16">
+            <div className="text-center mt-16 flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 variant="outline"
                 size="lg"
@@ -136,6 +143,11 @@ export default function HomePage() {
               >
                 <Link href="/services">
                   View All Services <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground" asChild>
+                <Link href="/packages">
+                  View Packages <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
             </div>
@@ -158,21 +170,22 @@ export default function HomePage() {
                   className="group relative aspect-square rounded-xl overflow-hidden border border-accent/20 hover:border-accent/50 transition-all duration-300 cursor-pointer"
                 >
                   <img
-                    src={p.image}
+                    src={p.image || "/placeholder.svg"}
                     alt={p.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                     <div>
                       <h3 className="text-xl font-serif font-bold text-white mb-2">{p.title}</h3>
-                      <p className="text-sm text-white/80">{p.category} · {p.description}</p>
+                      <p className="text-sm text-white/80">
+                        {p.category} · {p.description}
+                      </p>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
-            
-            {/* Button below grid */}
+
             <div className="text-center mt-16">
               <Button
                 size="lg"
@@ -187,7 +200,36 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-         
+
+        <section className="py-32 px-6 bg-muted/30 border-t border-border">
+          <div className="mx-auto max-w-7xl">
+            <div className="text-center mb-20">
+              <h2 className="text-5xl md:text-6xl font-serif font-bold mb-6 text-balance">Brands We've Worked With</h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                Trusted by leading brands across multiple industries
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center justify-items-center">
+              {[
+                { name: "Brand 1", logo: "/abstract-geometric-logo.png" },
+                { name: "Brand 2", logo: "/abstract-geometric-logo.png" },
+                { name: "Brand 3", logo: "/abstract-logo-design-3.png" },
+                { name: "Brand 4", logo: "/brand-logo-4.jpg" },
+                { name: "Brand 5", logo: "/brand-logo-5.jpg" },
+                { name: "Brand 6", logo: "/brand-logo-6.jpg" },
+              ].map((brand) => (
+                <div
+                  key={brand.name}
+                  className="grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100"
+                >
+                  <img src={brand.logo || "/placeholder.svg"} alt={brand.name} className="h-16 w-auto object-contain" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         <section className="py-32 px-6">
           <div className="mx-auto max-w-7xl">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -246,9 +288,19 @@ export default function HomePage() {
               Let's collaborate to create something extraordinary that resonates with your audience and drives real
               business impact.
             </p>
-            <Button size="lg" className="bg-accent-foreground hover:bg-accent-foreground/90 text-accent" asChild>
-              <Link href="/contact">Get in Touch</Link>
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" className="bg-accent-foreground hover:bg-accent-foreground/90 text-accent" asChild>
+                <Link href="/contact">Get in Touch</Link>
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-accent-foreground text-accent-foreground hover:bg-accent-foreground/10 bg-transparent"
+                asChild
+              >
+                <Link href="/packages">View Packages</Link>
+              </Button>
+            </div>
           </div>
         </section>
       </main>

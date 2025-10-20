@@ -13,6 +13,7 @@ export function Header() {
   const navigation = [
     { name: "About", href: "/about" },
     { name: "Services", href: "/services" },
+    { name: "Packages", href: "/packages" },
     { name: "Portfolio", href: "/portfolio" },
     { name: "Contact", href: "/contact" },
   ]
@@ -68,7 +69,7 @@ export function Header() {
           </div>
         </div>
       </nav>
-      
+
       {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className="lg:hidden" role="dialog" aria-modal="true">

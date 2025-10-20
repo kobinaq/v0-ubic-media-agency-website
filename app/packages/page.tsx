@@ -21,9 +21,11 @@ export default function PackagesPage() {
   const [isProcessing, setIsProcessing] = useState(false)
 
   useEffect(() => {
-    // Detect currency based on locale
-    const detectedCurrency = detectCurrency(navigator.language)
-    setCurrency(detectedCurrency)
+    const detectAndSetCurrency = async () => {
+      const detected = await detectCurrency(navigator.language)
+      setCurrency(detected)
+    }
+    detectAndSetCurrency()
   }, [])
 
   const handlePurchase = async (pkg: Package) => {
@@ -55,7 +57,6 @@ export default function PackagesPage() {
       const data = await response.json()
 
       if (data.authorization_url) {
-        // Redirect to Paystack checkout
         window.location.href = data.authorization_url
       } else {
         alert("Failed to initialize payment. Please try again.")
@@ -68,28 +69,15 @@ export default function PackagesPage() {
     }
   }
 
-  const groupedPackages = packages.packages.reduce(
+  const serviceGroups = packages.packages.reduce(
     (acc, pkg) => {
       const service = (pkg as any).service || "Other"
-      if (!acc[service]) {
-        acc[service] = []
-      }
+      if (!acc[service]) acc[service] = []
       acc[service].push(pkg)
       return acc
     },
     {} as Record<string, Package[]>,
   )
-
-  const serviceOrder = [
-    "Website Design & Development",
-    "Brand Identity Development",
-    "Social Media Content Creation & Management",
-    "Brand Strategy Consulting",
-    "Photography & Videography",
-    "Print & Production",
-  ]
-
-  const sortedServices = serviceOrder.filter((service) => groupedPackages[service])
 
   return (
     <>
@@ -101,36 +89,19 @@ export default function PackagesPage() {
           <div className="mx-auto max-w-4xl text-center">
             <h1 className="text-5xl md:text-6xl font-serif font-bold mb-6 text-balance">Our Packages</h1>
             <p className="text-xl text-muted-foreground text-pretty leading-relaxed">
-              Choose the perfect package for each service to elevate your brand
+              Choose the perfect package to elevate your brand. Pricing automatically adjusts to{" "}
+              {currency === "GHS" ? "GH₵ (Ghana Cedis)" : "USD (US Dollars)"} based on your location.
             </p>
-            <div className="mt-6 flex items-center justify-center gap-4">
-              <span className="text-sm text-muted-foreground">Currency:</span>
-              <div className="flex gap-2">
-                <Button
-                  variant={currency === "GHS" ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setCurrency("GHS")}
-                >
-                  GHS (Ghana)
-                </Button>
-                <Button
-                  variant={currency === "USD" ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setCurrency("USD")}
-                >
-                  USD (International)
-                </Button>
-              </div>
-            </div>
           </div>
         </section>
 
-        {sortedServices.map((service) => (
+        {/* Packages by Service */}
+        {Object.entries(serviceGroups).map(([service, servicePackages]) => (
           <section key={service} className="py-24 px-6 border-t border-border">
             <div className="mx-auto max-w-7xl">
-              <h2 className="text-3xl md:text-4xl font-serif font-bold mb-12 text-center">{service}</h2>
+              <h2 className="text-4xl md:text-5xl font-serif font-bold mb-12 text-balance">{service}</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {groupedPackages[service].map((pkg) => (
+                {servicePackages.map((pkg) => (
                   <Card
                     key={pkg.id}
                     className={`border-2 ${pkg.popular ? "border-accent shadow-lg scale-105" : ""} relative`}
@@ -145,6 +116,7 @@ export default function PackagesPage() {
                       <p className="text-muted-foreground mb-4">{pkg.description}</p>
                       <div className="text-4xl font-bold">
                         {formatPrice(currency === "GHS" ? pkg.priceGHS : pkg.priceUSD, currency)}
+                        {(pkg as any).isHourly && <span className="text-lg text-muted-foreground">/hr</span>}
                       </div>
                     </CardHeader>
                     <CardContent>

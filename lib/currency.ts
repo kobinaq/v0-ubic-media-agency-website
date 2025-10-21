@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 
 export type Currency = "GHS" | "USD"
 
@@ -37,22 +37,26 @@ export function formatPriceWithCurrency(amount: number, currency: Currency): str
 export const formatPrice = formatPriceWithCurrency
 
 export function useCurrency() {
-  const [currency, setCurrency] = useState<Currency>("USD")
+  const [currency, setCurrencyState] = useState<Currency>("USD")
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const detectAndSetCurrency = async () => {
       const detected = await detectCurrency()
-      setCurrency(detected)
+      setCurrencyState(detected)
       setIsLoading(false)
     }
 
     detectAndSetCurrency()
   }, [])
 
-  const formatPrice = (amount: number): string => {
+  const setCurrency = useCallback((newCurrency: Currency) => {
+    setCurrencyState(newCurrency)
+  }, [])
+
+  const formatPriceFunc = (amount: number): string => {
     return formatPriceWithCurrency(amount, currency)
   }
 
-  return { currency, formatPrice, isLoading }
+  return { currency, setCurrency, formatPrice: formatPriceFunc, isLoading }
 }

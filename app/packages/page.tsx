@@ -19,6 +19,7 @@ export default function PackagesPage() {
   const [selectedPackage, setSelectedPackage] = useState<Package | null>(null)
   const [customerInfo, setCustomerInfo] = useState({ name: "", email: "" })
   const [isProcessing, setIsProcessing] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     const detectAndSetCurrency = async () => {
@@ -26,6 +27,10 @@ export default function PackagesPage() {
       setCurrency(detected)
     }
     detectAndSetCurrency()
+  }, [])
+
+  useEffect(() => {
+    setMounted(true)
   }, [])
 
   const handlePurchase = async (pkg: Package) => {
@@ -88,9 +93,35 @@ export default function PackagesPage() {
         <section className="py-24 px-6 bg-muted/30">
           <div className="mx-auto max-w-4xl text-center">
             <h1 className="text-5xl md:text-6xl font-serif font-bold mb-6 text-balance">Our Packages</h1>
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <span className="text-muted-foreground">Select Currency:</span>
+              {mounted && (
+                <div className="flex items-center gap-2 border border-border rounded-lg p-1">
+                  <button
+                    onClick={() => setCurrency("GHS")}
+                    className={`px-4 py-2 rounded text-sm font-medium transition-colors ${
+                      currency === "GHS"
+                        ? "bg-accent text-accent-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    GHS
+                  </button>
+                  <button
+                    onClick={() => setCurrency("USD")}
+                    className={`px-4 py-2 rounded text-sm font-medium transition-colors ${
+                      currency === "USD"
+                        ? "bg-accent text-accent-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    USD
+                  </button>
+                </div>
+              )}
+            </div>
             <p className="text-xl text-muted-foreground text-pretty leading-relaxed">
-              Choose the perfect package to elevate your brand. Pricing automatically adjusts to{" "}
-              {currency === "GHS" ? "GH₵ (Ghana Cedis)" : "USD (US Dollars)"} based on your location.
+              Choose the perfect package to elevate your brand.
             </p>
           </div>
         </section>

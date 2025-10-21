@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { services } from "@/lib/content"
@@ -13,29 +12,32 @@ import portfolioData from "@/content/portfolio.json"
 
 // Typed text animation hook
 function useTypedText(words: string[], typingSpeed = 150, deletingSpeed = 100, delayBetweenWords = 2000) {
-  const [text, setText] = useState('')
+  const [text, setText] = useState("")
   const [wordIndex, setWordIndex] = useState(0)
   const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
     const currentWord = words[wordIndex]
-    
-    const timeout = setTimeout(() => {
-      if (!isDeleting) {
-        if (text.length < currentWord.length) {
-          setText(currentWord.slice(0, text.length + 1))
+
+    const timeout = setTimeout(
+      () => {
+        if (!isDeleting) {
+          if (text.length < currentWord.length) {
+            setText(currentWord.slice(0, text.length + 1))
+          } else {
+            setTimeout(() => setIsDeleting(true), delayBetweenWords)
+          }
         } else {
-          setTimeout(() => setIsDeleting(true), delayBetweenWords)
+          if (text.length > 0) {
+            setText(currentWord.slice(0, text.length - 1))
+          } else {
+            setIsDeleting(false)
+            setWordIndex((wordIndex + 1) % words.length)
+          }
         }
-      } else {
-        if (text.length > 0) {
-          setText(currentWord.slice(0, text.length - 1))
-        } else {
-          setIsDeleting(false)
-          setWordIndex((wordIndex + 1) % words.length)
-        }
-      }
-    }, isDeleting ? deletingSpeed : typingSpeed)
+      },
+      isDeleting ? deletingSpeed : typingSpeed,
+    )
 
     return () => clearTimeout(timeout)
   }, [text, isDeleting, wordIndex, words, typingSpeed, deletingSpeed, delayBetweenWords])
@@ -49,11 +51,14 @@ function useInView(options = {}) {
   const [isInView, setIsInView] = useState(false)
 
   useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setIsInView(true)
-      }
-    }, { threshold: 0.1, ...options })
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true)
+        }
+      },
+      { threshold: 0.1, ...options },
+    )
 
     if (ref.current) {
       observer.observe(ref.current)
@@ -82,7 +87,7 @@ function useCounter(end: number, duration = 2000, isInView: boolean) {
     const animate = (currentTime: number) => {
       if (!startTime) startTime = currentTime
       const progress = Math.min((currentTime - startTime) / duration, 1)
-      
+
       setCount(Math.floor(progress * end))
 
       if (progress < 1) {
@@ -135,23 +140,23 @@ function pickFeatured(projects: any[], n = 3) {
 export default function HomePage() {
   const [featured] = useState(() => pickFeatured(portfolioData.projects, 6))
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const typedService = useTypedText(['Photography', 'Websites', 'Brands', 'Stories', 'Campaigns'])
-  
+  const typedService = useTypedText(["Photography", "Websites", "Brands", "Stories", "Campaigns"])
+
   const [servicesRef, servicesInView] = useInView()
   const [workRef, workInView] = useInView()
   const [statsRef, statsInView] = useInView()
   const [whyRef, whyInView] = useInView()
 
-  const projectsCount = useCounter(123, 2000, statsInView)
-  const clientsCount = useCounter(96, 2000, statsInView)
+  const projectsCount = useCounter(120, 2000, statsInView)
+  const clientsCount = useCounter(90, 2000, statsInView)
   const yearsCount = useCounter(5, 2000, statsInView)
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY })
     }
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
+    window.addEventListener("mousemove", handleMouseMove)
+    return () => window.removeEventListener("mousemove", handleMouseMove)
   }, [])
 
   return (
@@ -167,12 +172,12 @@ export default function HomePage() {
             <div className="absolute top-0 left-1/4 w-96 h-96 bg-accent/30 rounded-full blur-3xl animate-float opacity-40" />
             <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-float-delayed opacity-30" />
             <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-float-slow opacity-20" />
-            
+
             {/* Parallax overlay */}
-            <div 
+            <div
               className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.3)_100%)]"
               style={{
-                transform: `translate(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px)`
+                transform: `translate(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px)`,
               }}
             />
           </div>
@@ -180,7 +185,7 @@ export default function HomePage() {
           <div className="mx-auto max-w-5xl text-center relative z-10">
             {/* Animated headline */}
             <h1 className="text-6xl md:text-7xl lg:text-8xl font-serif font-bold tracking-tight mb-8 text-balance leading-tight">
-              <span className="inline-block animate-fadeInUp">Bold Ideas.</span>{' '}
+              <span className="inline-block animate-fadeInUp">Bold Ideas.</span>{" "}
               <span className="inline-block animate-fadeInUp delay-200 text-accent">Real Impact.</span>
             </h1>
 
@@ -193,14 +198,15 @@ export default function HomePage() {
             </div>
 
             <p className="text-lg md:text-xl text-muted-foreground mb-12 max-w-3xl mx-auto text-pretty leading-relaxed animate-fadeInUp delay-400">
-              We help ambitious brands stand out through design, strategy, and storytelling that spark emotion. 
-              From websites to social media, photography, video, and print, we turn bold ideas into visuals that move people.
+              We help ambitious brands stand out through design, strategy, and storytelling that spark emotion. From
+              websites to social media, photography, video, and print, we turn bold ideas into visuals that move people.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fadeInUp delay-600">
               <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground group" asChild>
                 <Link href="/contact">
-                  Start Your Journey <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  Start Your Journey{" "}
+                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
               <Button
@@ -220,22 +226,20 @@ export default function HomePage() {
           <div className="mx-auto max-w-6xl">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
               {[
-                { label: 'Projects Completed', value: projectsCount, suffix: '+' },
-                { label: 'Happy Clients', value: clientsCount, suffix: '+' },
-                { label: 'Years Experience', value: yearsCount, suffix: '' }
+                { label: "Projects Completed", value: projectsCount, suffix: "+", target: 120 },
+                { label: "Happy Clients", value: clientsCount, suffix: "+", target: 90 },
+                { label: "Years Experience", value: yearsCount, suffix: "", target: 5 },
               ].map((stat, i) => (
-                <div 
-                  key={stat.label} 
-                  className={`text-center transition-all duration-700 ${statsInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                <div
+                  key={stat.label}
+                  className={`text-center transition-all duration-700 ${statsInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
                   style={{ transitionDelay: `${i * 150}ms` }}
                 >
                   <div className="mb-4">
                     <span className="text-6xl md:text-7xl font-serif font-bold text-foreground tracking-tight">
                       {stat.value}
                     </span>
-                    <span className="text-6xl md:text-7xl font-serif font-bold text-accent">
-                      {stat.suffix}
-                    </span>
+                    <span className="text-6xl md:text-7xl font-serif font-bold text-accent">{stat.suffix}</span>
                   </div>
                   <div className="text-sm uppercase tracking-[0.2em] text-muted-foreground font-light">
                     {stat.label}
@@ -250,13 +254,13 @@ export default function HomePage() {
         <section ref={servicesRef} className="py-32 px-6 bg-secondary/20">
           <div className="mx-auto max-w-5xl">
             {/* Header */}
-            <div className={`text-center mb-24 transition-all duration-700 ${servicesInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <div
+              className={`text-center mb-24 transition-all duration-700 ${servicesInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+            >
               <div className="inline-block mb-6">
                 <div className="h-px w-16 bg-accent mx-auto mb-6" />
               </div>
-              <h2 className="text-4xl md:text-5xl font-serif font-light mb-6 tracking-tight">
-                Our Services
-              </h2>
+              <h2 className="text-4xl md:text-5xl font-serif font-light mb-6 tracking-tight">Our Services</h2>
               <p className="text-base text-muted-foreground max-w-2xl mx-auto font-light leading-relaxed">
                 Comprehensive creative solutions crafted with precision and care
               </p>
@@ -268,7 +272,7 @@ export default function HomePage() {
                 <div
                   key={service.id}
                   className={`group border-t border-border last:border-b transition-all duration-700 ${
-                    servicesInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                    servicesInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                   }`}
                   style={{ transitionDelay: `${index * 100}ms` }}
                 >
@@ -277,7 +281,7 @@ export default function HomePage() {
                       {/* Number */}
                       <div className="flex-shrink-0 w-16">
                         <span className="text-5xl md:text-6xl font-serif font-light text-accent/30 group-hover:text-accent transition-colors duration-300">
-                          {String(index + 1).padStart(2, '0')}
+                          {String(index + 1).padStart(2, "0")}
                         </span>
                       </div>
 
@@ -303,7 +307,7 @@ export default function HomePage() {
 
             {/* Footer CTA */}
             <div className="text-center mt-20">
-              <Link 
+              <Link
                 href="/services"
                 className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.2em] text-accent hover:text-accent/80 transition-colors font-light group"
               >
@@ -317,7 +321,9 @@ export default function HomePage() {
         {/* Enhanced Featured Work - Masonry Style */}
         <section ref={workRef} className="py-32 px-6 bg-background">
           <div className="mx-auto max-w-7xl">
-            <div className={`mb-20 transition-all duration-700 ${workInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <div
+              className={`mb-20 transition-all duration-700 ${workInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+            >
               <h2 className="text-5xl md:text-6xl font-serif font-bold mb-6 text-balance">Featured Work</h2>
               <p className="text-lg text-muted-foreground max-w-2xl">
                 Explore our latest campaigns and brand transformations that have made an impact.
@@ -331,15 +337,15 @@ export default function HomePage() {
                   <div
                     key={p.id}
                     className={`group relative rounded-2xl overflow-hidden border border-accent/20 hover:border-accent/50 transition-all duration-700 cursor-pointer ${
-                      isLarge ? 'md:col-span-2 md:row-span-2' : ''
-                    } ${workInView ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
-                    style={{ 
+                      isLarge ? "md:col-span-2 md:row-span-2" : ""
+                    } ${workInView ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
+                    style={{
                       transitionDelay: `${index * 100}ms`,
-                      transformStyle: 'preserve-3d'
+                      transformStyle: "preserve-3d",
                     }}
                   >
                     <img
-                      src={p.image}
+                      src={p.image || "/placeholder.svg"}
                       alt={p.title}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
@@ -360,7 +366,7 @@ export default function HomePage() {
                 )
               })}
             </div>
-            
+
             <div className="text-center mt-16">
               <Button
                 size="lg"
@@ -369,18 +375,21 @@ export default function HomePage() {
                 asChild
               >
                 <Link href="/portfolio">
-                  View Full Portfolio <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  View Full Portfolio{" "}
+                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
             </div>
           </div>
         </section>
-         
+
         {/* Why Choose Ubic */}
         <section ref={whyRef} className="py-32 px-6 bg-secondary/30">
           <div className="mx-auto max-w-7xl">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              <div className={`transition-all duration-700 ${whyInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}>
+              <div
+                className={`transition-all duration-700 ${whyInView ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-12"}`}
+              >
                 <h2 className="text-5xl md:text-6xl font-serif font-bold mb-8 text-balance leading-tight">
                   Why Brands Choose <span className="text-accent">Ubic</span>
                 </h2>
@@ -395,9 +404,9 @@ export default function HomePage() {
                     { title: "Cultural Fluency", desc: "We understand African markets and global audiences" },
                     { title: "Proven Excellence", desc: "Trusted by leading brands across multiple industries" },
                   ].map((item, i) => (
-                    <div 
-                      key={i} 
-                      className={`flex gap-4 transition-all duration-700 ${whyInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}
+                    <div
+                      key={i}
+                      className={`flex gap-4 transition-all duration-700 ${whyInView ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"}`}
                       style={{ transitionDelay: `${(i + 1) * 100}ms` }}
                     >
                       <div className="w-1 bg-accent rounded-full flex-shrink-0" />
@@ -412,10 +421,16 @@ export default function HomePage() {
                 <div className="mt-12 flex flex-wrap gap-4">
                   <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground group" asChild>
                     <Link href="/about">
-                      Learn Our Story <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      Learn Our Story{" "}
+                      <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </Link>
                   </Button>
-                  <Button size="lg" variant="outline" className="border-accent/30 hover:bg-accent/10" asChild>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="border-accent/30 hover:bg-accent/10 bg-transparent"
+                    asChild
+                  >
                     <a href="https://calendar.app.google/TPjTbTnJ5f9ztbvz5" target="_blank" rel="noopener noreferrer">
                       Book a Meeting
                     </a>
@@ -423,7 +438,9 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className={`relative aspect-square rounded-2xl overflow-hidden border-2 border-accent/20 transition-all duration-700 ${whyInView ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 translate-x-12 scale-95'}`}>
+              <div
+                className={`relative aspect-square rounded-2xl overflow-hidden border-2 border-accent/20 transition-all duration-700 ${whyInView ? "opacity-100 translate-x-0 scale-100" : "opacity-0 translate-x-12 scale-95"}`}
+              >
                 <img
                   src="/creative-team-collaboration-modern-office.jpg"
                   alt="Ubic Media Agency team"

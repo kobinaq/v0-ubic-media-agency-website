@@ -126,8 +126,8 @@ export default function AboutPage() {
               We Build Brands That <span className="text-accent font-normal">Matter</span>
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-light animate-fadeInUp delay-200">
-              Ubic Media Agency was founded on a simple belief: great brands aren't born from templates, they're crafted 
-              through strategy, creativity, and an unwavering commitment to excellence.
+              Ubic Media Agency was founded on a simple belief: 
+              Great brands aren't born from templates, they're crafted through strategy, creativity, and an unwavering commitment to excellence.
             </p>
           </div>
         </section>

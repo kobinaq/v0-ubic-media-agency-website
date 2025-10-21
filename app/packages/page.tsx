@@ -146,8 +146,24 @@ export default function PackagesPage() {
                       <h3 className="text-2xl font-serif font-bold mb-2">{pkg.name}</h3>
                       <p className="text-muted-foreground mb-4">{pkg.description}</p>
                       <div className="text-4xl font-bold">
-                        {formatPrice(currency === "GHS" ? pkg.priceGHS : pkg.priceUSD, currency)}
-                        {(pkg as any).isHourly && <span className="text-lg text-muted-foreground">/hr</span>}
+                        {(pkg as any).service === "Photography & Videography" ? (
+                          <div>
+                            <div className="text-lg text-muted-foreground mb-2">Contact Sales</div>
+                            <div className="text-lg text-accent">
+                              Starting from {formatPrice(currency === "GHS" ? pkg.priceGHS : pkg.priceUSD, currency)}
+                            </div>
+                          </div>
+                        ) : (
+                          <>
+                            {formatPrice(currency === "GHS" ? pkg.priceGHS : pkg.priceUSD, currency)}
+                            {(pkg as any).service === "Social Media Management" && (
+                              <span className="text-lg text-muted-foreground">/month</span>
+                            )}
+                            {(pkg as any).isHourly && (pkg as any).service !== "Photography & Videography" && (
+                              <span className="text-lg text-muted-foreground">/hr</span>
+                            )}
+                          </>
+                        )}
                       </div>
                     </CardHeader>
                     <CardContent>

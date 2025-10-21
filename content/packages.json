@@ -207,17 +207,14 @@
       "id": "photo-starter",
       "service": "Photography & Videography",
       "name": "Starter",
-      "description": "Perfect for product and event coverage.",
+      "description": "Every project is unique and our pricing reflects that",
       "features": [
-        "First hour: GH₵ 1,000",
-        "Additional hours: GH₵ 500/hour",
         "Basic editing included",
         "Digital delivery",
         "Usage rights included"
       ],
-      "priceGHS": 1000,
-      "priceUSD": 60,
-      "popular": false,
+      "priceGHS": 0,
+      "priceUSD": 0,
       "isHourly": true
     },
     {
@@ -226,16 +223,13 @@
       "name": "Professional",
       "description": "Comprehensive photo and video production.",
       "features": [
-        "First hour: GH₵ 1,000",
-        "Additional hours: GH₵ 500/hour",
         "Professional editing",
         "Color grading",
         "Multiple format delivery",
         "Commercial usage rights"
       ],
-      "priceGHS": 1000,
-      "priceUSD": 60,
-      "popular": true,
+      "priceGHS": 0,
+      "priceUSD": 0,
       "isHourly": true
     },
     {
@@ -244,17 +238,14 @@
       "name": "Enterprise",
       "description": "Full-scale production with team.",
       "features": [
-        "First hour: GH₵ 1,000",
-        "Additional hours: GH₵ 500/hour",
         "Multi-camera setup",
         "Professional crew",
         "Advanced post-production",
         "4K video delivery",
         "Unlimited revisions"
       ],
-      "priceGHS": 1000,
-      "priceUSD": 60,
-      "popular": false,
+      "priceGHS": 0,
+      "priceUSD": 0,
       "isHourly": true
     },
     {

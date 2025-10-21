@@ -131,57 +131,84 @@ export default function PackagesPage() {
           <section key={service} className="py-24 px-6 border-t border-border">
             <div className="mx-auto max-w-7xl">
               <h2 className="text-4xl md:text-5xl font-serif font-bold mb-12 text-balance">{service}</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {servicePackages.map((pkg) => (
-                  <Card
-                    key={pkg.id}
-                    className={`border-2 ${pkg.popular ? "border-accent shadow-lg scale-105" : ""} relative`}
+
+              {service === "Photography & Videography" ? (
+                <Card className="border-2 max-w-2xl mx-auto">
+                  <CardHeader className="text-center pb-8 pt-8">
+                    <h3 className="text-3xl font-serif font-bold mb-4">Photography & Videography</h3>
+                    <p className="text-lg text-muted-foreground mb-6">
+                      Every project is unique. Our photography and videography services are customized based on your
+                      specific needs, scope, and vision. Pricing varies depending on factors like project duration,
+                      location, equipment requirements, and post-production complexity.
+                    </p>
+                    <p className="text-base text-muted-foreground">
+                      Let's discuss your project requirements and provide you with a tailored quote.
+                    </p>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                      <Button
+                        className="flex-1 sm:flex-none"
+                        size="lg"
+                        onClick={() => (window.location.href = "/contact")}
+                      >
+                        Contact Sales
+                      </Button>
+                      <Button
+                    size="lg"
+                    variant="outline"
+                    className="border-accent/30 hover:bg-accent/10 bg-transparent"
+                    asChild
                   >
-                    {pkg.popular && (
-                      <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-accent text-accent-foreground px-4 py-1 rounded-full text-sm font-semibold">
-                        Most Popular
-                      </div>
-                    )}
-                    <CardHeader className="text-center pb-8 pt-8">
-                      <h3 className="text-2xl font-serif font-bold mb-2">{pkg.name}</h3>
-                      <p className="text-muted-foreground mb-4">{pkg.description}</p>
-                      <div className="text-4xl font-bold">
-                        {(pkg as any).service === "Photography & Videography" ? (
-                          <div>
-                            <div className="text-lg text-muted-foreground mb-2">Contact Sales</div>
-                            <div className="text-lg text-accent">
-                              Starting from {formatPrice(currency === "GHS" ? pkg.priceGHS : pkg.priceUSD, currency)}
-                            </div>
-                          </div>
-                        ) : (
+                    <a href="https://calendar.app.google/TPjTbTnJ5f9ztbvz5" target="_blank" rel="noopener noreferrer">
+                      Book a Meeting
+                    </a>
+                  </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  {servicePackages.map((pkg) => (
+                    <Card
+                      key={pkg.id}
+                      className={`border-2 ${pkg.popular ? "border-accent shadow-lg scale-105" : ""} relative`}
+                    >
+                      {pkg.popular && (
+                        <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-accent text-accent-foreground px-4 py-1 rounded-full text-sm font-semibold">
+                          Most Popular
+                        </div>
+                      )}
+                      <CardHeader className="text-center pb-8 pt-8">
+                        <h3 className="text-2xl font-serif font-bold mb-2">{pkg.name}</h3>
+                        <p className="text-muted-foreground mb-4">{pkg.description}</p>
+                        <div className="text-4xl font-bold">
                           <>
                             {formatPrice(currency === "GHS" ? pkg.priceGHS : pkg.priceUSD, currency)}
                             {(pkg as any).service === "Social Media Management" && (
                               <span className="text-lg text-muted-foreground">/month</span>
                             )}
-                            {(pkg as any).isHourly && (pkg as any).service !== "Photography & Videography" && (
-                              <span className="text-lg text-muted-foreground">/hr</span>
-                            )}
+                            {(pkg as any).isHourly && <span className="text-lg text-muted-foreground">/hr</span>}
                           </>
-                        )}
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <ul className="space-y-3 mb-8">
-                        {pkg.features.map((feature, index) => (
-                          <li key={index} className="flex items-start gap-3">
-                            <CheckCircle2 className="h-5 w-5 text-accent flex-shrink-0 mt-0.5" />
-                            <span className="text-sm">{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-                      <Button className="w-full" size="lg" onClick={() => handlePurchase(pkg)}>
-                        Get Started
-                      </Button>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <ul className="space-y-3 mb-8">
+                          {pkg.features.map((feature, index) => (
+                            <li key={index} className="flex items-start gap-3">
+                              <CheckCircle2 className="h-5 w-5 text-accent flex-shrink-0 mt-0.5" />
+                              <span className="text-sm">{feature}</span>
+                            </li>
+                          ))}
+                        </ul>
+                        <Button className="w-full" size="lg" onClick={() => handlePurchase(pkg)}>
+                          Get Started
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
             </div>
           </section>
         ))}

@@ -15,6 +15,8 @@ export const metadata: Metadata = {
     "brand strategy",
     "Ghana",
     "Africa",
+    "graphic design"
+    "logo"
   ],
   openGraph: {
     title: "Ubic Media Agency - Bold Ideas. Real Impact.",

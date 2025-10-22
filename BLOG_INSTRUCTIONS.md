@@ -1,7 +1,14 @@
 # Blog Feature
 
 ## Overview
-The blog feature allows you to manage blog posts through a JSON file, similar to other content on the site.
+The blog feature allows you to manage blog posts through a JSON file, similar to other content on the site. Blog posts are fully integrated with your site's SEO (sitemap, metadata) and navigation.
+
+## Technical Implementation
+- **Blog listing page**: `/app/blog/page.tsx` (client component with filtering)
+- **Individual post pages**: `/app/blog/[slug]/page.tsx` (server component for SEO)
+- **Content source**: `content/blog.json`
+- **Utility functions**: `lib/content.ts` (getBlogPosts, getBlogPost, getBlogCategories)
+- **Sitemap integration**: Automatic inclusion of all blog posts in sitemap.xml
 
 ## Adding New Blog Posts
 

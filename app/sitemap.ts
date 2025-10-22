@@ -1,7 +1,17 @@
 import type { MetadataRoute } from "next"
+import { getBlogPosts } from "@/lib/content"
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://weareubic.com"
+  
+  // Get all blog posts
+  const posts = getBlogPosts()
+  const blogEntries: MetadataRoute.Sitemap = posts.map((post) => ({
+    url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: new Date(post.date),
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }))
 
   return [
     {
@@ -28,6 +38,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.9,
     },
+    {
+      url: `${baseUrl}/blog`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    ...blogEntries,
     {
       url: `${baseUrl}/contact`,
       lastModified: new Date(),

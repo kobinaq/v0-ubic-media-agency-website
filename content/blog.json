@@ -1,0 +1,143 @@
+{
+  "posts": [
+    {
+      "id": "getting-started-with-social-media",
+      "slug": "getting-started-with-social-media",
+      "title": "Getting Started with Social Media Marketing in 2025",
+      "excerpt": "Learn the essential strategies to build a strong social media presence for your brand in today's digital landscape.",
+      "author": "Ubic Media Team",
+      "date": "2025-01-15",
+      "category": "Social Media",
+      "image": "/blog/social-media-marketing.jpg",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Social media marketing has evolved dramatically over the past few years. In 2025, it's no longer just about posting content—it's about creating meaningful connections with your audience."
+        },
+        {
+          "type": "heading",
+          "text": "Understanding Your Audience"
+        },
+        {
+          "type": "paragraph",
+          "text": "Before you create any content, you need to understand who you're talking to. Define your target audience's demographics, interests, pain points, and social media habits."
+        },
+        {
+          "type": "heading",
+          "text": "Content Strategy Matters"
+        },
+        {
+          "type": "paragraph",
+          "text": "A consistent posting schedule, authentic brand voice, and engaging visuals are the foundation of successful social media marketing. Focus on value over volume."
+        },
+        {
+          "type": "image",
+          "src": "/blog/content-calendar.jpg",
+          "alt": "Social media content calendar"
+        },
+        {
+          "type": "heading",
+          "text": "Key Takeaways"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Know your audience inside and out",
+            "Create valuable, engaging content consistently",
+            "Engage authentically with your community",
+            "Track metrics and adjust your strategy",
+            "Stay updated with platform changes"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "brand-identity-basics",
+      "slug": "brand-identity-basics",
+      "title": "Brand Identity Basics: More Than Just a Logo",
+      "excerpt": "Discover what makes a strong brand identity and why it's crucial for your business success.",
+      "author": "Ubic Media Team",
+      "date": "2025-01-10",
+      "category": "Branding",
+      "image": "/blog/brand-identity.jpg",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Many businesses make the mistake of thinking brand identity is just about having a nice logo. While a logo is important, your brand identity encompasses much more."
+        },
+        {
+          "type": "heading",
+          "text": "What is Brand Identity?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Brand identity is the visual and verbal expression of your brand. It includes your logo, color palette, typography, imagery style, tone of voice, and messaging."
+        },
+        {
+          "type": "heading",
+          "text": "Elements of Strong Brand Identity"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Logo and visual marks",
+            "Color palette that reflects your values",
+            "Typography system",
+            "Brand voice and messaging guidelines",
+            "Imagery and photography style",
+            "Consistent application across all touchpoints"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "When all these elements work together cohesively, they create a memorable brand experience that resonates with your target audience and differentiates you from competitors."
+        }
+      ]
+    },
+    {
+      "id": "website-design-trends-2025",
+      "slug": "website-design-trends-2025",
+      "title": "Website Design Trends to Watch in 2025",
+      "excerpt": "Stay ahead of the curve with these emerging web design trends that are shaping the digital landscape.",
+      "author": "Ubic Media Team",
+      "date": "2025-01-05",
+      "category": "Web Design",
+      "image": "/blog/web-design-trends.jpg",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "The web design landscape is constantly evolving. Here are the key trends we're seeing dominate in 2025."
+        },
+        {
+          "type": "heading",
+          "text": "AI-Powered Personalization"
+        },
+        {
+          "type": "paragraph",
+          "text": "Websites are becoming smarter, adapting content and layouts based on user behavior and preferences in real-time."
+        },
+        {
+          "type": "heading",
+          "text": "Minimalist Design with Bold Typography"
+        },
+        {
+          "type": "paragraph",
+          "text": "Clean, minimal layouts paired with large, bold typography create impact without overwhelming users."
+        },
+        {
+          "type": "image",
+          "src": "/blog/minimalist-design.jpg",
+          "alt": "Minimalist website design example"
+        },
+        {
+          "type": "heading",
+          "text": "Sustainability and Performance"
+        },
+        {
+          "type": "paragraph",
+          "text": "Eco-conscious design practices and optimized performance are no longer optional—they're expected by users and search engines alike."
+        }
+      ]
+    }
+  ]
+}

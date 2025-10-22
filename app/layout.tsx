@@ -4,6 +4,7 @@ import { Inter, Playfair_Display } from "next/font/google"
 import "./globals.css"
 import { siteConfig } from "@/lib/content"
 import Script from "next/script"
+import { generateOrganizationSchema, generateLocalBusinessSchema } from "@/lib/schema"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -22,12 +23,15 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   keywords: [
     "brand development",
+    "brand agency Ghana",
     "social media management",
-    "web design",
-    "photography",
-    "videography",
-    "Ghana",
-    "Africa",
+    "web design Ghana",
+    "photography services",
+    "videography services",
+    "creative agency Africa",
+    "brand strategy",
+    "digital marketing",
+    "Accra",
   ],
   authors: [{ name: siteConfig.siteName }],
   openGraph: {
@@ -36,17 +40,29 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: siteConfig.siteName,
+    url: process.env.NEXT_PUBLIC_SITE_URL,
   },
   twitter: {
     card: "summary_large_image",
     title: siteConfig.siteName,
     description: siteConfig.description,
+    creator: "@ubicmediaagency",
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-snippet": -1,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
+    },
   },
-    generator: 'v0.app'
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_SITE_URL,
+  },
+  generator: "v0.app",
 }
 
 export default function RootLayout({
@@ -54,9 +70,22 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const organizationSchema = generateOrganizationSchema()
+  const localBusinessSchema = generateLocalBusinessSchema()
+
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <head>
+        <Script
+          id="organization-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        <Script
+          id="local-business-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+        />
         {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID && (
           <>
             <Script

@@ -11,6 +11,7 @@ import { Analytics } from "@/components/analytics"
 import portfolioData from "@/content/portfolio.json"
 import { generateFAQSchema, generateBreadcrumbSchema } from "@/lib/schema"
 import Script from "next/script"
+import { YesLadder } from "@/components/yes-ladder"
 
 // Typed text animation hook
 function useTypedText(words: string[], typingSpeed = 150, deletingSpeed = 100, delayBetweenWords = 2000) {
@@ -205,6 +206,7 @@ export default function HomePageClient() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       <Header />
+      <YesLadder />
       <main>
         {/* Enhanced Hero Section */}
         <section className="relative min-h-screen flex items-center justify-center px-6 pt-32 pb-20 overflow-hidden">

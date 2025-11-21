@@ -4,7 +4,7 @@
       "id": "website-starter",
       "service": "Website Development",
       "name": "Starter",
-      "description": "Perfect for small businesses launching their online presence.",
+      "description": "Perfect for small organization launching their online presence.",
       "features": [
         "3-page responsive website",
         "Mobile optimization",
@@ -20,7 +20,7 @@
       "id": "website-professional",
       "service": "Website Development",
       "name": "Professional",
-      "description": "Ideal for growing businesses with more complex needs.",
+      "description": "Ideal for growing organizations with more complex needs.",
       "features": [
         "Up to 10 pages custom website",
         "Advanced SEO optimization",

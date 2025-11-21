@@ -18,14 +18,14 @@
     },
     {
       "id": "website-professional",
-      "service": "Website Design",
+      "service": "Website Development",
       "name": "Professional",
       "description": "Ideal for growing businesses with more complex needs.",
       "features": [
         "Up to 10 pages custom website",
         "Advanced SEO optimization",
         "Blog integration",
-        "payment integration",
+        "Payment integration",
         "Analytics setup",
         "3 months support"
       ],

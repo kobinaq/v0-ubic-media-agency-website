@@ -2,7 +2,7 @@
   "packages": [
     {
       "id": "website-starter",
-      "service": "Website Design",
+      "service": "Website Development",
       "name": "Starter",
       "description": "Perfect for small businesses launching their online presence.",
       "features": [
@@ -35,7 +35,7 @@
     },
     {
       "id": "website-enterprise",
-      "service": "Website Design",
+      "service": "Website Development",
       "name": "Enterprise",
       "description": "Comprehensive solution for established brands.",
       "features": [

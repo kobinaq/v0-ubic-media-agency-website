@@ -50,7 +50,7 @@
     "input-otp": "1.4.1",
     "lucide-react": "^0.454.0",
     "nanoid": "latest",
-    "next": "15.2.5",
+    "next": "15.2.6",
     "next-themes": "latest",
     "nodemailer": "latest",
     "react": "^19",

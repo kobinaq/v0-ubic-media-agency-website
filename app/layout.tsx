@@ -5,6 +5,7 @@ import "./globals.css"
 import { siteConfig } from "@/lib/content"
 import Script from "next/script"
 import { generateOrganizationSchema, generateLocalBusinessSchema } from "@/lib/schema"
+import { Analytics } from "@vercel/analytics/next"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -118,7 +119,10 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className="font-sans antialiased">{children}</body>
+      <body className="font-sans antialiased">
+        {children}</body>
+        <Analytics />
+      </body>
     </html>
   )
 }

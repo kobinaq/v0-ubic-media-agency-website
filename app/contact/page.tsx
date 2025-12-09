@@ -8,27 +8,15 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent } from "@/components/ui/card"
-import { Mail, Phone, MapPin, ArrowRight, Check } from "lucide-react"
+import { Mail, Phone, MapPin, Check } from "lucide-react"
 import { siteConfig } from "@/lib/content"
 import { Analytics } from "@/components/analytics"
 
-const services = [
-  "Brand Strategy & Identity",
-  "Digital Design & Web",
-  "Content & Photography",
-  "Video & Motion",
-  "Social Media Management",
-  "Print & Packaging"
-]
-
 export default function ContactPage() {
-  const [step, setStep] = useState(1)
   const [formData, setFormData] = useState({
-    service: "",
     name: "",
     email: "",
     phone: "",
-    company: "",
     message: "",
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -53,8 +41,7 @@ export default function ContactPage() {
 
       if (response.ok) {
         setSubmitStatus("success")
-        setFormData({ service: "", name: "", email: "", phone: "", company: "", message: "" })
-        setStep(1)
+        setFormData({ name: "", email: "", phone: "", message: "" })
       } else {
         setSubmitStatus("error")
       }
@@ -63,14 +50,6 @@ export default function ContactPage() {
     } finally {
       setIsSubmitting(false)
     }
-  }
-
-  const nextStep = () => {
-    if (step < 3) setStep(step + 1)
-  }
-
-  const prevStep = () => {
-    if (step > 1) setStep(step - 1)
   }
 
   return (
@@ -106,176 +85,93 @@ export default function ContactPage() {
               <div className={`transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'}`}>
                 <Card className="border-2 border-accent/20 bg-card/50 backdrop-blur-xl shadow-2xl">
                   <CardContent className="p-8 md:p-10">
-                    {/* Progress Steps */}
-                    <div className="flex items-center justify-between mb-8">
-                      {[1, 2, 3].map((s) => (
-                        <div key={s} className="flex items-center flex-1">
-                          <div className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-all duration-300 ${
-                            step >= s ? 'bg-accent text-accent-foreground scale-110' : 'bg-muted text-muted-foreground'
-                          }`}>
-                            {step > s ? <Check className="w-5 h-5" /> : s}
-                          </div>
-                          {s < 3 && (
-                            <div className={`flex-1 h-1 mx-2 rounded transition-all duration-300 ${
-                              step > s ? 'bg-accent' : 'bg-muted'
-                            }`} />
-                          )}
-                        </div>
-                      ))}
+                    <div className="space-y-6 mb-8">
+                      <div>
+                        <h2 className="text-2xl font-serif font-bold mb-2">Get in Touch</h2>
+                        <p className="text-sm text-muted-foreground">Fill out the form below and we'll get back to you within 24 hours</p>
+                      </div>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-6">
-                      {/* Step 1: Service Selection */}
-                      {step === 1 && (
-                        <div className="space-y-6 animate-fadeIn">
-                          <div>
-                            <h2 className="text-2xl font-serif font-bold mb-2">What can we help you with?</h2>
-                            <p className="text-sm text-muted-foreground">Select the service you're interested in</p>
-                          </div>
-                          <div className="grid grid-cols-1 gap-3">
-                            {services.map((service) => (
-                              <button
-                                key={service}
-                                type="button"
-                                onClick={() => {
-                                  setFormData({ ...formData, service })
-                                  nextStep()
-                                }}
-                                className={`p-4 rounded-lg border-2 text-left transition-all duration-300 hover:border-accent hover:bg-accent/5 ${
-                                  formData.service === service ? 'border-accent bg-accent/5' : 'border-border'
-                                }`}
-                              >
-                                <span className="font-medium">{service}</span>
-                              </button>
-                            ))}
-                          </div>
+                      <div>
+                        <label htmlFor="name" className="block text-sm font-medium mb-2">
+                          Full Name *
+                        </label>
+                        <Input
+                          id="name"
+                          type="text"
+                          required
+                          value={formData.name}
+                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          placeholder="John Doe"
+                        />
+                      </div>
+
+                      <div>
+                        <label htmlFor="email" className="block text-sm font-medium mb-2">
+                          Email Address *
+                        </label>
+                        <Input
+                          id="email"
+                          type="email"
+                          required
+                          value={formData.email}
+                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          placeholder="john@company.com"
+                        />
+                      </div>
+
+                      <div>
+                        <label htmlFor="phone" className="block text-sm font-medium mb-2">
+                          Contact Number *
+                        </label>
+                        <Input
+                          id="phone"
+                          type="tel"
+                          required
+                          value={formData.phone}
+                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                          placeholder="+233 XX XXX XXXX"
+                        />
+                      </div>
+
+                      <div>
+                        <label htmlFor="message" className="block text-sm font-medium mb-2">
+                          Message *
+                        </label>
+                        <Textarea
+                          id="message"
+                          required
+                          value={formData.message}
+                          onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                          placeholder="Tell us about your project, goals, timeline, budget..."
+                          rows={6}
+                        />
+                      </div>
+
+                      {submitStatus === "success" && (
+                        <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
+                          <p className="text-sm text-green-600 dark:text-green-400 flex items-center gap-2">
+                            <Check className="w-4 h-4" />
+                            Thank you! We'll get back to you soon.
+                          </p>
+                        </div>
+                      )}
+                      {submitStatus === "error" && (
+                        <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
+                          <p className="text-sm text-red-600 dark:text-red-400">
+                            Something went wrong. Please try again.
+                          </p>
                         </div>
                       )}
 
-                      {/* Step 2: Project Details */}
-                      {step === 2 && (
-                        <div className="space-y-6 animate-fadeIn">
-                          <div>
-                            <h2 className="text-2xl font-serif font-bold mb-2">Tell us about your project</h2>
-                            <p className="text-sm text-muted-foreground">The more details, the better we can help</p>
-                          </div>
-                          <div>
-                            <label htmlFor="company" className="block text-sm font-medium mb-2">
-                              Company Name (Optional)
-                            </label>
-                            <Input
-                              id="company"
-                              type="text"
-                              value={formData.company}
-                              onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                              placeholder="Your company"
-                            />
-                          </div>
-                          <div>
-                            <label htmlFor="message" className="block text-sm font-medium mb-2">
-                              Project Details
-                            </label>
-                            <Textarea
-                              id="message"
-                              required
-                              value={formData.message}
-                              onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                              placeholder="Tell us about your project, goals, timeline, budget..."
-                              rows={6}
-                            />
-                          </div>
-                          <div className="flex gap-3">
-                            <Button type="button" variant="outline" onClick={prevStep} className="flex-1">
-                              Back
-                            </Button>
-                            <Button 
-                              type="button" 
-                              onClick={nextStep} 
-                              className="flex-1 bg-accent hover:bg-accent/90 text-accent-foreground"
-                              disabled={!formData.message}
-                            >
-                              Next <ArrowRight className="ml-2 w-4 h-4" />
-                            </Button>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Step 3: Contact Information */}
-                      {step === 3 && (
-                        <div className="space-y-6 animate-fadeIn">
-                          <div>
-                            <h2 className="text-2xl font-serif font-bold mb-2">How can we reach you?</h2>
-                            <p className="text-sm text-muted-foreground">We'll get back to you within 24 hours</p>
-                          </div>
-                          <div>
-                            <label htmlFor="name" className="block text-sm font-medium mb-2">
-                              Full Name *
-                            </label>
-                            <Input
-                              id="name"
-                              type="text"
-                              required
-                              value={formData.name}
-                              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                              placeholder="John Doe"
-                            />
-                          </div>
-                          <div>
-                            <label htmlFor="email" className="block text-sm font-medium mb-2">
-                              Email Address *
-                            </label>
-                            <Input
-                              id="email"
-                              type="email"
-                              required
-                              value={formData.email}
-                              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                              placeholder="john@company.com"
-                            />
-                          </div>
-                          <div>
-                            <label htmlFor="phone" className="block text-sm font-medium mb-2">
-                              Phone Number (Optional)
-                            </label>
-                            <Input
-                              id="phone"
-                              type="tel"
-                              value={formData.phone}
-                              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                              placeholder="+233 XX XXX XXXX"
-                            />
-                          </div>
-                          
-                          {submitStatus === "success" && (
-                            <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
-                              <p className="text-sm text-green-600 dark:text-green-400 flex items-center gap-2">
-                                <Check className="w-4 h-4" />
-                                Thank you! We'll get back to you soon.
-                              </p>
-                            </div>
-                          )}
-                          {submitStatus === "error" && (
-                            <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
-                              <p className="text-sm text-red-600 dark:text-red-400">
-                                Something went wrong. Please try again.
-                              </p>
-                            </div>
-                          )}
-                          
-                          <div className="flex gap-3">
-                            <Button type="button" variant="outline" onClick={prevStep} className="flex-1">
-                              Back
-                            </Button>
-                            <Button 
-                              type="submit" 
-                              className="flex-1 bg-accent hover:bg-accent/90 text-accent-foreground" 
-                              disabled={isSubmitting}
-                            >
-                              {isSubmitting ? "Sending..." : "Send Message"}
-                            </Button>
-                          </div>
-                        </div>
-                      )}
+                      <Button 
+                        type="submit" 
+                        className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" 
+                        disabled={isSubmitting}
+                      >
+                        {isSubmitting ? "Sending..." : "Send Message"}
+                      </Button>
                     </form>
 
                     {/* Contact Information Below Form */}

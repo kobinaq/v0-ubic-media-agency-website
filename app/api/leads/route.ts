@@ -4,15 +4,20 @@ import { sendLeadConfirmationEmail, sendAdminLeadNotification } from "@/lib/emai
 
 export async function POST(request: Request) {
   try {
-    const { name, email, message } = await request.json()
+    const { name, email, phone, message } = await request.json()
 
     // Validate input
     if (!name || !email || !message) {
-      return NextResponse.json({ error: "All fields are required" }, { status: 400 })
+      return NextResponse.json({ error: "Name, email, and message are required" }, { status: 400 })
     }
 
     // Insert lead into database
-    await query("INSERT INTO leads (name, email, message) VALUES ($1, $2, $3)", [name, email, message])
+    await query("INSERT INTO leads (name, email, phone, message) VALUES ($1, $2, $3, $4)", [
+      name,
+      email,
+      phone || null,
+      message,
+    ])
 
     try {
       await sendLeadConfirmationEmail(email, name)

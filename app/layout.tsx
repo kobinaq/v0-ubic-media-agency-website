@@ -6,6 +6,7 @@ import { siteConfig } from "@/lib/content"
 import Script from "next/script"
 import { generateOrganizationSchema, generateLocalBusinessSchema } from "@/lib/schema"
 import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -122,6 +123,7 @@ export default function RootLayout({
       <body className="font-sans antialiased">
         {children}
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )

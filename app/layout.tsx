@@ -20,6 +20,7 @@ const playfair = Playfair_Display({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://weareubic.com"),
   title: `${siteConfig.siteName} - ${siteConfig.tagline}`,
   description: siteConfig.description,
   keywords: [
@@ -42,12 +43,21 @@ export const metadata: Metadata = {
     locale: "en_US",
     siteName: siteConfig.siteName,
     url: process.env.NEXT_PUBLIC_SITE_URL,
+    images: [
+      {
+        url: "/logo.png",
+        width: 1200,
+        height: 630,
+        alt: `${siteConfig.siteName} logo`,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: siteConfig.siteName,
     description: siteConfig.description,
     creator: "@ubicmediaagency",
+    images: ["/logo.png"],
   },
   robots: {
     index: true,
@@ -61,7 +71,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: process.env.NEXT_PUBLIC_SITE_URL,
+    canonical: process.env.NEXT_PUBLIC_SITE_URL || "https://weareubic.com",
   },
   generator: "v0.app",
 }

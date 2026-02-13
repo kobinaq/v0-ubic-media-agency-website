@@ -93,7 +93,13 @@ export function Header() {
             <div className="px-6 py-6">
               <div className="flex items-center justify-between mb-6">
                 <Link href="/" className="-m-1.5 p-1.5" onClick={() => setMobileMenuOpen(false)}>
-                  
+                  <Image
+                    src="/logo.png"
+                    alt={siteConfig.siteName}
+                    width={90}
+                    height={24}
+                    className="h-auto w-auto max-h-8"
+                  />
                 </Link>
                 <button
                   type="button"

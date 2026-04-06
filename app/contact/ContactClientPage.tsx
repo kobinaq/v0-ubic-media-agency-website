@@ -8,11 +8,12 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent } from "@/components/ui/card"
-import { Mail, Phone, MapPin, Check } from "lucide-react"
+import { Mail, MessageCircle, MapPin, Check } from "lucide-react"
 import { siteConfig } from "@/lib/content"
 import { Analytics } from "@/components/analytics"
 
 export default function ContactPage() {
+  const web3FormsAccessKey = "726b78c9-6173-49f7-8c34-5e7cacf58af1"
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -33,13 +34,22 @@ export default function ContactPage() {
     setSubmitStatus("idle")
 
     try {
-      const response = await fetch("/api/leads", {
+      const payload = new FormData()
+      payload.append("access_key", web3FormsAccessKey)
+      payload.append("name", formData.name)
+      payload.append("email", formData.email)
+      payload.append("phone", formData.phone)
+      payload.append("message", formData.message)
+      payload.append("subject", "New contact form submission from UBIC website")
+
+      const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: payload,
       })
 
-      if (response.ok) {
+      const result = await response.json()
+
+      if (response.ok && result.success) {
         setSubmitStatus("success")
         setFormData({ name: "", email: "", phone: "", message: "" })
       } else {
@@ -99,6 +109,7 @@ export default function ContactPage() {
                         </label>
                         <Input
                           id="name"
+                          name="name"
                           type="text"
                           required
                           value={formData.name}
@@ -113,6 +124,7 @@ export default function ContactPage() {
                         </label>
                         <Input
                           id="email"
+                          name="email"
                           type="email"
                           required
                           value={formData.email}
@@ -127,6 +139,7 @@ export default function ContactPage() {
                         </label>
                         <Input
                           id="phone"
+                          name="phone"
                           type="tel"
                           required
                           value={formData.phone}
@@ -141,6 +154,7 @@ export default function ContactPage() {
                         </label>
                         <Textarea
                           id="message"
+                          name="message"
                           required
                           value={formData.message}
                           onChange={(e) => setFormData({ ...formData, message: e.target.value })}
@@ -179,7 +193,7 @@ export default function ContactPage() {
                       <p className="text-sm text-muted-foreground mb-6">Or reach out directly:</p>
                       <div className="space-y-4">
                         {[
-                          { icon: Phone, label: "Phone", value: siteConfig.contact.phone, href: `tel:${siteConfig.contact.phone}` },
+                          { icon: MessageCircle, label: "WhatsApp", value: "Chat on WhatsApp", href: siteConfig.contact.whatsapp },
                           { icon: Mail, label: "Email", value: siteConfig.contact.email, href: `mailto:${siteConfig.contact.email}` },
                           { icon: MapPin, label: "Location", value: siteConfig.contact.address, href: null }
                         ].map((item) => (

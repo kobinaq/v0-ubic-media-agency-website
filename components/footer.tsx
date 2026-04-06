@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Instagram, Linkedin, Twitter, Mail, Phone } from "lucide-react"
+import { Instagram, Linkedin, Twitter, Mail, MessageCircle } from "lucide-react"
 import { siteConfig } from "@/lib/content"
 
 export function Footer() {
@@ -71,8 +71,10 @@ export function Footer() {
             <h4 className="font-semibold mb-6 text-lg">Get in Touch</h4>
             <ul className="space-y-4">
               <li className="flex items-center gap-3 text-muted-foreground hover:text-accent transition-colors">
-                <Phone className="h-4 w-4 flex-shrink-0" />
-                <a href={`tel:${siteConfig.contact.phone}`}>{siteConfig.contact.phone}</a>
+                <MessageCircle className="h-4 w-4 flex-shrink-0" />
+                <a href={siteConfig.contact.whatsapp} target="_blank" rel="noopener noreferrer">
+                  WhatsApp
+                </a>
               </li>
               <li className="flex items-center gap-3 text-muted-foreground hover:text-accent transition-colors">
                 <Mail className="h-4 w-4 flex-shrink-0" />

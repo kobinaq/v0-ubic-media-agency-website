@@ -6,6 +6,7 @@ import { siteConfig } from "@/lib/content"
 import Script from "next/script"
 import { generateOrganizationSchema, generateLocalBusinessSchema } from "@/lib/schema"
 import { Analytics } from "@vercel/analytics/next"
+import { ThemeProvider } from "@/components/theme-provider"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -85,7 +86,7 @@ export default function RootLayout({
   const localBusinessSchema = generateLocalBusinessSchema()
 
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${playfair.variable}`}>
       <head>
         <Script
           id="organization-schema"
@@ -130,8 +131,10 @@ export default function RootLayout({
         </Script>
       </head>
       <body className="font-sans antialiased">
-        {children}
-        <Analytics />
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          {children}
+          <Analytics />
+        </ThemeProvider>
       </body>
     </html>
   )

@@ -4,10 +4,10 @@ import PackagesClientPage from "./PackagesClientPage"
 export const metadata: Metadata = {
   title: "Packages & Pricing - Ubic Media Agency",
   description:
-    "Compare Ubic Media Agency packages for social media management, web design, and creative services to find the best fit for your brand.",
+    "Compare Ubic Media Agency packages and starting prices for brand identity, websites, strategy, social media, and creative support.",
   openGraph: {
     title: "Packages & Pricing - Ubic Media Agency",
-    description: "Choose a package tailored to your growth goals.",
+    description: "Clear entry-point pricing for businesses planning a sharper brand or website.",
     type: "website",
     url: "/packages",
   },

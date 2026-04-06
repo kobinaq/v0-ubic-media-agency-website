@@ -1,14 +1,14 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect } from "react"
+import { useState } from "react"
+import { CalendarDays, Check, Mail, MapPin, MessageCircle } from "lucide-react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent } from "@/components/ui/card"
-import { Mail, MessageCircle, MapPin, Check } from "lucide-react"
 import { siteConfig } from "@/lib/content"
 import { Analytics } from "@/components/analytics"
 
@@ -22,11 +22,6 @@ export default function ContactPage() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle")
-  const [isVisible, setIsVisible] = useState(false)
-
-  useEffect(() => {
-    setIsVisible(true)
-  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -66,194 +61,197 @@ export default function ContactPage() {
     <>
       <Analytics />
       <Header />
-      <main className="pt-24 min-h-screen relative overflow-hidden">
-        {/* Animated Background */}
-        <div className="fixed inset-0 -z-10">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-float" />
-          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-float-delayed" />
-          <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-accent/5 rounded-full blur-3xl animate-float-slow" />
-        </div>
 
-        {/* Split Screen Hero with Form */}
-        <section className="min-h-[calc(100vh-6rem)] px-6 py-12 lg:py-0">
-          <div className="mx-auto max-w-7xl h-full">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center min-h-[calc(100vh-12rem)]">
-              
-              {/* Left Side - Hero Content */}
-              <div className={`space-y-8 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}>
-                <div>
-                  <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-bold mb-6 text-balance leading-tight">
-                    Let's Create Something <span className="text-accent">Extraordinary</span>
-                  </h1>
-                  <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-                    Ready to transform your brand? Get in touch and let's start building your success story together.
-                  </p>
+      <main className="bg-background pt-24 text-foreground">
+        <section className="border-b border-border">
+          <div className="mx-auto max-w-7xl px-6 py-18 lg:px-8 lg:py-24">
+            <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+              <div className="max-w-2xl">
+                <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Contact</p>
+                <h1 className="mt-4 text-5xl font-serif font-bold tracking-tight md:text-6xl">
+                  Tell us what you are building and we will help you choose the right next step.
+                </h1>
+                <p className="mt-6 text-lg leading-8 text-muted-foreground">
+                  If you already know what you need, send a quick brief. If you are still figuring out scope, use
+                  WhatsApp or book a short call and we will help you narrow it down.
+                </p>
+
+                <div className="mt-10 space-y-4">
+                  {[
+                    "Best for launch projects, rebrands, and website upgrades",
+                    "Useful if you need help choosing between strategy, identity, and web design",
+                    "We usually reply within one working day",
+                  ].map((item) => (
+                    <div key={item} className="flex items-start gap-3 text-sm text-muted-foreground">
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                      <span>{item}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
 
-              {/* Right Side - Floating Glass Form */}
-              <div className={`transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'}`}>
-                <Card className="border-2 border-accent/20 bg-card/50 backdrop-blur-xl shadow-2xl">
-                  <CardContent className="p-8 md:p-10">
-                    <div className="space-y-6 mb-8">
-                      <div>
-                        <h2 className="text-2xl font-serif font-bold mb-2">Get in Touch</h2>
-                        <p className="text-sm text-muted-foreground">Fill out the form below and we'll get back to you within 24 hours</p>
-                      </div>
-                    </div>
-
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                      <div>
-                        <label htmlFor="name" className="block text-sm font-medium mb-2">
-                          Full Name *
-                        </label>
-                        <Input
-                          id="name"
-                          name="name"
-                          type="text"
-                          required
-                          value={formData.name}
-                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                          placeholder="John Doe"
-                        />
-                      </div>
-
-                      <div>
-                        <label htmlFor="email" className="block text-sm font-medium mb-2">
-                          Email Address *
-                        </label>
-                        <Input
-                          id="email"
-                          name="email"
-                          type="email"
-                          required
-                          value={formData.email}
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          placeholder="john@company.com"
-                        />
-                      </div>
-
-                      <div>
-                        <label htmlFor="phone" className="block text-sm font-medium mb-2">
-                          Contact Number *
-                        </label>
-                        <Input
-                          id="phone"
-                          name="phone"
-                          type="tel"
-                          required
-                          value={formData.phone}
-                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                          placeholder="+233 XX XXX XXXX"
-                        />
-                      </div>
-
-                      <div>
-                        <label htmlFor="message" className="block text-sm font-medium mb-2">
-                          Message *
-                        </label>
-                        <Textarea
-                          id="message"
-                          name="message"
-                          required
-                          value={formData.message}
-                          onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                          placeholder="Tell us about your project, goals, timeline, budget..."
-                          rows={6}
-                        />
-                      </div>
-
-                      {submitStatus === "success" && (
-                        <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
-                          <p className="text-sm text-green-600 dark:text-green-400 flex items-center gap-2">
-                            <Check className="w-4 h-4" />
-                            Thank you! We'll get back to you soon.
-                          </p>
-                        </div>
-                      )}
-                      {submitStatus === "error" && (
-                        <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
-                          <p className="text-sm text-red-600 dark:text-red-400">
-                            Something went wrong. Please try again.
-                          </p>
-                        </div>
-                      )}
-
-                      <Button 
-                        type="submit" 
-                        className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" 
-                        disabled={isSubmitting}
-                      >
-                        {isSubmitting ? "Sending..." : "Send Message"}
-                      </Button>
-                    </form>
-
-                    {/* Contact Information Below Form */}
-                    <div className="mt-10 pt-8 border-t border-border">
-                      <p className="text-sm text-muted-foreground mb-6">Or reach out directly:</p>
-                      <div className="space-y-4">
-                        {[
-                          { icon: MessageCircle, label: "WhatsApp", value: "Chat on WhatsApp", href: siteConfig.contact.whatsapp },
-                          { icon: Mail, label: "Email", value: siteConfig.contact.email, href: `mailto:${siteConfig.contact.email}` },
-                          { icon: MapPin, label: "Location", value: siteConfig.contact.address, href: null }
-                        ].map((item) => (
-                          <div key={item.label} className="flex items-start gap-3">
-                            <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
-                              <item.icon className="h-4 w-4 text-accent" />
-                            </div>
-                            <div>
-                              <p className="text-xs font-medium text-muted-foreground mb-1">{item.label}</p>
-                              {item.href ? (
-                                <a href={item.href} className="text-sm font-medium hover:text-accent transition-colors">
-                                  {item.value}
-                                </a>
-                              ) : (
-                                <p className="text-sm font-medium">{item.value}</p>
-                              )}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <a
+                  href={siteConfig.contact.whatsapp}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-[1.75rem] border border-border bg-card p-6 transition-colors hover:border-accent/50 hover:bg-accent/[0.04]"
+                >
+                  <MessageCircle className="h-5 w-5 text-accent" />
+                  <h2 className="mt-4 text-xl font-serif font-semibold">Chat on WhatsApp</h2>
+                  <p className="mt-2 text-sm leading-7 text-muted-foreground">Best for quick questions, budget checks, and faster back-and-forth.</p>
+                </a>
+                <a
+                  href="https://calendar.app.google/TPjTbTnJ5f9ztbvz5"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-[1.75rem] border border-border bg-card p-6 transition-colors hover:border-accent/50 hover:bg-accent/[0.04]"
+                >
+                  <CalendarDays className="h-5 w-5 text-accent" />
+                  <h2 className="mt-4 text-xl font-serif font-semibold">Book a call</h2>
+                  <p className="mt-2 text-sm leading-7 text-muted-foreground">Best for projects that need strategy, multiple services, or a rollout plan.</p>
+                </a>
+                <a
+                  href={`mailto:${siteConfig.contact.email}`}
+                  className="rounded-[1.75rem] border border-border bg-card p-6 transition-colors hover:border-accent/50 hover:bg-accent/[0.04]"
+                >
+                  <Mail className="h-5 w-5 text-accent" />
+                  <h2 className="mt-4 text-xl font-serif font-semibold">Email us</h2>
+                  <p className="mt-2 text-sm leading-7 text-muted-foreground">{siteConfig.contact.email}</p>
+                </a>
+                <div className="rounded-[1.75rem] border border-border bg-card p-6">
+                  <MapPin className="h-5 w-5 text-accent" />
+                  <h2 className="mt-4 text-xl font-serif font-semibold">Based in Accra</h2>
+                  <p className="mt-2 text-sm leading-7 text-muted-foreground">{siteConfig.contact.address}</p>
+                </div>
               </div>
             </div>
           </div>
         </section>
-      </main>
-      <Footer />
 
-      <style jsx>{`
-        @keyframes float {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          50% { transform: translate(30px, -30px) scale(1.1); }
-        }
-        @keyframes float-delayed {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          50% { transform: translate(-30px, 30px) scale(1.1); }
-        }
-        @keyframes float-slow {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          50% { transform: translate(20px, 20px) scale(1.05); }
-        }
-        .animate-float {
-          animation: float 20s ease-in-out infinite;
-        }
-        .animate-float-delayed {
-          animation: float-delayed 25s ease-in-out infinite;
-        }
-        .animate-float-slow {
-          animation: float-slow 30s ease-in-out infinite;
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.5s ease-out;
-        }
-      `}</style>
+        <section className="py-24">
+          <div className="mx-auto grid max-w-7xl gap-10 px-6 lg:grid-cols-[0.78fr_1.22fr] lg:px-8">
+            <div className="rounded-[2rem] border border-accent/20 bg-accent px-7 py-8 text-accent-foreground">
+              <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent-foreground/80">Helpful brief guide</p>
+              <div className="mt-6 space-y-5">
+                {[
+                  "What are you trying to launch, improve, or fix?",
+                  "Which service do you think you need most right now?",
+                  "Do you have a timeline, budget range, or launch date in mind?",
+                  "What is not working well with your current brand or website?",
+                ].map((item, index) => (
+                  <div key={item} className="border-t border-accent-foreground/15 pt-5 first:border-t-0 first:pt-0">
+                    <p className="text-sm font-medium text-accent-foreground/75">Prompt {index + 1}</p>
+                    <p className="mt-2 text-sm leading-7 text-accent-foreground/92">{item}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <Card className="rounded-[2rem] border border-border bg-card shadow-[0_20px_80px_rgba(0,0,0,0.08)]">
+              <CardContent className="p-8 md:p-10">
+                <div className="mb-8">
+                  <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Project enquiry</p>
+                  <h2 className="mt-4 text-3xl font-serif font-bold">Send a brief</h2>
+                  <p className="mt-3 text-sm leading-7 text-muted-foreground">
+                    Keep it simple. We just need enough context to guide you well.
+                  </p>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid gap-6 md:grid-cols-2">
+                    <div>
+                      <label htmlFor="name" className="mb-2 block text-sm font-medium">
+                        Full Name
+                      </label>
+                      <Input
+                        id="name"
+                        name="name"
+                        type="text"
+                        required
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        placeholder="John Doe"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="email" className="mb-2 block text-sm font-medium">
+                        Email Address
+                      </label>
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        required
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        placeholder="john@company.com"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label htmlFor="phone" className="mb-2 block text-sm font-medium">
+                      Phone or WhatsApp Number
+                    </label>
+                    <Input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      required
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      placeholder="+233 XX XXX XXXX"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="message" className="mb-2 block text-sm font-medium">
+                      Project Details
+                    </label>
+                    <Textarea
+                      id="message"
+                      name="message"
+                      required
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      placeholder="Tell us what you need, what stage the business is at, and any timeline or budget context."
+                      rows={7}
+                    />
+                  </div>
+
+                  {submitStatus === "success" && (
+                    <div className="rounded-2xl border border-green-500/30 bg-green-500/10 p-4">
+                      <p className="flex items-center gap-2 text-sm text-green-700 dark:text-green-300">
+                        <Check className="h-4 w-4" />
+                        Thanks. Your message is in and we will get back to you soon.
+                      </p>
+                    </div>
+                  )}
+
+                  {submitStatus === "error" && (
+                    <div className="rounded-2xl border border-red-500/30 bg-red-500/10 p-4">
+                      <p className="text-sm text-red-700 dark:text-red-300">Something went wrong. Please try again or contact us directly.</p>
+                    </div>
+                  )}
+
+                  <Button
+                    type="submit"
+                    size="lg"
+                    className="w-full bg-accent hover:bg-accent/90 text-accent-foreground"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "Sending..." : "Send Project Brief"}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+      </main>
+
+      <Footer />
     </>
   )
 }

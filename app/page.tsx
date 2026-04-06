@@ -2,12 +2,14 @@ import type { Metadata } from "next"
 import HomePageClient from "./home-page-client"
 
 export const metadata: Metadata = {
-  title: "Ubic Media Agency - Brand Development & Creative Services",
+  title: "Ubic Media Agency - Brand Identity, Websites & Creative Systems",
   description:
-    "Transform your brand with Ubic Media Agency. We offer social media management, web design, brand identity, photography, and videography services across Africa.",
+    "Ubic Media Agency helps ambitious businesses build sharper brands and clearer websites through strategy, design, and content-led creative execution.",
   keywords: [
     "brand development",
+    "brand identity agency",
     "creative agency",
+    "web design agency Ghana",
     "social media management",
     "web design",
     "photography",
@@ -17,9 +19,9 @@ export const metadata: Metadata = {
     "Africa",
   ],
   openGraph: {
-    title: "Ubic Media Agency - Bold Ideas. Real Impact.",
+    title: "Ubic Media Agency - Build a Brand People Trust",
     description:
-      "Transform your brand with strategic design, storytelling, and digital innovation. We help ambitious brands stand out.",
+      "Brand identity, websites, and content systems for ambitious businesses that need to look sharper and convert better.",
     type: "website",
   },
 }

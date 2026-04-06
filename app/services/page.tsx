@@ -2,12 +2,12 @@ import type { Metadata } from "next"
 import { ServicesClientPage } from "./ServicesClientPage"
 
 export const metadata: Metadata = {
-  title: "Our Services - Ubic Media Agency | Brand Development & Creative Solutions",
+  title: "Services - Ubic Media Agency | Brand Identity, Websites & Creative Support",
   description:
-    "Explore our full range of creative services: social media management, web design, brand identity, photography, videography, and brand strategy consulting.",
+    "Explore Ubic Media Agency services across brand identity, website design and development, social media support, strategy, and creative production.",
   keywords: [
     "creative services",
-    "brand development",
+    "brand identity agency",
     "social media management",
     "web design services",
     "photography services",
@@ -16,8 +16,8 @@ export const metadata: Metadata = {
     "content creation",
   ],
   openGraph: {
-    title: "Our Services - Ubic Media Agency",
-    description: "Comprehensive creative solutions crafted with precision and care",
+    title: "Services - Ubic Media Agency",
+    description: "Brand identity, websites, and creative support structured around clarity, credibility, and growth.",
     type: "website",
   },
 }

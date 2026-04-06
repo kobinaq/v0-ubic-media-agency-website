@@ -6,6 +6,7 @@ import { useState } from "react"
 import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { siteConfig } from "@/lib/content"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -19,7 +20,7 @@ export function Header() {
   ]
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
       <nav className="mx-auto max-w-7xl px-6 lg:px-8" aria-label="Global">
         <div className="flex items-center justify-between py-4">
           {/* Logo Section */}
@@ -51,6 +52,7 @@ export function Header() {
 
           {/* Desktop Controls */}
           <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:items-center lg:gap-4">
+            <ThemeToggle />
             <Button className="bg-accent hover:bg-accent/90 text-accent-foreground" asChild>
               <Link href="/contact">Get Started</Link>
             </Button>
@@ -58,6 +60,7 @@ export function Header() {
 
           {/* Mobile Menu Button */}
           <div className="flex lg:hidden items-center gap-4">
+            <ThemeToggle />
             <button
               type="button"
               className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-foreground"
@@ -115,7 +118,8 @@ export function Header() {
                   </Link>
                 ))}
               </div>
-              <div className="mt-6">
+              <div className="mt-6 flex items-center gap-3">
+                <ThemeToggle />
                 <Button className="bg-accent hover:bg-accent/90 text-accent-foreground w-full" asChild>
                   <Link href="/contact" onClick={() => setMobileMenuOpen(false)}>
                     Get Started

@@ -4,10 +4,10 @@ import ContactClientPage from "./ContactClientPage"
 export const metadata: Metadata = {
   title: "Contact Ubic Media Agency - Start Your Next Brand Project",
   description:
-    "Contact Ubic Media Agency for brand strategy, social media management, web design, and creative production services.",
+    "Contact Ubic Media Agency to discuss brand identity, websites, strategy, social media support, and creative production.",
   openGraph: {
     title: "Contact Ubic Media Agency",
-    description: "Let’s discuss your goals and build a brand that performs.",
+    description: "Send a project brief, message us on WhatsApp, or book a strategy call.",
     type: "website",
     url: "/contact",
   },

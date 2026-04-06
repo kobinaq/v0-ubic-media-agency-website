@@ -1,96 +1,81 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
-import { ArrowRight, ArrowDown } from "lucide-react"
+import Script from "next/script"
+import { ArrowRight, CalendarDays, Check, MessageCircle } from "lucide-react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { services } from "@/lib/content"
+import { services, siteConfig } from "@/lib/content"
 import { Analytics } from "@/components/analytics"
 import { Button } from "@/components/ui/button"
 import { useCurrency } from "@/lib/currency"
 import { generateServiceSchema, generateFAQSchema, generateBreadcrumbSchema } from "@/lib/schema"
-import Script from "next/script" // Import Script component
+
+const serviceDetails: Record<string, string[]> = {
+  "social-media": [
+    "Content planning and creative direction",
+    "Platform-ready design and captions",
+    "Publishing rhythm built around your audience",
+  ],
+  "web-design": [
+    "Clear page structure and conversion-focused UX",
+    "Responsive build with contact or payment flows",
+    "Launch support and quality checks",
+  ],
+  "brand-identity": [
+    "Logo and visual identity direction",
+    "Typography, color system, and brand rules",
+    "Templates that keep the brand consistent",
+  ],
+  "brand-strategy": [
+    "Positioning, messaging, and audience clarity",
+    "Brand audit and direction-setting sessions",
+    "Recommendations you can act on quickly",
+  ],
+  "photography-videography": [
+    "Production planning and shot direction",
+    "Polished stills or video assets for campaigns",
+    "Content tailored for digital and brand use",
+  ],
+  "print-production": [
+    "Collateral design for physical touchpoints",
+    "Production-ready files and specifications",
+    "Brand consistency across print materials",
+  ],
+}
+
+const serviceSchemas = services.services.map((service) => generateServiceSchema(service))
+
+const faqSchema = generateFAQSchema([
+  {
+    question: "What service should I start with if my brand feels unclear?",
+    answer:
+      "Brand identity or brand strategy is usually the best starting point when the core message, look, and positioning are not yet working together.",
+  },
+  {
+    question: "Can Ubic handle both the brand and the website?",
+    answer:
+      "Yes. Ubic is structured to handle strategy, identity, website design and development, and supporting content so the final experience feels coherent.",
+  },
+  {
+    question: "Do you offer one-off projects and retainers?",
+    answer:
+      "Yes. Some clients work with us for a one-time launch project while others stay on for content, social media, or ongoing creative support.",
+  },
+  {
+    question: "How quickly can a project start?",
+    answer:
+      "That depends on scope and queue, but the fastest way to get clarity is to book a strategy call or message us on WhatsApp with your timeline.",
+  },
+])
+
+const breadcrumbSchema = generateBreadcrumbSchema([
+  { name: "Home", url: process.env.NEXT_PUBLIC_SITE_URL || "" },
+  { name: "Services", url: `${process.env.NEXT_PUBLIC_SITE_URL}/services` },
+])
 
 export function ServicesClientPage() {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [scrollProgress, setScrollProgress] = useState(0)
-  const [showFinalCTA, setShowFinalCTA] = useState(false)
-  const containerRef = useRef<HTMLDivElement>(null)
-  const isScrollingRef = useRef(false)
-  const { currency, formatPrice } = useCurrency()
-
-  const serviceSchemas = services.services.map((service) => generateServiceSchema(service))
-
-  const faqSchema = generateFAQSchema([
-    {
-      question: "What is included in social media management?",
-      answer:
-        "Our social media management includes content strategy, content creation, posting schedules, community engagement, analytics tracking, and campaign optimization across all major platforms.",
-    },
-    {
-      question: "Do you offer custom website design?",
-      answer:
-        "Yes, we design and develop custom, responsive websites tailored to your brand identity and business goals. Each website is built to convert visitors into customers.",
-    },
-    {
-      question: "What does brand identity development include?",
-      answer:
-        "Brand identity development includes logo design, color palette creation, typography selection, brand guidelines, messaging framework, and visual identity systems.",
-    },
-    {
-      question: "How much do your services cost?",
-      answer:
-        "Pricing varies based on project scope and requirements. We offer packages starting at different price points, and we're happy to provide custom quotes for larger projects.",
-    },
-    {
-      question: "How long does a typical project take?",
-      answer:
-        "Project timelines vary depending on complexity and scope. We'll provide a detailed timeline during our initial consultation.",
-    },
-  ])
-
-  const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: "Home", url: process.env.NEXT_PUBLIC_SITE_URL || "" },
-    { name: "Services", url: `${process.env.NEXT_PUBLIC_SITE_URL}/services` },
-  ])
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!containerRef.current || isScrollingRef.current) return
-
-      const scrollTop = window.scrollY
-      const windowHeight = window.innerHeight
-      const totalHeight = windowHeight * services.services.length
-
-      const progress = Math.min(Math.max(scrollTop / totalHeight, 0), 0.99)
-      const index = Math.floor(progress * services.services.length)
-
-      setCurrentIndex(index)
-      const localProgress = (progress * services.services.length) % 1
-      setScrollProgress(localProgress)
-
-      // Show final CTA when on last service and scrolled past 60%
-      setShowFinalCTA(index === services.services.length - 1 && localProgress > 0.6)
-    }
-
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    handleScroll()
-
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
-
-  const handleNext = () => {
-    if (currentIndex < services.services.length - 1) {
-      isScrollingRef.current = true
-      const nextScroll = (currentIndex + 1) * window.innerHeight
-      window.scrollTo({ top: nextScroll, behavior: "smooth" })
-
-      setTimeout(() => {
-        isScrollingRef.current = false
-      }, 1000)
-    }
-  }
+  const { formatPrice } = useCurrency()
 
   return (
     <>
@@ -113,206 +98,146 @@ export function ServicesClientPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
+
       <Header />
 
-      <div ref={containerRef} className="bg-background text-foreground">
-        {/* Spacer to enable scrolling */}
-        <div style={{ height: `${services.services.length * 100}vh` }} />
-
-        {/* Fixed viewport container */}
-        <div className="fixed inset-0 overflow-hidden pt-[72px]">
-          {/* Progress indicator */}
-          <div className="fixed left-6 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col gap-3">
-            {services.services.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => {
-                  window.scrollTo({ top: index * window.innerHeight, behavior: "smooth" })
-                }}
-                className="group relative"
-              >
-                <div
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    index === currentIndex
-                      ? "bg-accent scale-150"
-                      : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
-                  }`}
-                />
-                <span className="absolute left-6 top-1/2 -translate-y-1/2 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity bg-card px-2 py-1 rounded border border-border">
-                  {services.services[index].title}
-                </span>
-              </button>
-            ))}
-          </div>
-
-          {/* Service counter */}
-          <div className="fixed right-6 bottom-6 z-40 text-sm font-mono">
-            <span className="text-accent text-2xl font-bold">{String(currentIndex + 1).padStart(2, "0")}</span>
-            <span className="text-muted-foreground"> / {String(services.services.length).padStart(2, "0")}</span>
-          </div>
-
-          {/* 3D Cards Container */}
-          <div className="h-full flex items-center justify-center px-6 py-12">
-            <div className="relative w-full max-w-6xl h-[80vh]" style={{ perspective: "2000px" }}>
-              {services.services.map((service, index) => {
-                const isActive = index === currentIndex
-                const isPast = index < currentIndex
-                const isFuture = index > currentIndex
-
-                let transform = ""
-                let opacity = 0
-                let zIndex = 0
-                let filter = "blur(0px)"
-
-                if (isActive) {
-                  const progress = scrollProgress
-                  transform = `
-                    translateX(${progress * -100}%)
-                    translateZ(${-progress * 200}px)
-                    rotateY(${progress * -15}deg)
-                    scale(${1 - progress * 0.1})
-                  `
-                  opacity = 1 - progress * 0.5
-                  zIndex = 50
-                } else if (isPast) {
-                  transform = "translateX(-120%) translateZ(-300px) rotateY(-20deg) scale(0.8)"
-                  opacity = 0
-                  zIndex = 10 - (currentIndex - index)
-                  filter = "blur(4px)"
-                } else if (isFuture) {
-                  const distance = index - currentIndex
-                  transform = `translateX(${20 * distance}%) translateZ(-${100 * distance}px) scale(${1 - 0.1 * distance})`
-                  opacity = Math.max(0, 1 - (distance - 1) * 0.5)
-                  zIndex = 40 - distance
-                  filter = `blur(${distance * 2}px)`
-                }
-
-                return (
-                  <div
-                    key={service.id}
-                    className="absolute inset-0 transition-all duration-700 ease-out"
-                    style={{
-                      transform,
-                      opacity,
-                      zIndex,
-                      filter,
-                      transformStyle: "preserve-3d",
-                      pointerEvents: isActive ? "auto" : "none",
-                    }}
-                  >
-                    <div className="relative h-full bg-card rounded-3xl border-2 border-accent/20 overflow-hidden shadow-2xl">
-                      {/* Glow effect */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-accent/5" />
-
-                      {/* Content */}
-                      <div className="relative h-full flex flex-col justify-center p-8 md:p-12 lg:p-16 z-10">
-                        <div className="max-w-3xl">
-                          {/* Number */}
-                          <div className="text-7xl md:text-8xl lg:text-9xl font-serif font-bold text-accent/10 mb-4">
-                            {String(index + 1).padStart(2, "0")}
-                          </div>
-
-                          {/* Title */}
-                          <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold mb-4 text-foreground">
-                            {service.title}
-                          </h2>
-
-                          <div className="mb-6 flex items-baseline gap-2">
-                            <span className="text-sm text-muted-foreground">Starting from</span>
-                            <span className="text-2xl font-bold text-accent">{formatPrice(service.startingPrice)}</span>
-                          </div>
-
-                          {/* Description */}
-                          <p className="text-base md:text-lg text-muted-foreground mb-8 leading-relaxed max-w-2xl">
-                            {service.description}
-                          </p>
-
-                          {/* CTA */}
-                          <div className="flex gap-4">
-                            <Button
-                              size="lg"
-                              className="bg-accent hover:bg-accent/90 text-accent-foreground relative z-20"
-                              asChild
-                            >
-                              <Link href="/packages">
-                                View Packages <ArrowRight className="ml-2 w-4 h-4" />
-                              </Link>
-                            </Button>
-                            <Button
-                              size="lg"
-                              variant="outline"
-                              className="border-accent/30 hover:bg-accent/10 bg-transparent relative z-20"
-                              asChild
-                            >
-                              <a
-                                href="https://calendar.app.google/TPjTbTnJ5f9ztbvz5"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                Book a Meeting <ArrowRight className="ml-2 w-4 h-4" />
-                              </a>
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Decorative elements */}
-                      <div className="absolute top-0 right-0 w-64 h-64 md:w-96 md:h-96 bg-accent/5 rounded-full blur-3xl" />
-                      <div className="absolute bottom-0 left-0 w-64 h-64 md:w-96 md:h-96 bg-accent/5 rounded-full blur-3xl" />
-                    </div>
-                  </div>
-                )
-              })}
+      <main className="bg-background pt-24 text-foreground">
+        <section className="border-b border-border">
+          <div className="mx-auto max-w-7xl px-6 py-18 lg:px-8 lg:py-24">
+            <div className="max-w-3xl">
+              <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Services</p>
+              <h1 className="mt-4 text-5xl font-serif font-bold tracking-tight md:text-6xl">
+                The services we use to make brands clearer, more credible, and easier to choose.
+              </h1>
+              <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
+                We do not treat brand, website, and content as separate problems. We shape them together so the business
+                feels more trustworthy wherever people find you.
+              </p>
+              <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+                <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground" asChild>
+                  <Link href="/contact">Start a Project</Link>
+                </Button>
+                <Button size="lg" variant="outline" className="border-accent/30 bg-transparent" asChild>
+                  <Link href="/packages">See Packages & Pricing</Link>
+                </Button>
+              </div>
             </div>
           </div>
+        </section>
 
-          {/* Scroll hint */}
-          {currentIndex < services.services.length - 1 && !showFinalCTA && (
-            <button
-              onClick={handleNext}
-              className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center gap-2 text-muted-foreground hover:text-foreground transition-colors group"
-            >
-              <span className="text-xs uppercase tracking-wider">Scroll</span>
-              <ArrowDown className="w-5 h-5 animate-bounce" />
-            </button>
-          )}
+        <section className="py-24">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="grid gap-6 lg:grid-cols-2">
+              {services.services.map((service) => (
+                <article key={service.id} className="rounded-[1.75rem] border border-border bg-card p-7">
+                  <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                    <div className="max-w-xl">
+                      <p className="text-xs font-medium uppercase tracking-[0.24em] text-accent">
+                        Starting from {formatPrice(service.startingPrice)}
+                      </p>
+                      <h2 className="mt-4 text-3xl font-serif font-semibold tracking-tight">{service.title}</h2>
+                      <p className="mt-4 text-sm leading-7 text-muted-foreground">{service.description}</p>
+                    </div>
+                    <div className="rounded-full border border-accent/20 bg-accent/10 px-4 py-2 text-xs font-medium text-accent">
+                      Service area
+                    </div>
+                  </div>
 
-          {/* Final CTA Overlay */}
-          {showFinalCTA && (
-            <div className="fixed inset-0 bg-accent flex items-center justify-center z-50 animate-fadeIn pt-[72px]">
-              <div className="text-center px-6 max-w-4xl">
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold mb-6 text-accent-foreground">
-                  Ready to Transform Your Brand?
+                  <ul className="mt-8 grid gap-3 text-sm text-muted-foreground">
+                    {(serviceDetails[service.id] ?? []).map((detail) => (
+                      <li key={detail} className="flex items-start gap-3">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                        <span>{detail}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="border-y border-border bg-secondary/20 py-24">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+              <div className="max-w-xl">
+                <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">How engagements usually work</p>
+                <h2 className="mt-4 text-4xl font-serif font-bold tracking-tight md:text-5xl">
+                  We help clients buy with more confidence by making scope visible early.
                 </h2>
-                <p className="text-lg md:text-xl text-accent-foreground/90 mb-8 max-w-2xl mx-auto leading-relaxed">
-                  Let's collaborate to create something extraordinary that resonates with your audience and drives real
-                  business impact.
-                </p>
-                <Button size="lg" variant="secondary" className="text-lg" asChild>
-                  <Link href="/contact">
-                    Get in Touch <ArrowRight className="ml-2 w-5 h-5" />
+              </div>
+
+              <div className="grid gap-5">
+                {[
+                  "We start with the outcome you need, not a generic package.",
+                  "We recommend the smallest scope that solves the real problem.",
+                  "If the brand needs strategy first, we say that before design starts.",
+                  "If the website is the blocker, we show what has to change to improve conversion.",
+                ].map((point, index) => (
+                  <div key={point} className="rounded-[1.5rem] border border-border bg-card p-6">
+                    <div className="flex items-start gap-4">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent text-sm font-semibold text-accent-foreground">
+                        {index + 1}
+                      </div>
+                      <p className="text-sm leading-7 text-muted-foreground">{point}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-24">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="grid gap-8 lg:grid-cols-2">
+              <div className="rounded-[2rem] border border-accent/20 bg-accent px-7 py-8 text-accent-foreground">
+                <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent-foreground/80">When to reach out</p>
+                <div className="mt-6 space-y-4 text-sm leading-7 text-accent-foreground/90">
+                  <p>Your website looks dated or unclear and visitors are not taking action.</p>
+                  <p>Your business has grown but the brand presentation still feels small or inconsistent.</p>
+                  <p>You need one partner to connect strategy, visuals, and execution instead of managing multiple vendors.</p>
+                </div>
+              </div>
+
+              <div className="rounded-[2rem] border border-border bg-card p-7">
+                <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Next step</p>
+                <h2 className="mt-4 text-4xl font-serif font-bold tracking-tight">Choose a quick route to clarity.</h2>
+                <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                  <a
+                    href="https://calendar.app.google/TPjTbTnJ5f9ztbvz5"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-[1.5rem] border border-border bg-background p-5 transition-colors hover:border-accent/50 hover:bg-accent/[0.04]"
+                  >
+                    <CalendarDays className="h-5 w-5 text-accent" />
+                    <h3 className="mt-4 text-lg font-semibold">Book a meeting</h3>
+                    <p className="mt-2 text-sm leading-7 text-muted-foreground">Best for planning a project with multiple deliverables.</p>
+                  </a>
+                  <a
+                    href={siteConfig.contact.whatsapp}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-[1.5rem] border border-border bg-background p-5 transition-colors hover:border-accent/50 hover:bg-accent/[0.04]"
+                  >
+                    <MessageCircle className="h-5 w-5 text-accent" />
+                    <h3 className="mt-4 text-lg font-semibold">Chat on WhatsApp</h3>
+                    <p className="mt-2 text-sm leading-7 text-muted-foreground">Best for a quick budget check or scope question.</p>
+                  </a>
+                </div>
+                <Button className="mt-8 bg-accent hover:bg-accent/90 text-accent-foreground" asChild>
+                  <Link href="/packages">
+                    Compare Packages
+                    <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        </section>
+      </main>
 
-        <style jsx>{`
-          @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-          }
-          .animate-fadeIn {
-            animation: fadeIn 0.5s ease-out;
-          }
-        `}</style>
-      </div>
-
-      {/* Footer - always rendered below the scrolling section */}
-      <div className="relative bg-background" style={{ marginTop: `${services.services.length * 100}vh` }}>
-        <Footer />
-      </div>
+      <Footer />
     </>
   )
 }

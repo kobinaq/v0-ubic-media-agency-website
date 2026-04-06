@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Header } from "@/components/header"
@@ -13,12 +14,25 @@ import { generateFAQSchema, generateBreadcrumbSchema } from "@/lib/schema"
 import Script from "next/script"
 
 // Typed text animation hook
-function useTypedText(words: string[], typingSpeed = 150, deletingSpeed = 100, delayBetweenWords = 2000) {
+function useTypedText(
+  words: string[],
+  typingSpeed = 150,
+  deletingSpeed = 100,
+  delayBetweenWords = 2000,
+  enabled = true,
+) {
   const [text, setText] = useState("")
   const [wordIndex, setWordIndex] = useState(0)
   const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
+    if (!enabled) {
+      setText(words[0] ?? "")
+      setWordIndex(0)
+      setIsDeleting(false)
+      return
+    }
+
     const currentWord = words[wordIndex]
 
     const timeout = setTimeout(
@@ -42,7 +56,7 @@ function useTypedText(words: string[], typingSpeed = 150, deletingSpeed = 100, d
     )
 
     return () => clearTimeout(timeout)
-  }, [text, isDeleting, wordIndex, words, typingSpeed, deletingSpeed, delayBetweenWords])
+  }, [text, isDeleting, wordIndex, words, typingSpeed, deletingSpeed, delayBetweenWords, enabled])
 
   return text
 }
@@ -112,20 +126,14 @@ function pickFeatured(projects: any[], n = 3) {
     return acc
   }, {})
 
-  const categories = Object.keys(byCategory)
+  const categories = Object.keys(byCategory).sort()
   const chosen: any[] = []
-
-  for (let i = categories.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[categories[i], categories[j]] = [categories[j], categories[i]]
-  }
 
   for (const cat of categories) {
     if (chosen.length >= n) break
     const list = byCategory[cat]
     if (list && list.length) {
-      const project = list[Math.floor(Math.random() * list.length)]
-      chosen.push(project)
+      chosen.push(list[0])
     }
   }
 
@@ -141,8 +149,9 @@ function pickFeatured(projects: any[], n = 3) {
 
 export default function HomePageClient() {
   const [featured] = useState(() => pickFeatured(portfolioData.projects, 6))
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const typedService = useTypedText(["Photography", "Websites", "Brands", "Stories", "Campaigns"])
+  const [showHeroVideo, setShowHeroVideo] = useState(false)
+  const [allowMotion, setAllowMotion] = useState(true)
+  const typedService = useTypedText(["Photography", "Websites", "Brands", "Stories", "Campaigns"], 150, 100, 2000, allowMotion)
 
   const [servicesRef, servicesInView] = useInView()
   const [workRef, workInView] = useInView()
@@ -154,11 +163,22 @@ export default function HomePageClient() {
   const yearsCount = useCounter(5, 2000, statsInView)
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY })
+    const mediaQuery = window.matchMedia("(min-width: 1024px) and (prefers-reduced-motion: no-preference)")
+    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
+
+    const syncExperience = () => {
+      setShowHeroVideo(mediaQuery.matches)
+      setAllowMotion(!reducedMotionQuery.matches)
     }
-    window.addEventListener("mousemove", handleMouseMove)
-    return () => window.removeEventListener("mousemove", handleMouseMove)
+
+    syncExperience()
+    mediaQuery.addEventListener("change", syncExperience)
+    reducedMotionQuery.addEventListener("change", syncExperience)
+
+    return () => {
+      mediaQuery.removeEventListener("change", syncExperience)
+      reducedMotionQuery.removeEventListener("change", syncExperience)
+    }
   }, [])
 
   const faqSchema = generateFAQSchema([
@@ -208,18 +228,29 @@ export default function HomePageClient() {
       <main>
         {/* Enhanced Hero Section */}
         <section className="relative min-h-screen flex items-center justify-center px-6 pt-32 pb-20 overflow-hidden">
-          {/* Animated Background - placeholder for video */}
+          {/* Media background */}
           <div className="absolute inset-0 -z-10">
-            {/* Video background */}
-            <video 
-              autoPlay 
-              muted 
-              loop 
-              playsInline
-              className="absolute inset-0 w-full h-full object-cover"
-            >
-              <source src="/hero-creative-motion.mp4" type="video/mp4" />
-            </video>
+            <Image
+              src="/hero-creative-workspace.jpg"
+              alt=""
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover"
+            />
+            {showHeroVideo && (
+              <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="none"
+                poster="/hero-creative-workspace.jpg"
+                className="absolute inset-0 w-full h-full object-cover"
+              >
+                <source src="/hero-creative-motion.mp4" type="video/mp4" />
+              </video>
+            )}
   
             {/* Dark overlay to ensure text readability */}
             <div className="absolute inset-0 bg-black/50" />
@@ -228,13 +259,7 @@ export default function HomePageClient() {
             <div className="absolute top-0 left-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl opacity-30" />
             <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl opacity-20" />
   
-            {/* Parallax overlay */}
-            <div
-              className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.3)_100%)]"
-              style={{
-                transform: `translate(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px)`,
-              }}
-            />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.3)_100%)]" />
           </div>
 
           <div className="mx-auto max-w-5xl text-center relative z-10">
@@ -399,10 +424,12 @@ export default function HomePageClient() {
                       transformStyle: "preserve-3d",
                     }}
                   >
-                    <img
+                    <Image
                       src={p.image || "/placeholder.svg"}
                       alt={p.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      fill
+                      sizes={isLarge ? "(min-width: 768px) 66vw, 100vw" : "(min-width: 768px) 33vw, 100vw"}
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                       <div>
@@ -496,10 +523,12 @@ export default function HomePageClient() {
               <div
                 className={`relative aspect-square rounded-2xl overflow-hidden border-2 border-accent/20 transition-all duration-700 ${whyInView ? "opacity-100 translate-x-0 scale-100" : "opacity-0 translate-x-12 scale-95"}`}
               >
-                <img
+                <Image
                   src="/creative-team-collaboration-modern-office.jpg"
                   alt="Ubic Media Agency team"
-                  className="object-cover w-full h-full"
+                  fill
+                  sizes="(min-width: 1024px) 50vw, 100vw"
+                  className="object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-accent/40 to-transparent" />
               </div>
@@ -592,6 +621,17 @@ export default function HomePageClient() {
         }
         .animate-shimmer-reverse {
           animation: shimmer-reverse 2s ease-in-out infinite;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .animate-float,
+          .animate-float-delayed,
+          .animate-float-slow,
+          .animate-fadeInUp,
+          .animate-blink,
+          .animate-shimmer,
+          .animate-shimmer-reverse {
+            animation: none;
+          }
         }
       `}</style>
     </>

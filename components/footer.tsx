@@ -10,7 +10,7 @@ export function Footer() {
         <div className="grid gap-12 lg:grid-cols-[1.3fr_0.7fr_0.7fr_0.7fr]">
           <div>
             <Link href="/" className="inline-flex items-center" aria-label={siteConfig.siteName}>
-              <Image src="/logo.png" alt={siteConfig.siteName} width={160} height={46} className="h-auto w-auto max-h-10" />
+              <Image src="/logo.png" alt={siteConfig.siteName} width={80} height={23} className="h-auto w-auto max-h-5" />
             </Link>
             <p className="mt-5 max-w-md text-sm leading-7 text-muted-foreground">{siteConfig.tagline}</p>
             <div className="mt-8 flex gap-3">

@@ -179,3 +179,14 @@ html.dark {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
 }
+
+.retro-image {
+  filter: grayscale(100%) contrast(1.08) sepia(0.22) saturate(0.72) brightness(0.94);
+  transition: filter 220ms ease, transform 220ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .retro-image:hover {
+    filter: none;
+  }
+}

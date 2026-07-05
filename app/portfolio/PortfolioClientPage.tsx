@@ -127,7 +127,7 @@ export default function PortfolioPage() {
                         alt={project.title}
                         fill
                         sizes={isLarge ? "(min-width: 768px) 66vw, 100vw" : "(min-width: 768px) 33vw, 100vw"}
-                        className="object-cover"
+                        className="retro-image object-cover"
                       />
                       {/* Gradient overlay */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-300" />
@@ -207,7 +207,7 @@ export default function PortfolioPage() {
                     alt={selectedProject.title}
                     fill
                     sizes="(min-width: 1024px) 50vw, 100vw"
-                    className="object-cover"
+                    className="retro-image object-cover"
                   />
                 </div>
 

@@ -1,7 +1,6 @@
-import Image from "next/image"
 import Link from "next/link"
 import Script from "next/script"
-import { ArrowRight, CalendarDays, Check, MessageCircle } from "lucide-react"
+import { ArrowRight, CalendarDays, MessageCircle } from "lucide-react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
@@ -103,7 +102,7 @@ export default function HomePageClient() {
               <span>Brand - Web - Content</span>
             </div>
 
-            <div className="mt-12 grid gap-14 lg:grid-cols-[1.12fr_0.88fr] lg:items-end">
+            <div className="mt-12 max-w-4xl">
               <div className="max-w-3xl">
                 <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Editorial studio</p>
                 <h1 className="mt-5 max-w-4xl text-5xl font-semibold leading-[0.94] tracking-[-0.04em] md:text-6xl lg:text-[6.5rem]">
@@ -125,37 +124,6 @@ export default function HomePageClient() {
                   <Button size="lg" variant="outline" className="border-border bg-background/80" asChild>
                     <Link href="/portfolio">See Selected Work</Link>
                   </Button>
-                </div>
-
-                <div className="mt-8 flex flex-wrap gap-3 text-sm text-muted-foreground">
-                  {[
-                    "Clear positioning",
-                    "Conversion-focused websites",
-                    "Transparent starting prices",
-                  ].map((item) => (
-                    <div key={item} className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2">
-                      <Check className="h-4 w-4 text-accent" />
-                      <span>{item}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="relative aspect-[4/5] overflow-hidden border border-border bg-card">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_25%,rgba(227,167,46,0.55),transparent_45%),radial-gradient(circle_at_70%_70%,rgba(31,71,65,0.55),transparent_50%),linear-gradient(135deg,#201c1a,#1f4741)]" />
-                <div className="absolute inset-0 bg-[radial-gradient(rgba(244,237,220,0.5)_1px,transparent_1.35px)] bg-[size:7px_7px] mix-blend-overlay opacity-60" />
-                <div className="absolute inset-0 opacity-20 mix-blend-multiply bg-[radial-gradient(circle,_rgba(255,255,255,0.3)_1px,_transparent_1px)] bg-[size:12px_12px]" />
-                <div className="absolute right-5 top-5 rounded-full border border-paper/70 px-4 py-2 text-[11px] uppercase tracking-[0.24em] text-paper">
-                  Special issue
-                </div>
-                <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-4 text-paper">
-                  <div>
-                    <div className="text-3xl font-serif italic">Ubic</div>
-                    <p className="mt-1 text-xs uppercase tracking-[0.22em] text-paper/80">Printed digitally in Accra</p>
-                  </div>
-                  <div className="max-w-[10rem] border-l border-paper/40 pl-4 text-right text-xs uppercase tracking-[0.22em] text-paper/75">
-                    Strategy, identity, websites, and content systems.
-                  </div>
                 </div>
               </div>
             </div>
@@ -234,7 +202,7 @@ export default function HomePageClient() {
                       alt={project.title}
                       fill
                       sizes="(min-width: 1024px) 50vw, 100vw"
-                      className="object-cover"
+                      className="retro-image object-cover"
                     />
                     <div className="absolute left-4 top-4 rounded-full bg-background px-3 py-1 text-xs uppercase tracking-[0.18em] text-foreground">
                       {project.category}

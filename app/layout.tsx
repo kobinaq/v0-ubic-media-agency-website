@@ -31,6 +31,11 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://weareubic.com"),
   title: `${siteConfig.siteName} - ${siteConfig.tagline}`,
   description: siteConfig.description,
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
   keywords: [
     "brand development",
     "brand agency Ghana",

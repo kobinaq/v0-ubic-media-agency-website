@@ -25,10 +25,7 @@ export function Header() {
         <div className="flex items-center justify-between gap-6 py-4 lg:py-5">
           <div className="min-w-0 flex items-center gap-4">
             <Link href="/" className="flex items-center gap-3 text-xl font-semibold tracking-[-0.03em] text-foreground">
-              <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-border bg-card">
-                <Image src="/logo.png" alt={siteConfig.siteName} width={32} height={32} priority className="h-full w-full object-contain p-1" />
-              </span>
-              <span className="hidden sm:inline-flex">{siteConfig.siteName}</span>
+              <Image src="/logo.png" alt={siteConfig.siteName} width={70} height={20} priority className="h-auto w-auto max-h-5" />
             </Link>
             <span className="hidden border-l border-border pl-4 text-xs uppercase tracking-[0.28em] text-muted-foreground xl:inline-flex">
               Editorial studio
@@ -83,9 +80,7 @@ export function Header() {
             <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-6 lg:px-8">
               <div className="flex items-center justify-between border-b border-border pb-5">
                 <Link href="/" className="flex items-center" onClick={() => setMobileMenuOpen(false)}>
-                  <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-border bg-card">
-                    <Image src="/logo.png" alt={siteConfig.siteName} width={32} height={32} className="h-full w-full object-contain p-1" />
-                  </span>
+                  <Image src="/logo.png" alt={siteConfig.siteName} width={70} height={20} className="h-auto w-auto max-h-5" />
                 </Link>
                 <button
                   type="button"

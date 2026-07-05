@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import Script from "next/script"
 import { ArrowRight, CalendarDays, MessageCircle } from "lucide-react"
 import { Header } from "@/components/header"
@@ -104,7 +105,9 @@ export default function HomePageClient() {
 
             <div className="mt-12 max-w-4xl">
               <div className="max-w-3xl">
-                <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Editorial studio</p>
+                <div className="inline-flex items-center">
+                  <Image src="/logo.png" alt={siteConfig.siteName} width={240} height={68} priority className="h-auto w-auto max-h-14" />
+                </div>
                 <h1 className="mt-5 max-w-4xl text-5xl font-semibold leading-[0.94] tracking-[-0.04em] md:text-6xl lg:text-[6.5rem]">
                   Build a brand
                   <span className="block font-serif italic text-accent">people trust.</span>

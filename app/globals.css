@@ -181,6 +181,18 @@ html.dark {
 }
 
 .retro-image {
+  filter: grayscale(1) sepia(0.2) contrast(1.06) saturate(0.65);
+  transition: filter 220ms ease, transform 220ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .retro-image,
+  .retro-image:hover {
+    filter: none;
+  }
+}
+
+.retro-image {
   filter: grayscale(100%) contrast(1.08) sepia(0.22) saturate(0.72) brightness(0.94);
   transition: filter 220ms ease, transform 220ms ease;
 }

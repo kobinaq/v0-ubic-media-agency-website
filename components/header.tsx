@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { useState } from "react"
 import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -23,9 +24,8 @@ export function Header() {
       <nav className="mx-auto max-w-7xl px-6 lg:px-8" aria-label="Global">
         <div className="flex items-center justify-between gap-6 py-4 lg:py-5">
           <div className="min-w-0 flex items-center gap-4">
-            <Link href="/" className="flex items-baseline gap-1.5 text-xl font-semibold tracking-[-0.03em] text-foreground">
-              <span className="font-serif text-2xl italic text-accent">U</span>
-              <span>{siteConfig.siteName}</span>
+            <Link href="/" className="flex items-center gap-3 text-xl font-semibold tracking-[-0.03em] text-foreground">
+              <Image src="/logo.png" alt={siteConfig.siteName} width={140} height={40} priority className="h-auto w-auto max-h-9" />
             </Link>
             <span className="hidden border-l border-border pl-4 text-xs uppercase tracking-[0.28em] text-muted-foreground xl:inline-flex">
               Editorial studio
@@ -79,9 +79,8 @@ export function Header() {
           >
             <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-6 lg:px-8">
               <div className="flex items-center justify-between border-b border-border pb-5">
-                <Link href="/" className="text-xl font-semibold tracking-[-0.03em] text-foreground" onClick={() => setMobileMenuOpen(false)}>
-                  <span className="font-serif text-2xl italic text-accent">U</span>
-                  <span>{siteConfig.siteName}</span>
+                <Link href="/" className="flex items-center" onClick={() => setMobileMenuOpen(false)}>
+                  <Image src="/logo.png" alt={siteConfig.siteName} width={140} height={40} className="h-auto w-auto max-h-9" />
                 </Link>
                 <button
                   type="button"

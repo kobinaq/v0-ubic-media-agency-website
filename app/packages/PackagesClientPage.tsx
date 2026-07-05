@@ -120,43 +120,53 @@ export default function PackagesPage() {
       <main className="bg-background pt-24 text-foreground">
         <section className="border-b border-border">
           <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-24">
-            <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr]">
+            <div className="grid gap-12 lg:grid-cols-[1.08fr_0.92fr] lg:items-end">
               <div className="max-w-3xl">
-                <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Packages & pricing</p>
+                <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Issue 02 — pricing</p>
                 <h1 className="mt-4 text-5xl font-semibold tracking-[-0.04em] md:text-6xl">
-                  Clear entry points for businesses that want to move without guessing.
+                  Clear entry points for brands that want to move without guessing.
                 </h1>
                 <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
-                  We show starting packages so you can understand the budget range before a call. If your project needs
-                  something custom, we will tell you early rather than pushing you into the wrong scope.
+                  Packages are starting points, not cages. They help you understand the range before a call, then we
+                  shape scope around what the business actually needs.
                 </p>
+                <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+                  <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90" asChild>
+                    <Link href="/contact">Start a Project</Link>
+                  </Button>
+                  <Button size="lg" variant="outline" className="border-border bg-transparent" asChild>
+                    <Link href="/portfolio">See Selected Work</Link>
+                  </Button>
+                </div>
               </div>
 
               <div className="border border-border bg-card p-7">
-                <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Choose currency</p>
-                <div className="mt-6 inline-flex items-center border border-border bg-background p-1">
-                  <button
-                    type="button"
-                    onClick={() => setCurrency("GHS")}
-                    className={`px-4 py-2 text-sm font-medium transition-colors ${
-                      currency === "GHS" ? "bg-accent text-accent-foreground" : "text-muted-foreground"
-                    }`}
-                  >
-                    GHS
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setCurrency("USD")}
-                    className={`px-4 py-2 text-sm font-medium transition-colors ${
-                      currency === "USD" ? "bg-accent text-accent-foreground" : "text-muted-foreground"
-                    }`}
-                  >
-                    USD
-                  </button>
+                <div className="flex items-center justify-between gap-4 border-b border-border pb-4">
+                  <p className="text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">Currency</p>
+                  <div className="inline-flex items-center border border-border bg-background p-1">
+                    <button
+                      type="button"
+                      onClick={() => setCurrency("GHS")}
+                      className={`px-4 py-2 text-sm font-medium transition-colors ${
+                        currency === "GHS" ? "bg-accent text-accent-foreground" : "text-muted-foreground"
+                      }`}
+                    >
+                      GHS
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setCurrency("USD")}
+                      className={`px-4 py-2 text-sm font-medium transition-colors ${
+                        currency === "USD" ? "bg-accent text-accent-foreground" : "text-muted-foreground"
+                      }`}
+                    >
+                      USD
+                    </button>
+                  </div>
                 </div>
-                <div className="mt-6 space-y-3 text-sm text-muted-foreground">
+                <div className="mt-6 space-y-3 text-sm leading-7 text-muted-foreground">
                   <p>{mounted ? `Showing ${currency} pricing based on your likely region.` : "Detecting the most useful currency for you."}</p>
-                  <p>Photography and some production work often need a custom quote, so those paths send you to WhatsApp instead of direct checkout.</p>
+                  <p>Some production-heavy work needs a custom quote, so those paths move straight into a consult instead of forcing checkout.</p>
                 </div>
               </div>
             </div>
@@ -164,82 +174,87 @@ export default function PackagesPage() {
         </section>
 
         <section className="py-24">
-          <div className="mx-auto max-w-7xl space-y-18 px-6 lg:px-8">
-            {serviceGroups.map(([service, servicePackages]) => (
-              <section key={service}>
-                <div className="max-w-2xl">
-                  <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">{service}</p>
-                  <p className="mt-4 text-lg leading-8 text-muted-foreground">
-                    {serviceIntroductions[service] ?? "Flexible packages shaped around scope, goals, and rollout needs."}
-                  </p>
-                </div>
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="border-t border-border">
+              {serviceGroups.map(([service, servicePackages], serviceIndex) => (
+                <section key={service} className="border-b border-border py-12">
+                  <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+                    <div className="max-w-lg">
+                      <p className="text-xs font-medium uppercase tracking-[0.24em] text-accent">0{serviceIndex + 1}</p>
+                      <h2 className="mt-4 text-3xl font-serif font-semibold tracking-tight md:text-[2.5rem]">{service}</h2>
+                      <p className="mt-4 text-lg leading-8 text-muted-foreground">
+                        {serviceIntroductions[service] ?? "Flexible packages shaped around scope, goals, and rollout needs."}
+                      </p>
+                    </div>
 
-                <div className="mt-10 grid gap-6 lg:grid-cols-3">
-                  {servicePackages.map((pkg) => {
-                    const amount = currency === "GHS" ? pkg.priceGHS : pkg.priceUSD
-                    const needsQuote = amount <= 0 || pkg.isHourly
+                    <div className="grid gap-6 lg:grid-cols-2">
+                      {servicePackages.map((pkg) => {
+                        const amount = currency === "GHS" ? pkg.priceGHS : pkg.priceUSD
+                        const needsQuote = amount <= 0 || pkg.isHourly
 
-                    return (
-                      <Card
-                        key={pkg.id}
-                        className={`relative overflow-hidden border bg-card ${pkg.popular ? "border-accent" : "border-border"}`}
-                      >
-                        {pkg.popular && (
-                          <div className="absolute right-5 top-5 border border-accent/20 bg-accent/10 px-3 py-1 text-xs font-medium text-accent">
-                            Popular
-                          </div>
-                        )}
-                        <CardHeader className="space-y-4 pb-6 pt-8">
-                          <div>
-                            <p className="text-xs font-medium uppercase tracking-[0.24em] text-accent">{service}</p>
-                            <h2 className="mt-4 text-3xl font-serif font-semibold">{pkg.name}</h2>
-                          </div>
-                          <p className="text-sm leading-7 text-muted-foreground">{pkg.description}</p>
-                          <div>
-                            {needsQuote ? (
-                              <>
-                                <div className="text-3xl font-serif font-semibold">Custom quote</div>
-                                <div className="mt-1 text-sm text-muted-foreground">Best handled after a quick scope chat</div>
-                              </>
-                            ) : (
-                              <>
-                                <div className="text-4xl font-serif font-semibold">{formatPrice(amount, currency)}</div>
-                                <div className="mt-1 text-sm text-muted-foreground">
-                                  {service === "Social Media Management" ? "Monthly starting point" : "Starting package"}
-                                </div>
-                              </>
-                            )}
-                          </div>
-                        </CardHeader>
-                        <CardContent>
-                          <ul className="space-y-3">
-                            {pkg.features.map((feature) => (
-                              <li key={feature} className="flex items-start gap-3 text-sm text-muted-foreground">
-                                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-                                <span>{feature}</span>
-                              </li>
-                            ))}
-                          </ul>
-
-                          <Button
-                            className="mt-8 w-full bg-accent text-accent-foreground hover:bg-accent/90"
-                            size="lg"
-                            onClick={() => handlePurchase(pkg)}
+                        return (
+                          <Card
+                            key={pkg.id}
+                            className={`relative overflow-hidden border bg-card ${pkg.popular ? "border-accent" : "border-border"}`}
                           >
-                            {needsQuote ? "Request Quote" : "Continue"}
-                          </Button>
-                        </CardContent>
-                      </Card>
-                    )
-                  })}
-                </div>
-              </section>
-            ))}
+                            {pkg.popular && (
+                              <div className="absolute right-5 top-5 border border-accent/20 bg-accent/10 px-3 py-1 text-xs font-medium text-accent">
+                                Popular
+                              </div>
+                            )}
+                            <CardHeader className="space-y-4 pb-6 pt-8">
+                              <div>
+                                <p className="text-xs font-medium uppercase tracking-[0.24em] text-accent">Package</p>
+                                <h3 className="mt-4 text-2xl font-serif font-semibold tracking-tight">{pkg.name}</h3>
+                              </div>
+                              <p className="text-sm leading-7 text-muted-foreground">{pkg.description}</p>
+                              <div>
+                                {needsQuote ? (
+                                  <>
+                                    <div className="text-3xl font-serif font-semibold tracking-tight">Custom quote</div>
+                                    <div className="mt-1 text-sm text-muted-foreground">Best handled after a quick scope chat</div>
+                                  </>
+                                ) : (
+                                  <>
+                                    <div className="text-4xl font-serif font-semibold tracking-tight">{formatPrice(amount, currency)}</div>
+                                    <div className="mt-1 text-sm text-muted-foreground">
+                                      {service === "Social Media Management" ? "Monthly starting point" : "Starting package"}
+                                    </div>
+                                  </>
+                                )}
+                              </div>
+                            </CardHeader>
+                            <CardContent>
+                              <ul className="space-y-3">
+                                {pkg.features.map((feature) => (
+                                  <li key={feature} className="flex items-start gap-3 text-sm text-muted-foreground">
+                                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                                    <span>{feature}</span>
+                                  </li>
+                                ))}
+                              </ul>
+
+                              <Button
+                                className="mt-8 w-full bg-accent text-accent-foreground hover:bg-accent/90"
+                                size="lg"
+                                onClick={() => handlePurchase(pkg)}
+                              >
+                                {needsQuote ? "Request Quote" : "Continue"}
+                              </Button>
+                            </CardContent>
+                          </Card>
+                        )
+                      })}
+                    </div>
+                  </div>
+                </section>
+              ))}
+            </div>
           </div>
         </section>
 
         <section className="border-y border-border bg-secondary/15 py-24">
-          <div className="mx-auto grid max-w-7xl gap-8 px-6 lg:grid-cols-[1fr_1fr] lg:px-8">
+          <div className="mx-auto grid max-w-7xl gap-8 px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
             <div className="border border-accent/20 bg-accent px-7 py-8 text-accent-foreground">
               <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent-foreground/80">Need something tailored?</p>
               <h2 className="mt-4 text-4xl font-semibold tracking-tight">Custom scope is normal for serious brand work.</h2>

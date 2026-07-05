@@ -63,114 +63,111 @@ export default function PortfolioPage() {
     <>
       <Analytics />
       <Header />
-      <main className="pt-24">
-        {/* Hero */}
-        <section className="py-24 px-6 bg-secondary/30">
-          <div className="mx-auto max-w-4xl text-center">
-            <h1 className="text-5xl md:text-6xl font-serif font-bold mb-6 text-balance">Our Portfolio</h1>
-            <p className="text-xl text-muted-foreground text-pretty leading-relaxed">
-              Explore our work across photography, videography, web design, and brand development
-            </p>
-          </div>
-        </section>
 
-        {/* Filter */}
-        <section className="py-12 px-6 border-b border-border sticky top-[72px] bg-background/95 backdrop-blur-md z-30">
-          <div className="mx-auto max-w-7xl">
-            <div className="flex flex-wrap gap-3 justify-center">
-              {portfolio.categories.map((category) => (
-                <Button
-                  key={category}
-                  variant={activeCategory === category ? "default" : "outline"}
-                  onClick={() => setActiveCategory(category)}
-                  className={activeCategory === category ? "bg-accent hover:bg-accent/90 text-accent-foreground" : ""}
-                >
-                  {category}
-                </Button>
-              ))}
+      <main className="bg-background pt-24 text-foreground">
+        <section className="border-b border-border">
+          <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-24">
+            <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
+              <div className="max-w-3xl">
+                <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Issue 03 — portfolio</p>
+                <h1 className="mt-4 text-5xl font-semibold tracking-[-0.04em] md:text-6xl">
+                  Case studies, spreads, and selected work.
+                </h1>
+                <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
+                  A clearer look at the work behind the brand. Each project is presented more like a magazine spread than
+                  a gallery tile, so the portfolio feels aligned with the rest of the site.
+                </p>
+              </div>
+
+              <div className="border border-border bg-card p-7">
+                <p className="text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">Browse by category</p>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  {portfolio.categories.map((category) => (
+                    <Button
+                      key={category}
+                      variant={activeCategory === category ? "default" : "outline"}
+                      onClick={() => setActiveCategory(category)}
+                      className={activeCategory === category ? "bg-accent text-accent-foreground hover:bg-accent/90" : "border-border bg-transparent"}
+                    >
+                      {category}
+                    </Button>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Bento Grid */}
-        <section className="py-24 px-6">
-          <div className="mx-auto max-w-7xl">
-            <div 
-              ref={gridRef}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[300px]"
-            >
+        <section className="py-24">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div ref={gridRef} className="space-y-20">
               {filteredProjects.map((project, index) => {
-                const size = getBentoSize(index)
-                const isLarge = size === 2
-                
+                const isReverse = index % 2 === 1
+
                 return (
-                  <div
+                  <article
                     key={project.id}
                     onClick={() => handleProjectClick(project)}
-                    className={`group cursor-pointer relative overflow-hidden rounded-2xl bg-card border border-accent/20 hover:border-accent/50 transition-all duration-500 ${
-                      isLarge ? 'md:col-span-2 md:row-span-2' : ''
-                    } ${
-                      isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                    }`}
-                    style={{
-                      transitionDelay: `${index * 50}ms`,
-                      perspective: '1000px'
-                    }}
+                    className={`group grid cursor-pointer gap-8 border-b border-border pb-16 transition-all duration-500 last:border-b-0 last:pb-0 lg:grid-cols-2 lg:items-center ${
+                      isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                    } ${isReverse ? "lg:[&>*:first-child]:order-2" : ""}`}
+                    style={{ transitionDelay: `${index * 60}ms` }}
                   >
-                    {/* Image with 3D hover effect */}
-                    <div 
-                      className="absolute inset-0 transition-transform duration-500 group-hover:scale-105"
-                      style={{ transformStyle: 'preserve-3d' }}
-                    >
+                    <div className="relative aspect-[5/4] overflow-hidden border border-border bg-card">
                       <Image
                         src={project.image || "/placeholder.svg"}
                         alt={project.title}
                         fill
-                        sizes={isLarge ? "(min-width: 768px) 66vw, 100vw" : "(min-width: 768px) 33vw, 100vw"}
+                        sizes="(min-width: 1024px) 50vw, 100vw"
                         className="retro-image object-cover"
                       />
-                      {/* Gradient overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-300" />
-                    </div>
-
-                    {/* Content */}
-                    <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end z-10">
-                      <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                        <span className="inline-block px-3 py-1 bg-accent/90 text-accent-foreground text-xs font-medium rounded-full mb-3">
-                          {project.category}
-                        </span>
-                        <h3 className="text-2xl md:text-3xl font-serif font-bold text-white mb-2">
-                          {project.title}
-                        </h3>
-                        <p className="text-sm text-white/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
-                          {project.description}
-                        </p>
+                      <div className="absolute left-4 top-4 border border-border bg-background px-3 py-1 text-xs uppercase tracking-[0.18em] text-foreground">
+                        {project.category}
                       </div>
                     </div>
 
-                    {/* Hover glow effect */}
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-accent/30 rounded-full blur-3xl" />
-                      <div className="absolute bottom-0 left-0 w-32 h-32 bg-accent/20 rounded-full blur-3xl" />
+                    <div className="max-w-xl">
+                      <p className="text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">
+                        Fig. 0{index + 1}
+                      </p>
+                      <h2 className="mt-4 text-3xl font-serif font-semibold tracking-tight md:text-[2.5rem]">
+                        {project.title}
+                      </h2>
+                      <p className="mt-5 text-base leading-8 text-muted-foreground">{project.description}</p>
+                      <div className="mt-8 flex flex-wrap items-center gap-3">
+                        <span className="border border-border bg-card px-3 py-1 text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                          Selected project
+                        </span>
+                        <span className="text-sm text-accent">Open to view case details</span>
+                      </div>
                     </div>
-                  </div>
+                  </article>
                 )
               })}
             </div>
           </div>
         </section>
 
+        {filteredProjects.length === 0 && (
+          <section className="py-24">
+            <div className="mx-auto max-w-3xl px-6 text-center lg:px-8">
+              <p className="text-sm font-medium uppercase tracking-[0.24em] text-muted-foreground">No results</p>
+              <h2 className="mt-4 text-3xl font-semibold tracking-tight">Try another category.</h2>
+            </div>
+          </section>
+        )}
+
         {/* Full-Screen Project Modal */}
         {selectedProject && (
           <div 
-            className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm animate-fadeIn"
+            className="fixed inset-0 z-50 bg-background/92 backdrop-blur-md animate-fadeIn"
             onClick={closeModal}
           >
             <div className="absolute inset-0 flex items-center justify-center p-6">
               {/* Close button */}
               <button
                 onClick={closeModal}
-                className="absolute top-6 right-6 text-white hover:text-accent transition-colors z-10"
+                className="absolute top-6 right-6 z-10 text-foreground hover:text-accent transition-colors"
               >
                 <X className="w-8 h-8" />
               </button>
@@ -179,29 +176,29 @@ export default function PortfolioPage() {
               <button
                 onClick={(e) => {
                   e.stopPropagation()
-                  navigateProject('prev')
+                  navigateProject("prev")
                 }}
-                className="absolute left-6 top-1/2 -translate-y-1/2 text-white hover:text-accent transition-colors z-10"
+                className="absolute left-6 top-1/2 -translate-y-1/2 z-10 text-foreground hover:text-accent transition-colors"
               >
                 <ChevronLeft className="w-12 h-12" />
               </button>
               <button
                 onClick={(e) => {
                   e.stopPropagation()
-                  navigateProject('next')
+                  navigateProject("next")
                 }}
-                className="absolute right-6 top-1/2 -translate-y-1/2 text-white hover:text-accent transition-colors z-10"
+                className="absolute right-6 top-1/2 -translate-y-1/2 z-10 text-foreground hover:text-accent transition-colors"
               >
                 <ChevronRight className="w-12 h-12" />
               </button>
 
               {/* Content */}
               <div 
-                className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center"
+                className="max-w-6xl w-full grid grid-cols-1 gap-8 items-center lg:grid-cols-2"
                 onClick={(e) => e.stopPropagation()}
               >
                 {/* Image */}
-                <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-accent/30">
+                <div className="relative aspect-[4/3] overflow-hidden border border-border bg-card">
                   <Image
                     src={selectedProject.image || "/placeholder.svg"}
                     alt={selectedProject.title}
@@ -212,32 +209,32 @@ export default function PortfolioPage() {
                 </div>
 
                 {/* Details */}
-                <div className="text-white space-y-6">
+                <div className="space-y-6 text-foreground">
                   <div>
-                    <span className="inline-block px-4 py-2 bg-accent text-accent-foreground text-sm font-medium rounded-full mb-4">
+                    <span className="mb-4 inline-block border border-border bg-card px-4 py-2 text-sm font-medium uppercase tracking-[0.18em] text-foreground">
                       {selectedProject.category}
                     </span>
-                    <h2 className="text-4xl md:text-5xl font-serif font-bold mb-4">
+                    <h2 className="mb-4 text-4xl font-serif font-semibold md:text-5xl">
                       {selectedProject.title}
                     </h2>
-                    <p className="text-lg text-white/80 leading-relaxed">
+                    <p className="text-lg leading-relaxed text-muted-foreground">
                       {selectedProject.description}
                     </p>
                   </div>
 
                   {/* Additional project details - customize as needed */}
-                  <div className="space-y-4 pt-6 border-t border-white/20">
+                  <div className="space-y-4 border-t border-border pt-6">
                     <div>
-                      <h4 className="text-sm font-semibold text-white/60 uppercase tracking-wider mb-2">
+                      <h4 className="mb-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
                         Project Type
                       </h4>
-                      <p className="text-white">{selectedProject.category}</p>
+                      <p>{selectedProject.category}</p>
                     </div>
                   </div>
 
                   <Button 
                     size="lg"
-                    className="bg-accent hover:bg-accent/90 text-accent-foreground mt-8"
+                    className="mt-8 bg-accent text-accent-foreground hover:bg-accent/90"
                     asChild
                   >
                     <a href="/contact">

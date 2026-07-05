@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { Instagram, Linkedin, Mail, MessageCircle, Twitter } from "lucide-react"
 import { siteConfig } from "@/lib/content"
 
@@ -8,9 +9,8 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
         <div className="grid gap-12 lg:grid-cols-[1.3fr_0.7fr_0.7fr_0.7fr]">
           <div>
-            <Link href="/" className="inline-flex items-baseline gap-1.5 text-3xl font-semibold tracking-[-0.03em] text-foreground">
-              <span className="font-serif text-4xl italic text-accent">U</span>
-              <span>{siteConfig.siteName}</span>
+            <Link href="/" className="inline-flex items-center" aria-label={siteConfig.siteName}>
+              <Image src="/logo.png" alt={siteConfig.siteName} width={160} height={46} className="h-auto w-auto max-h-10" />
             </Link>
             <p className="mt-5 max-w-md text-sm leading-7 text-muted-foreground">{siteConfig.tagline}</p>
             <div className="mt-8 flex gap-3">

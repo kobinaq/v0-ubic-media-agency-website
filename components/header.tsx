@@ -28,7 +28,7 @@ export function Header() {
               <Image src="/logo.png" alt={siteConfig.siteName} width={70} height={20} priority className="h-auto w-auto max-h-5" />
             </Link>
             <span className="hidden border-l border-border pl-4 text-xs uppercase tracking-[0.28em] text-muted-foreground xl:inline-flex">
-              Editorial studio
+
             </span>
           </div>
 

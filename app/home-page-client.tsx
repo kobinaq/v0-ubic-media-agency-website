@@ -1,7 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import Script from "next/script"
-import { ArrowRight, CalendarDays, MessageCircle } from "lucide-react"
+import { ArrowRight, CalendarDays, Check, MessageCircle } from "lucide-react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"

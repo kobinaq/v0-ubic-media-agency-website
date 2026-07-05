@@ -307,62 +307,75 @@ export default function HomePageClient() {
           </div>
         </section>
 
-        <section className="border-t border-border bg-secondary/20 py-24">
-          <div className="mx-auto grid max-w-7xl gap-8 px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
-            <div className="border border-border bg-accent p-7 text-accent-foreground">
-              <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent-foreground/75">Why clients choose Ubic</p>
-              <div className="mt-6 space-y-5">
-                {about.differentiators.slice(0, 3).map((item) => (
-                  <div key={item.title} className="border-t border-accent-foreground/15 pt-5 first:border-t-0 first:pt-0">
-                    <h3 className="text-xl font-serif font-semibold">{item.title}</h3>
-                    <p className="mt-2 text-sm leading-7 text-accent-foreground/85">{item.description}</p>
+        <section className="border-t border-border bg-secondary/15 py-24">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+              <div className="max-w-xl">
+                <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Why clients choose Ubic</p>
+                <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
+                  The reason people stay is the system, not just the output.
+                </h2>
+                <p className="mt-5 text-lg leading-8 text-muted-foreground">
+                  We work like a small editorial team: one point of view, one standard, and no disconnect between strategy, design, and rollout.
+                </p>
+              </div>
+
+              <div className="border-t border-border">
+                {about.differentiators.slice(0, 3).map((item, index) => (
+                  <div key={item.title} className="grid gap-4 border-b border-border py-8 md:grid-cols-[72px_1fr] md:gap-6">
+                    <div className="font-mono text-sm tracking-[0.18em] text-accent">0{index + 1}</div>
+                    <div>
+                      <h3 className="text-2xl font-serif font-semibold tracking-tight">{item.title}</h3>
+                      <p className="mt-3 text-sm leading-7 text-muted-foreground md:text-base">{item.description}</p>
+                    </div>
                   </div>
                 ))}
-              </div>
-            </div>
 
-            <div className="border border-border bg-card p-7">
-              <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Ready to move?</p>
-              <h2 className="mt-4 text-4xl font-semibold tracking-tight">Pick the next step that fits your buying style.</h2>
-              <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                <a
-                  href="https://calendar.app.google/TPjTbTnJ5f9ztbvz5"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="border border-border bg-background p-5 transition-colors hover:border-accent/50 hover:bg-accent/5"
-                >
-                  <CalendarDays className="h-5 w-5 text-accent" />
-                  <h3 className="mt-4 text-lg font-semibold">Book a call</h3>
-                  <p className="mt-2 text-sm leading-7 text-muted-foreground">
-                    Best if you want to talk through goals, scope, and timing live.
-                  </p>
-                </a>
-                <a
-                  href={siteConfig.contact.whatsapp}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="border border-border bg-background p-5 transition-colors hover:border-accent/50 hover:bg-accent/5"
-                >
-                  <MessageCircle className="h-5 w-5 text-accent" />
-                  <h3 className="mt-4 text-lg font-semibold">Message on WhatsApp</h3>
-                  <p className="mt-2 text-sm leading-7 text-muted-foreground">
-                    Best if you want a quick answer, budget check, or a faster start.
-                  </p>
-                </a>
-              </div>
+                <div className="grid gap-6 border-b border-border py-8 md:grid-cols-[72px_1fr] md:gap-6">
+                  <div className="font-mono text-sm tracking-[0.18em] text-accent">04</div>
+                  <div>
+                    <h3 className="text-2xl font-serif font-semibold tracking-tight">Pick the next step that fits your buying style.</h3>
+                    <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                      <a
+                        href="https://calendar.app.google/TPjTbTnJ5f9ztbvz5"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="border border-border bg-card p-5 transition-colors hover:border-accent/50 hover:bg-accent/5"
+                      >
+                        <CalendarDays className="h-5 w-5 text-accent" />
+                        <h4 className="mt-4 text-lg font-semibold">Book a call</h4>
+                        <p className="mt-2 text-sm leading-7 text-muted-foreground">
+                          Best if you want to talk through goals, scope, and timing live.
+                        </p>
+                      </a>
+                      <a
+                        href={siteConfig.contact.whatsapp}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="border border-border bg-card p-5 transition-colors hover:border-accent/50 hover:bg-accent/5"
+                      >
+                        <MessageCircle className="h-5 w-5 text-accent" />
+                        <h4 className="mt-4 text-lg font-semibold">Message on WhatsApp</h4>
+                        <p className="mt-2 text-sm leading-7 text-muted-foreground">
+                          Best if you want a quick answer, budget check, or a faster start.
+                        </p>
+                      </a>
+                    </div>
 
-              <div className="mt-8 border border-border bg-background p-5">
-                <p className="text-sm font-medium">Prefer email?</p>
-                <p className="mt-2 text-sm leading-7 text-muted-foreground">
-                  Reach us at{" "}
-                  <a href={`mailto:${siteConfig.contact.email}`} className="font-medium text-accent hover:text-accent/80">
-                    {siteConfig.contact.email}
-                  </a>
-                  {" "}or use the contact form for a project brief.
-                </p>
-                <Button className="mt-5 bg-accent text-accent-foreground hover:bg-accent/90" asChild>
-                  <Link href="/contact">Go to Contact Form</Link>
-                </Button>
+                    <div className="mt-8 flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
+                      <p className="text-sm leading-7 text-muted-foreground">
+                        Prefer email? Reach us at{" "}
+                        <a href={`mailto:${siteConfig.contact.email}`} className="font-medium text-accent hover:text-accent/80">
+                          {siteConfig.contact.email}
+                        </a>
+                        .
+                      </p>
+                      <Button className="bg-accent text-accent-foreground hover:bg-accent/90" asChild>
+                        <Link href="/contact">Go to Contact Form</Link>
+                      </Button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

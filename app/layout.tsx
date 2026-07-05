@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter, Playfair_Display } from "next/font/google"
+import { Archivo, Fraunces, Space_Mono } from "next/font/google"
 import "./globals.css"
 import { siteConfig } from "@/lib/content"
 import Script from "next/script"
@@ -8,15 +8,21 @@ import { generateOrganizationSchema, generateLocalBusinessSchema } from "@/lib/s
 import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
 
-const inter = Inter({
+const archivo = Archivo({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-archivo",
   display: "swap",
 })
 
-const playfair = Playfair_Display({
+const fraunces = Fraunces({
   subsets: ["latin"],
-  variable: "--font-playfair",
+  variable: "--font-fraunces",
+  display: "swap",
+})
+
+const spaceMono = Space_Mono({
+  subsets: ["latin"],
+  variable: "--font-space-mono",
   display: "swap",
 })
 
@@ -86,7 +92,7 @@ export default function RootLayout({
   const localBusinessSchema = generateLocalBusinessSchema()
 
   return (
-    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${playfair.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${archivo.variable} ${fraunces.variable} ${spaceMono.variable}`}>
       <head>
         <Script
           id="organization-schema"
@@ -131,7 +137,7 @@ export default function RootLayout({
         </Script>
       </head>
       <body className="font-sans antialiased">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
           {children}
           <Analytics />
         </ThemeProvider>

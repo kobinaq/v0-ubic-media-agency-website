@@ -103,10 +103,10 @@ export function ServicesClientPage() {
 
       <main className="bg-background pt-24 text-foreground">
         <section className="border-b border-border">
-          <div className="mx-auto max-w-7xl px-6 py-18 lg:px-8 lg:py-24">
+          <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-24">
             <div className="max-w-3xl">
-              <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Services</p>
-              <h1 className="mt-4 text-5xl font-serif font-bold tracking-tight md:text-6xl">
+              <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">In this issue</p>
+              <h1 className="mt-4 text-5xl font-semibold tracking-[-0.04em] md:text-6xl">
                 The services we use to make brands clearer, more credible, and easier to choose.
               </h1>
               <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
@@ -114,10 +114,10 @@ export function ServicesClientPage() {
                 feels more trustworthy wherever people find you.
               </p>
               <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-                <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground" asChild>
+                <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90" asChild>
                   <Link href="/contact">Start a Project</Link>
                 </Button>
-                <Button size="lg" variant="outline" className="border-accent/30 bg-transparent" asChild>
+                <Button size="lg" variant="outline" className="border-border bg-transparent" asChild>
                   <Link href="/packages">See Packages & Pricing</Link>
                 </Button>
               </div>
@@ -127,42 +127,37 @@ export function ServicesClientPage() {
 
         <section className="py-24">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="grid gap-6 lg:grid-cols-2">
-              {services.services.map((service) => (
-                <article key={service.id} className="rounded-[1.75rem] border border-border bg-card p-7">
-                  <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-                    <div className="max-w-xl">
-                      <p className="text-xs font-medium uppercase tracking-[0.24em] text-accent">
-                        Starting from {formatPrice(service.startingPrice)}
-                      </p>
-                      <h2 className="mt-4 text-3xl font-serif font-semibold tracking-tight">{service.title}</h2>
-                      <p className="mt-4 text-sm leading-7 text-muted-foreground">{service.description}</p>
-                    </div>
-                    <div className="rounded-full border border-accent/20 bg-accent/10 px-4 py-2 text-xs font-medium text-accent">
-                      Service area
-                    </div>
+            <div className="border-t border-border">
+              {services.services.map((service, index) => (
+                <article key={service.id} className="grid gap-6 border-b border-border py-8 lg:grid-cols-[72px_1fr_220px] lg:items-start lg:py-10">
+                  <div className="font-mono text-sm tracking-[0.16em] text-accent">0{index + 1}</div>
+                  <div className="max-w-2xl">
+                    <h2 className="text-3xl font-serif font-semibold tracking-tight md:text-[2.5rem]">{service.title}</h2>
+                    <p className="mt-4 text-sm leading-7 text-muted-foreground md:text-base">{service.description}</p>
+                    <ul className="mt-6 grid gap-3 text-sm text-muted-foreground">
+                      {(serviceDetails[service.id] ?? []).map((detail) => (
+                        <li key={detail} className="flex items-start gap-3">
+                          <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                          <span>{detail}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-
-                  <ul className="mt-8 grid gap-3 text-sm text-muted-foreground">
-                    {(serviceDetails[service.id] ?? []).map((detail) => (
-                      <li key={detail} className="flex items-start gap-3">
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-                        <span>{detail}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="text-sm uppercase tracking-[0.22em] text-muted-foreground lg:text-right">
+                    Starting from {formatPrice(service.startingPrice)}
+                  </div>
                 </article>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="border-y border-border bg-secondary/20 py-24">
+        <section className="border-y border-border bg-secondary/15 py-24">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+            <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr]">
               <div className="max-w-xl">
                 <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">How engagements usually work</p>
-                <h2 className="mt-4 text-4xl font-serif font-bold tracking-tight md:text-5xl">
+                <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
                   We help clients buy with more confidence by making scope visible early.
                 </h2>
               </div>
@@ -174,9 +169,9 @@ export function ServicesClientPage() {
                   "If the brand needs strategy first, we say that before design starts.",
                   "If the website is the blocker, we show what has to change to improve conversion.",
                 ].map((point, index) => (
-                  <div key={point} className="rounded-[1.5rem] border border-border bg-card p-6">
+                  <div key={point} className="border border-border bg-card p-6">
                     <div className="flex items-start gap-4">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent text-sm font-semibold text-accent-foreground">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center border border-border bg-background text-sm font-semibold text-accent">
                         {index + 1}
                       </div>
                       <p className="text-sm leading-7 text-muted-foreground">{point}</p>
@@ -191,7 +186,7 @@ export function ServicesClientPage() {
         <section className="py-24">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="grid gap-8 lg:grid-cols-2">
-              <div className="rounded-[2rem] border border-accent/20 bg-accent px-7 py-8 text-accent-foreground">
+              <div className="border border-border bg-accent px-7 py-8 text-accent-foreground">
                 <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent-foreground/80">When to reach out</p>
                 <div className="mt-6 space-y-4 text-sm leading-7 text-accent-foreground/90">
                   <p>Your website looks dated or unclear and visitors are not taking action.</p>
@@ -200,15 +195,15 @@ export function ServicesClientPage() {
                 </div>
               </div>
 
-              <div className="rounded-[2rem] border border-border bg-card p-7">
+              <div className="border border-border bg-card p-7">
                 <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Next step</p>
-                <h2 className="mt-4 text-4xl font-serif font-bold tracking-tight">Choose a quick route to clarity.</h2>
+                <h2 className="mt-4 text-4xl font-semibold tracking-tight">Choose a quick route to clarity.</h2>
                 <div className="mt-8 grid gap-4 sm:grid-cols-2">
                   <a
                     href="https://calendar.app.google/TPjTbTnJ5f9ztbvz5"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="rounded-[1.5rem] border border-border bg-background p-5 transition-colors hover:border-accent/50 hover:bg-accent/[0.04]"
+                    className="border border-border bg-background p-5 transition-colors hover:border-accent/50 hover:bg-accent/5"
                   >
                     <CalendarDays className="h-5 w-5 text-accent" />
                     <h3 className="mt-4 text-lg font-semibold">Book a meeting</h3>
@@ -218,14 +213,14 @@ export function ServicesClientPage() {
                     href={siteConfig.contact.whatsapp}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="rounded-[1.5rem] border border-border bg-background p-5 transition-colors hover:border-accent/50 hover:bg-accent/[0.04]"
+                    className="border border-border bg-background p-5 transition-colors hover:border-accent/50 hover:bg-accent/5"
                   >
                     <MessageCircle className="h-5 w-5 text-accent" />
                     <h3 className="mt-4 text-lg font-semibold">Chat on WhatsApp</h3>
                     <p className="mt-2 text-sm leading-7 text-muted-foreground">Best for a quick budget check or scope question.</p>
                   </a>
                 </div>
-                <Button className="mt-8 bg-accent hover:bg-accent/90 text-accent-foreground" asChild>
+                <Button className="mt-8 bg-accent text-accent-foreground hover:bg-accent/90" asChild>
                   <Link href="/packages">
                     Compare Packages
                     <ArrowRight className="ml-2 h-4 w-4" />

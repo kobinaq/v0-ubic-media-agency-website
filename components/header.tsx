@@ -1,7 +1,6 @@
 "use client"
 
 import Link from "next/link"
-import Image from "next/image"
 import { useState } from "react"
 import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -20,50 +19,43 @@ export function Header() {
   ]
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-border/70 bg-background/92 backdrop-blur-sm">
       <nav className="mx-auto max-w-7xl px-6 lg:px-8" aria-label="Global">
-        <div className="flex items-center justify-between py-4">
-          {/* Logo Section */}
-          <div className="flex lg:flex-1 items-center">
-            <Link href="/" className="-m-1.5 p-1.5 flex items-center">
-              <Image
-                src="/logo.png"
-                alt={siteConfig.siteName}
-                width={90}
-                height={24}
-                priority
-                className="h-auto w-auto max-h-8 md:max-h-10"
-              />
+        <div className="flex items-center justify-between gap-6 py-4 lg:py-5">
+          <div className="min-w-0 flex items-center gap-4">
+            <Link href="/" className="flex items-baseline gap-1.5 text-xl font-semibold tracking-[-0.03em] text-foreground">
+              <span className="font-serif text-2xl italic text-accent">U</span>
+              <span>{siteConfig.siteName}</span>
             </Link>
+            <span className="hidden border-l border-border pl-4 text-xs uppercase tracking-[0.28em] text-muted-foreground xl:inline-flex">
+              Editorial studio
+            </span>
           </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex lg:gap-x-12">
+          <div className="hidden lg:flex lg:items-center lg:gap-x-10">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-sm font-medium leading-6 text-foreground hover:text-accent transition-colors"
+                className="text-sm font-medium leading-6 text-foreground transition-colors hover:text-accent"
               >
                 {item.name}
               </Link>
             ))}
           </div>
 
-          {/* Desktop Controls */}
-          <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:items-center lg:gap-4">
+          <div className="hidden items-center gap-3 lg:flex">
             <ThemeToggle />
-            <Button className="bg-accent hover:bg-accent/90 text-accent-foreground" asChild>
+            <Button className="bg-accent text-accent-foreground hover:bg-accent/90" asChild>
               <Link href="/contact">Get Started</Link>
             </Button>
           </div>
 
-          {/* Mobile Menu Button */}
           <div className="flex lg:hidden items-center gap-4">
             <ThemeToggle />
             <button
               type="button"
-              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-foreground"
+              className="-m-2.5 inline-flex items-center justify-center rounded-md border border-border bg-card/80 p-2.5 text-foreground"
               onClick={() => setMobileMenuOpen(true)}
             >
               <span className="sr-only">Open main menu</span>
@@ -73,54 +65,48 @@ export function Header() {
         </div>
       </nav>
 
-      {/* Mobile Menu */}
       {mobileMenuOpen && (
         <>
           <div
-            className="fixed inset-0 bg-black/50 z-40"
+            className="fixed inset-0 z-40 bg-foreground/40 backdrop-blur-[2px]"
             onClick={() => setMobileMenuOpen(false)}
             role="presentation"
           />
           <div
-            className="fixed inset-y-0 right-0 z-50 w-full sm:max-w-sm bg-background overflow-y-auto min-h-screen"
+            className="fixed inset-x-0 top-0 z-50 min-h-screen w-full overflow-y-auto bg-background"
             role="dialog"
             aria-modal="true"
           >
-            <div className="px-6 py-6">
-              <div className="flex items-center justify-between mb-6">
-                <Link href="/" className="-m-1.5 p-1.5" onClick={() => setMobileMenuOpen(false)}>
-                  <Image
-                    src="/logo.png"
-                    alt={siteConfig.siteName}
-                    width={90}
-                    height={24}
-                    className="h-auto w-auto max-h-8"
-                  />
+            <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-6 lg:px-8">
+              <div className="flex items-center justify-between border-b border-border pb-5">
+                <Link href="/" className="text-xl font-semibold tracking-[-0.03em] text-foreground" onClick={() => setMobileMenuOpen(false)}>
+                  <span className="font-serif text-2xl italic text-accent">U</span>
+                  <span>{siteConfig.siteName}</span>
                 </Link>
                 <button
                   type="button"
-                  className="-m-2.5 rounded-md p-2.5 text-foreground"
+                  className="-m-2.5 rounded-md border border-border bg-card/80 p-2.5 text-foreground"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <span className="sr-only">Close menu</span>
                   <X className="h-6 w-6" aria-hidden="true" />
                 </button>
               </div>
-              <div className="space-y-2">
+              <div className="grid gap-3">
                 {navigation.map((item) => (
                   <Link
                     key={item.name}
                     href={item.href}
-                    className="block rounded-lg px-3 py-2 text-base font-medium leading-7 text-foreground hover:bg-muted transition-colors"
+                    className="border-b border-border/70 py-4 text-2xl font-serif font-semibold tracking-tight text-foreground transition-colors hover:text-accent"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {item.name}
                   </Link>
                 ))}
               </div>
-              <div className="mt-6 flex items-center gap-3">
+              <div className="flex items-center gap-3 pt-2">
                 <ThemeToggle />
-                <Button className="bg-accent hover:bg-accent/90 text-accent-foreground w-full" asChild>
+                <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90" asChild>
                   <Link href="/contact" onClick={() => setMobileMenuOpen(false)}>
                     Get Started
                   </Link>

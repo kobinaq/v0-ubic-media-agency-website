@@ -159,62 +159,57 @@ export function AboutClientPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       <Header />
-      <main className="pt-24">
+      <main className="bg-background pt-24 text-foreground">
         {/* Hero - Founder's Vision */}
-        <section className="relative py-32 px-6 overflow-hidden">
-          {/* Animated background */}
-          <div className="absolute inset-0 -z-10 bg-gradient-to-br from-secondary/50 via-background to-accent/10">
-            <div className="absolute top-0 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-float" />
-            <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-float-delayed" />
-          </div>
+        <section className="relative overflow-hidden border-b border-border px-6 py-20">
+          <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(227,167,46,0.08),transparent_35%),linear-gradient(90deg,rgba(32,28,26,0.04)_1px,transparent_1px),linear-gradient(rgba(32,28,26,0.04)_1px,transparent_1px)] bg-[size:auto,48px_48px,48px_48px]" />
+          <div className="absolute left-1/2 top-0 -z-10 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-accent/10 blur-3xl" />
 
           <div className="mx-auto max-w-4xl text-center">
-            <div className="inline-block mb-8">
-              <div className="h-px w-16 bg-accent mx-auto mb-6" />
+            <div className="inline-flex items-center rounded-full border border-border bg-card px-4 py-2 text-xs uppercase tracking-[0.24em] text-accent">
+              About
             </div>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-light mb-8 text-balance leading-tight animate-fadeInUp">
-              We Build Brands That <span className="text-accent font-normal">Matter</span>
+            <h1 className="mt-8 text-5xl font-semibold tracking-[-0.04em] leading-[0.95] md:text-6xl lg:text-7xl">
+              We build brands that <span className="font-serif italic text-accent">matter.</span>
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-light animate-fadeInUp delay-200">
-              Ubic Media Agency was founded on a simple belief: great brands aren't born from templates, they're crafted
-              through strategy, creativity, and an unwavering commitment to excellence.
+            <p className="mt-7 max-w-2xl mx-auto text-lg md:text-xl text-muted-foreground leading-relaxed">
+              Ubic Media Agency was founded on a simple belief: great brands are crafted through strategy, creativity,
+              and an unwavering commitment to consistency.
             </p>
           </div>
         </section>
 
         {/* Mission & Vision - Enhanced */}
-        <section ref={missionRef} className="py-24 px-6 bg-background border-y border-border">
+        <section ref={missionRef} className="border-b border-border px-6 py-24">
           <div className="mx-auto max-w-6xl">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
+            <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-20">
               <div
                 className={`transition-all duration-700 ${missionInView ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-12"}`}
               >
-                <div className="h-px w-12 bg-accent mb-6" />
-                <h2 className="text-3xl md:text-4xl font-serif font-light mb-6 tracking-tight">Our Mission</h2>
-                <p className="text-lg text-muted-foreground leading-relaxed font-light">{about.mission}</p>
+                <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Our Mission</p>
+                <h2 className="mt-4 text-3xl md:text-4xl font-semibold tracking-tight">What we are here to do</h2>
+                <p className="mt-5 text-lg text-muted-foreground leading-relaxed">{about.mission}</p>
               </div>
               <div
                 className={`transition-all duration-700 delay-200 ${missionInView ? "opacity-100 translate-x-0" : "opacity-0 translate-x-12"}`}
               >
-                <div className="h-px w-12 bg-accent mb-6" />
-                <h2 className="text-3xl md:text-4xl font-serif font-light mb-6 tracking-tight">Our Vision</h2>
-                <p className="text-lg text-muted-foreground leading-relaxed font-light">{about.vision}</p>
+                <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Our Vision</p>
+                <h2 className="mt-4 text-3xl md:text-4xl font-semibold tracking-tight">What success should look like</h2>
+                <p className="mt-5 text-lg text-muted-foreground leading-relaxed">{about.vision}</p>
               </div>
             </div>
           </div>
         </section>
 
         {/* Our Approach */}
-        <section ref={approachRef} className="py-32 px-6 bg-secondary/20">
+        <section ref={approachRef} className="border-b border-border bg-secondary/15 px-6 py-24">
           <div className="mx-auto max-w-6xl">
             <div
-              className={`text-center mb-20 transition-all duration-700 ${approachInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+              className={`mb-16 text-center transition-all duration-700 ${approachInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
             >
-              <div className="inline-block mb-6">
-                <div className="h-px w-16 bg-accent mx-auto mb-6" />
-              </div>
-              <h2 className="text-4xl md:text-5xl font-serif font-light mb-6 tracking-tight">How We Work</h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-light">
+              <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">How We Work</p>
+              <h2 className="mt-4 text-4xl md:text-5xl font-semibold tracking-tight">A process built for clarity</h2>
+              <p className="mx-auto mt-5 max-w-2xl text-lg text-muted-foreground">
                 Our proven process ensures every project delivers exceptional results
               </p>
             </div>
@@ -223,18 +218,18 @@ export function AboutClientPage() {
               {approach.map((item, index) => (
                 <div
                   key={item.title}
-                  className={`group p-8 border border-border hover:border-accent/50 rounded-lg transition-all duration-700 hover:shadow-lg hover:shadow-accent/10 ${
+                  className={`group border border-border bg-card p-8 transition-all duration-700 hover:border-accent/50 hover:bg-accent/5 ${
                     approachInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                   }`}
                   style={{ transitionDelay: `${index * 100}ms` }}
                 >
-                  <div className="w-14 h-14 rounded-full bg-accent/10 group-hover:bg-accent/20 flex items-center justify-center mb-6 transition-all duration-300 group-hover:scale-110">
+                  <div className="mb-6 flex h-14 w-14 items-center justify-center border border-border bg-background transition-all duration-300 group-hover:scale-110 group-hover:border-accent/40">
                     <item.icon className="w-7 h-7 text-accent" />
                   </div>
-                  <h3 className="text-2xl font-serif font-light mb-4 group-hover:text-accent transition-colors">
+                  <h3 className="mb-4 text-2xl font-serif font-semibold tracking-tight group-hover:text-accent transition-colors">
                     {item.title}
                   </h3>
-                  <p className="text-muted-foreground leading-relaxed font-light">{item.description}</p>
+                  <p className="text-muted-foreground leading-relaxed">{item.description}</p>
                 </div>
               ))}
             </div>
@@ -242,38 +237,36 @@ export function AboutClientPage() {
         </section>
 
         {/* What Makes Us Different */}
-        <section ref={diffRef} className="py-32 px-6 bg-background">
+        <section ref={diffRef} className="px-6 py-24 bg-background">
           <div className="mx-auto max-w-5xl">
             <div
-              className={`text-center mb-20 transition-all duration-700 ${diffInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+              className={`mb-16 text-center transition-all duration-700 ${diffInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
             >
-              <div className="inline-block mb-6">
-                <div className="h-px w-16 bg-accent mx-auto mb-6" />
-              </div>
-              <h2 className="text-4xl md:text-5xl font-serif font-light mb-6 tracking-tight">Why Choose Ubic</h2>
+              <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Why Choose Ubic</p>
+              <h2 className="mt-4 text-4xl md:text-5xl font-semibold tracking-tight">What makes us different</h2>
             </div>
 
-            <div className="space-y-0">
+            <div className="space-y-0 border-t border-border">
               {about.differentiators.map((item, index) => (
                 <div
                   key={index}
-                  className={`group border-t border-border last:border-b transition-all duration-700 ${
+                  className={`group border-b border-border transition-all duration-700 ${
                     diffInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                   }`}
                   style={{ transitionDelay: `${index * 100}ms` }}
                 >
-                  <div className="py-10 px-6 hover:bg-accent/5 transition-colors duration-300">
+                  <div className="px-0 py-8 hover:bg-accent/5 transition-colors duration-300">
                     <div className="flex items-start gap-8">
-                      <div className="flex-shrink-0 w-16">
-                        <span className="text-5xl font-serif font-light text-accent/30 group-hover:text-accent transition-colors duration-300">
+                      <div className="w-16 flex-shrink-0">
+                        <span className="text-5xl font-serif font-semibold text-accent/30 group-hover:text-accent transition-colors duration-300">
                           {String(index + 1).padStart(2, "0")}
                         </span>
                       </div>
                       <div className="flex-grow">
-                        <h3 className="text-2xl font-serif font-light mb-3 group-hover:text-accent transition-colors duration-300">
+                        <h3 className="mb-3 text-2xl font-serif font-semibold tracking-tight group-hover:text-accent transition-colors duration-300">
                           {item.title}
                         </h3>
-                        <p className="text-muted-foreground leading-relaxed font-light">{item.description}</p>
+                        <p className="text-muted-foreground leading-relaxed">{item.description}</p>
                       </div>
                     </div>
                   </div>
@@ -284,9 +277,9 @@ export function AboutClientPage() {
         </section>
 
         {/* Stats */}
-        <section ref={statsRef} className="py-24 px-6 bg-secondary/20 border-y border-border">
+        <section ref={statsRef} className="border-y border-border bg-secondary/15 px-6 py-24">
           <div className="mx-auto max-w-6xl">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
+            <div className="grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-16">
               {[
                 { label: "Projects Completed", value: projectsCount, suffix: "+" },
                 { label: "Happy Clients", value: clientsCount, suffix: "+" },
@@ -294,16 +287,16 @@ export function AboutClientPage() {
               ].map((stat, i) => (
                 <div
                   key={stat.label}
-                  className={`text-center transition-all duration-700 ${statsInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+                  className={`border border-border bg-card p-8 text-center transition-all duration-700 ${statsInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
                   style={{ transitionDelay: `${i * 150}ms` }}
                 >
                   <div className="mb-4">
-                    <span className="text-6xl md:text-7xl font-serif font-bold text-foreground tracking-tight">
+                    <span className="text-6xl md:text-7xl font-serif font-semibold tracking-tight text-foreground">
                       {stat.value}
                     </span>
-                    <span className="text-6xl md:text-7xl font-serif font-bold text-accent">{stat.suffix}</span>
+                    <span className="text-6xl md:text-7xl font-serif font-semibold text-accent">{stat.suffix}</span>
                   </div>
-                  <div className="text-sm uppercase tracking-[0.2em] text-muted-foreground font-light">
+                  <div className="text-sm uppercase tracking-[0.2em] text-muted-foreground">
                     {stat.label}
                   </div>
                 </div>
@@ -313,19 +306,17 @@ export function AboutClientPage() {
         </section>
 
         {/* Our Promise */}
-        <section ref={promiseRef} className="py-32 px-6 bg-background">
+        <section ref={promiseRef} className="px-6 py-24 bg-background">
           <div className="mx-auto max-w-4xl">
             <div
-              className={`text-center mb-16 transition-all duration-700 ${promiseInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+              className={`mb-14 text-center transition-all duration-700 ${promiseInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
             >
-              <div className="inline-block mb-6">
-                <div className="h-px w-16 bg-accent mx-auto mb-6" />
-              </div>
-              <h2 className="text-4xl md:text-5xl font-serif font-light mb-6 tracking-tight">Our Promise to You</h2>
-              <p className="text-lg text-muted-foreground font-light">When you work with Ubic, you can expect:</p>
+              <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Our Promise to You</p>
+              <h2 className="mt-4 text-4xl md:text-5xl font-semibold tracking-tight">What you can expect</h2>
+              <p className="mt-4 text-lg text-muted-foreground">When you work with Ubic, you can expect:</p>
             </div>
 
-            <div className="space-y-6 max-w-2xl mx-auto">
+            <div className="mx-auto max-w-2xl space-y-6">
               {promises.map((promise, index) => (
                 <div
                   key={index}
@@ -334,8 +325,8 @@ export function AboutClientPage() {
                   }`}
                   style={{ transitionDelay: `${index * 100}ms` }}
                 >
-                  <div className="w-2 h-2 rounded-full bg-accent mt-3 flex-shrink-0" />
-                  <p className="text-lg text-foreground font-light leading-relaxed">{promise}</p>
+                  <div className="mt-3 h-2 w-2 flex-shrink-0 rounded-full bg-accent" />
+                  <p className="text-lg leading-relaxed text-foreground">{promise}</p>
                 </div>
               ))}
             </div>
@@ -343,18 +334,18 @@ export function AboutClientPage() {
         </section>
 
         {/* CTA */}
-        <section className="py-32 px-6 bg-accent text-accent-foreground">
+        <section className="border-t border-border bg-accent px-6 py-24 text-accent-foreground">
           <div className="mx-auto max-w-4xl text-center">
-            <h2 className="text-4xl md:text-5xl font-serif font-light mb-8 text-balance">
+            <h2 className="text-4xl md:text-5xl font-semibold mb-8 text-balance">
               Let's Build Something Great Together
             </h2>
-            <p className="text-lg mb-12 text-accent-foreground/90 leading-relaxed max-w-2xl mx-auto font-light">
+            <p className="mx-auto mb-12 max-w-2xl text-lg leading-relaxed text-accent-foreground/90">
               Whether you're launching a new brand or transforming an existing one, we're here to help you succeed.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 size="lg"
-                className="bg-accent-foreground hover:bg-accent-foreground/90 text-accent group"
+                className="bg-accent-foreground text-accent hover:bg-accent-foreground/90 group"
                 asChild
               >
                 <Link href="/contact">
@@ -365,7 +356,7 @@ export function AboutClientPage() {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-accent-foreground text-accent-foreground hover:bg-accent-foreground/10 bg-transparent"
+                className="border-accent-foreground bg-transparent text-accent-foreground hover:bg-accent-foreground/10"
                 asChild
               >
                 <Link href="/portfolio">View Our Work</Link>
@@ -377,23 +368,9 @@ export function AboutClientPage() {
       <Footer />
 
       <style jsx>{`
-        @keyframes float {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          50% { transform: translate(30px, -30px) scale(1.1); }
-        }
-        @keyframes float-delayed {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          50% { transform: translate(-30px, 30px) scale(1.1); }
-        }
         @keyframes fadeInUp {
           from { opacity: 0; transform: translateY(30px); }
           to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-float {
-          animation: float 20s ease-in-out infinite;
-        }
-        .animate-float-delayed {
-          animation: float-delayed 25s ease-in-out infinite;
         }
         .animate-fadeInUp {
           animation: fadeInUp 0.8s ease-out forwards;

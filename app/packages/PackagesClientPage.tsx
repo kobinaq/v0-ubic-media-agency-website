@@ -119,11 +119,11 @@ export default function PackagesPage() {
 
       <main className="bg-background pt-24 text-foreground">
         <section className="border-b border-border">
-          <div className="mx-auto max-w-7xl px-6 py-18 lg:px-8 lg:py-24">
+          <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-24">
             <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr]">
               <div className="max-w-3xl">
                 <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Packages & pricing</p>
-                <h1 className="mt-4 text-5xl font-serif font-bold tracking-tight md:text-6xl">
+                <h1 className="mt-4 text-5xl font-semibold tracking-[-0.04em] md:text-6xl">
                   Clear entry points for businesses that want to move without guessing.
                 </h1>
                 <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
@@ -132,13 +132,13 @@ export default function PackagesPage() {
                 </p>
               </div>
 
-              <div className="rounded-[2rem] border border-border bg-card p-7">
+              <div className="border border-border bg-card p-7">
                 <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Choose currency</p>
-                <div className="mt-6 inline-flex items-center rounded-full border border-border bg-background p-1">
+                <div className="mt-6 inline-flex items-center border border-border bg-background p-1">
                   <button
                     type="button"
                     onClick={() => setCurrency("GHS")}
-                    className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                    className={`px-4 py-2 text-sm font-medium transition-colors ${
                       currency === "GHS" ? "bg-accent text-accent-foreground" : "text-muted-foreground"
                     }`}
                   >
@@ -147,7 +147,7 @@ export default function PackagesPage() {
                   <button
                     type="button"
                     onClick={() => setCurrency("USD")}
-                    className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                    className={`px-4 py-2 text-sm font-medium transition-colors ${
                       currency === "USD" ? "bg-accent text-accent-foreground" : "text-muted-foreground"
                     }`}
                   >
@@ -182,30 +182,28 @@ export default function PackagesPage() {
                     return (
                       <Card
                         key={pkg.id}
-                        className={`relative overflow-hidden rounded-[1.75rem] border bg-card ${
-                          pkg.popular ? "border-accent shadow-[0_20px_80px_rgba(0,0,0,0.08)]" : "border-border"
-                        }`}
+                        className={`relative overflow-hidden border bg-card ${pkg.popular ? "border-accent" : "border-border"}`}
                       >
                         {pkg.popular && (
-                          <div className="absolute right-5 top-5 rounded-full border border-accent/20 bg-accent/10 px-3 py-1 text-xs font-medium text-accent">
+                          <div className="absolute right-5 top-5 border border-accent/20 bg-accent/10 px-3 py-1 text-xs font-medium text-accent">
                             Popular
                           </div>
                         )}
                         <CardHeader className="space-y-4 pb-6 pt-8">
                           <div>
                             <p className="text-xs font-medium uppercase tracking-[0.24em] text-accent">{service}</p>
-                            <h2 className="mt-4 text-3xl font-serif font-bold">{pkg.name}</h2>
+                            <h2 className="mt-4 text-3xl font-serif font-semibold">{pkg.name}</h2>
                           </div>
                           <p className="text-sm leading-7 text-muted-foreground">{pkg.description}</p>
                           <div>
                             {needsQuote ? (
                               <>
-                                <div className="text-3xl font-serif font-bold">Custom quote</div>
+                                <div className="text-3xl font-serif font-semibold">Custom quote</div>
                                 <div className="mt-1 text-sm text-muted-foreground">Best handled after a quick scope chat</div>
                               </>
                             ) : (
                               <>
-                                <div className="text-4xl font-serif font-bold">{formatPrice(amount, currency)}</div>
+                                <div className="text-4xl font-serif font-semibold">{formatPrice(amount, currency)}</div>
                                 <div className="mt-1 text-sm text-muted-foreground">
                                   {service === "Social Media Management" ? "Monthly starting point" : "Starting package"}
                                 </div>
@@ -224,7 +222,7 @@ export default function PackagesPage() {
                           </ul>
 
                           <Button
-                            className="mt-8 w-full bg-accent hover:bg-accent/90 text-accent-foreground"
+                            className="mt-8 w-full bg-accent text-accent-foreground hover:bg-accent/90"
                             size="lg"
                             onClick={() => handlePurchase(pkg)}
                           >
@@ -240,11 +238,11 @@ export default function PackagesPage() {
           </div>
         </section>
 
-        <section className="border-y border-border bg-secondary/20 py-24">
+        <section className="border-y border-border bg-secondary/15 py-24">
           <div className="mx-auto grid max-w-7xl gap-8 px-6 lg:grid-cols-[1fr_1fr] lg:px-8">
-            <div className="rounded-[2rem] border border-accent/20 bg-accent px-7 py-8 text-accent-foreground">
+            <div className="border border-accent/20 bg-accent px-7 py-8 text-accent-foreground">
               <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent-foreground/80">Need something tailored?</p>
-              <h2 className="mt-4 text-4xl font-serif font-bold tracking-tight">Custom scope is normal for serious brand work.</h2>
+              <h2 className="mt-4 text-4xl font-semibold tracking-tight">Custom scope is normal for serious brand work.</h2>
               <p className="mt-4 text-sm leading-7 text-accent-foreground/90">
                 If your project spans multiple services, launch phases, or internal stakeholders, we can shape a proposal around that rather than forcing a package fit.
               </p>
@@ -256,7 +254,7 @@ export default function PackagesPage() {
               </Button>
             </div>
 
-            <div className="rounded-[2rem] border border-border bg-card p-7">
+            <div className="border border-border bg-card p-7">
               <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Before you buy</p>
               <ul className="mt-6 space-y-4 text-sm text-muted-foreground">
                 <li className="flex items-start gap-3">
@@ -272,7 +270,7 @@ export default function PackagesPage() {
                   <span>You can always start with a quick consultation and convert that into a wider scope later.</span>
                 </li>
               </ul>
-              <Button variant="outline" className="mt-8 border-accent/30 bg-transparent" asChild>
+              <Button variant="outline" className="mt-8 border-border bg-transparent" asChild>
                 <Link href="/services">Review Services Again</Link>
               </Button>
             </div>
@@ -281,7 +279,7 @@ export default function PackagesPage() {
 
         {selectedPackage && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-6 backdrop-blur-sm">
-            <Card className="w-full max-w-md rounded-[1.75rem] border border-border bg-card">
+            <Card className="w-full max-w-md border border-border bg-card">
               <CardHeader>
                 <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Secure checkout</p>
                 <h3 className="mt-3 text-3xl font-serif font-semibold">{selectedPackage.name}</h3>

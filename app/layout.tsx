@@ -23,6 +23,7 @@ const fraunces = Fraunces({
 const spaceMono = Space_Mono({
   subsets: ["latin"],
   variable: "--font-space-mono",
+  weight: ["400", "700"],
   display: "swap",
 })
 

@@ -46,29 +46,30 @@ export default function PaymentCallbackPage() {
     <>
       <Analytics />
       <Header />
-      <main className="pt-24 min-h-screen">
-        <section className="py-24 px-6">
+      <main className="min-h-screen bg-background pt-24 text-foreground">
+        <section className="editorial-grid px-6 py-24">
           <div className="mx-auto max-w-2xl">
-            <Card className="border-2">
+            <Card className="border border-border bg-card">
               <CardContent className="p-12 text-center">
+                <p className="issue-label justify-center">Payment Desk</p>
                 {status === "loading" && (
                   <>
-                    <Loader2 className="h-16 w-16 animate-spin text-accent mx-auto mb-6" />
-                    <h1 className="text-3xl font-serif font-bold mb-4">Verifying Payment...</h1>
+                    <Loader2 className="mx-auto mb-6 mt-8 h-16 w-16 animate-spin text-accent" />
+                    <h1 className="mb-4 text-3xl font-serif font-semibold">Verifying Payment...</h1>
                     <p className="text-muted-foreground">Please wait while we confirm your payment</p>
                   </>
                 )}
 
                 {status === "success" && (
                   <>
-                    <CheckCircle2 className="h-16 w-16 text-green-600 mx-auto mb-6" />
-                    <h1 className="text-3xl font-serif font-bold mb-4">Payment Successful!</h1>
-                    <p className="text-muted-foreground mb-8">{message}</p>
+                    <CheckCircle2 className="mx-auto mb-6 mt-8 h-16 w-16 text-green-600" />
+                    <h1 className="mb-4 text-3xl font-serif font-semibold">Payment Successful!</h1>
+                    <p className="mb-8 text-muted-foreground">{message}</p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                      <Button asChild>
+                      <Button className="editorial-button bg-foreground text-background hover:bg-accent" asChild>
                         <Link href="/">Return Home</Link>
                       </Button>
-                      <Button variant="outline" asChild>
+                      <Button className="editorial-button" variant="outline" asChild>
                         <Link href="/contact">Contact Us</Link>
                       </Button>
                     </div>
@@ -77,14 +78,14 @@ export default function PaymentCallbackPage() {
 
                 {status === "failed" && (
                   <>
-                    <XCircle className="h-16 w-16 text-red-600 mx-auto mb-6" />
-                    <h1 className="text-3xl font-serif font-bold mb-4">Payment Failed</h1>
-                    <p className="text-muted-foreground mb-8">{message}</p>
+                    <XCircle className="mx-auto mb-6 mt-8 h-16 w-16 text-red-600" />
+                    <h1 className="mb-4 text-3xl font-serif font-semibold">Payment Failed</h1>
+                    <p className="mb-8 text-muted-foreground">{message}</p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                      <Button asChild>
+                      <Button className="editorial-button bg-foreground text-background hover:bg-accent" asChild>
                         <Link href="/contact">Contact Us</Link>
                       </Button>
-                      <Button variant="outline" asChild>
+                      <Button className="editorial-button" variant="outline" asChild>
                         <Link href="/">Return Home</Link>
                       </Button>
                     </div>

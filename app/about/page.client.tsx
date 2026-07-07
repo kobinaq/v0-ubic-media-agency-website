@@ -1,118 +1,30 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
-import { about } from "@/lib/content"
-import { Button } from "@/components/ui/button"
-import { Analytics } from "@/components/analytics"
-import { ArrowRight, Target, Lightbulb, Users, TrendingUp } from "lucide-react"
 import Link from "next/link"
 import Script from "next/script"
+import { ArrowRight } from "lucide-react"
+import { Analytics } from "@/components/analytics"
+import { Button } from "@/components/ui/button"
+import { Footer } from "@/components/footer"
+import { Header } from "@/components/header"
+import { about } from "@/lib/content"
 import { generateBreadcrumbSchema, generateFAQSchema } from "@/lib/schema"
 
-// Intersection Observer hook
-function useInView(options = {}) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [isInView, setIsInView] = useState(false)
+const stats = [
+  { value: "123+", label: "Projects completed" },
+  { value: "96+", label: "Happy clients" },
+  { value: "5", label: "Years experience" },
+]
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true)
-        }
-      },
-      { threshold: 0.1, ...options },
-    )
-
-    if (ref.current) {
-      observer.observe(ref.current)
-    }
-
-    return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current)
-      }
-    }
-  }, [])
-
-  return [ref, isInView] as const
-}
-
-// Counter animation
-function useCounter(end: number, duration = 2000, isInView: boolean) {
-  const [count, setCount] = useState(0)
-
-  useEffect(() => {
-    if (!isInView) return
-
-    let startTime: number
-    let animationFrame: number
-
-    const animate = (currentTime: number) => {
-      if (!startTime) startTime = currentTime
-      const progress = Math.min((currentTime - startTime) / duration, 1)
-
-      setCount(Math.floor(progress * end))
-
-      if (progress < 1) {
-        animationFrame = requestAnimationFrame(animate)
-      }
-    }
-
-    animationFrame = requestAnimationFrame(animate)
-    return () => cancelAnimationFrame(animationFrame)
-  }, [end, duration, isInView])
-
-  return count
-}
+const promises = [
+  "Transparent communication at every stage",
+  "Deadlines we actually keep",
+  "Quality that exceeds expectations",
+  "Strategic thinking, not just execution",
+  "Partnership, not just a transaction",
+]
 
 export function AboutClientPage() {
-  const [missionRef, missionInView] = useInView()
-  const [approachRef, approachInView] = useInView()
-  const [diffRef, diffInView] = useInView()
-  const [statsRef, statsInView] = useInView()
-  const [promiseRef, promiseInView] = useInView()
-
-  const projectsCount = useCounter(123, 2000, statsInView)
-  const clientsCount = useCounter(96, 2000, statsInView)
-  const yearsCount = useCounter(5, 2000, statsInView)
-
-  const approach = [
-    {
-      icon: Target,
-      title: "Strategy First",
-      description:
-        "We begin by understanding your goals, audience, and market positioning to create a solid foundation.",
-    },
-    {
-      icon: Lightbulb,
-      title: "Creative Excellence",
-      description:
-        "Our team brings your vision to life with innovative design and compelling storytelling that resonates.",
-    },
-    {
-      icon: Users,
-      title: "Collaborative Process",
-      description: "We work closely with you at every step, ensuring your voice is heard and your vision is realized.",
-    },
-    {
-      icon: TrendingUp,
-      title: "Results Driven",
-      description:
-        "Every decision is made with measurable impact in mind, delivering solutions that drive real growth.",
-    },
-  ]
-
-  const promises = [
-    "Transparent communication at every stage",
-    "Deadlines we actually keep",
-    "Quality that exceeds expectations",
-    "Strategic thinking, not just execution",
-    "Partnership, not just a transaction",
-  ]
-
   const faqSchema = generateFAQSchema([
     {
       question: "What is Ubic Media Agency?",
@@ -159,227 +71,134 @@ export function AboutClientPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       <Header />
+
       <main className="bg-background pt-24 text-foreground">
-        {/* Hero - Founder's Vision */}
-        <section className="relative overflow-hidden border-b border-border px-6 py-20">
-          <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(227,167,46,0.08),transparent_35%),linear-gradient(90deg,rgba(32,28,26,0.04)_1px,transparent_1px),linear-gradient(rgba(32,28,26,0.04)_1px,transparent_1px)] bg-[size:auto,48px_48px,48px_48px]" />
-          <div className="absolute left-1/2 top-0 -z-10 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-accent/10 blur-3xl" />
-
-          <div className="mx-auto max-w-4xl text-center">
-            <div className="inline-flex items-center rounded-full border border-border bg-card px-4 py-2 text-xs uppercase tracking-[0.24em] text-accent">
-              About
+        <section className="editorial-grid border-b border-border">
+          <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-24">
+            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-4 font-mono text-xs uppercase tracking-[0.22em] text-muted-foreground">
+              <span>Vol. 01 - About</span>
+              <span>Accra, Ghana</span>
+              <span>Strategy - Story - Systems</span>
             </div>
-            <h1 className="mt-8 text-5xl font-semibold tracking-[-0.04em] leading-[0.95] md:text-6xl lg:text-7xl">
-              We build brands that <span className="font-serif italic text-accent">matter.</span>
-            </h1>
-            <p className="mt-7 max-w-2xl mx-auto text-lg md:text-xl text-muted-foreground leading-relaxed">
-              Ubic Media Agency was founded on a simple belief: great brands are crafted through strategy, creativity,
-              and an unwavering commitment to consistency.
-            </p>
-          </div>
-        </section>
 
-        {/* Mission & Vision - Enhanced */}
-        <section ref={missionRef} className="border-b border-border px-6 py-24">
-          <div className="mx-auto max-w-6xl">
-            <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-20">
-              <div
-                className={`transition-all duration-700 ${missionInView ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-12"}`}
-              >
-                <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Our Mission</p>
-                <h2 className="mt-4 text-3xl md:text-4xl font-semibold tracking-tight">What we are here to do</h2>
-                <p className="mt-5 text-lg text-muted-foreground leading-relaxed">{about.mission}</p>
+            <div className="grid gap-12 pt-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+              <div>
+                <p className="issue-label">The Studio</p>
+                <h1 className="mt-5 max-w-4xl text-5xl font-semibold leading-[0.94] tracking-[-0.04em] md:text-6xl lg:text-[6.5rem]">
+                  We build brands that
+                  <span className="block font-serif italic text-accent">hold together.</span>
+                </h1>
               </div>
-              <div
-                className={`transition-all duration-700 delay-200 ${missionInView ? "opacity-100 translate-x-0" : "opacity-0 translate-x-12"}`}
-              >
-                <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Our Vision</p>
-                <h2 className="mt-4 text-3xl md:text-4xl font-semibold tracking-tight">What success should look like</h2>
-                <p className="mt-5 text-lg text-muted-foreground leading-relaxed">{about.vision}</p>
+              <div className="border-t border-border pt-6">
+                <p className="text-lg leading-8 text-muted-foreground">
+                  Ubic Media Agency was founded on a simple belief: great brands are crafted through strategy,
+                  creativity, and an unwavering commitment to consistency.
+                </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Our Approach */}
-        <section ref={approachRef} className="border-b border-border bg-secondary/15 px-6 py-24">
-          <div className="mx-auto max-w-6xl">
-            <div
-              className={`mb-16 text-center transition-all duration-700 ${approachInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-            >
-              <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">How We Work</p>
-              <h2 className="mt-4 text-4xl md:text-5xl font-semibold tracking-tight">A process built for clarity</h2>
-              <p className="mx-auto mt-5 max-w-2xl text-lg text-muted-foreground">
-                Our proven process ensures every project delivers exceptional results
-              </p>
+        <section className="border-b border-border py-24">
+          <div className="mx-auto grid max-w-7xl gap-14 px-6 lg:grid-cols-[0.85fr_1.15fr] lg:px-8">
+            <div>
+              <p className="issue-label">The Brief</p>
+              <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
+                Present everywhere, consistent everywhere.
+              </h2>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {approach.map((item, index) => (
-                <div
-                  key={item.title}
-                  className={`group border border-border bg-card p-8 transition-all duration-700 hover:border-accent/50 hover:bg-accent/5 ${
-                    approachInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-                  }`}
-                  style={{ transitionDelay: `${index * 100}ms` }}
-                >
-                  <div className="mb-6 flex h-14 w-14 items-center justify-center border border-border bg-background transition-all duration-300 group-hover:scale-110 group-hover:border-accent/40">
-                    <item.icon className="w-7 h-7 text-accent" />
-                  </div>
-                  <h3 className="mb-4 text-2xl font-serif font-semibold tracking-tight group-hover:text-accent transition-colors">
-                    {item.title}
-                  </h3>
-                  <p className="text-muted-foreground leading-relaxed">{item.description}</p>
-                </div>
+            <div className="grid gap-8 text-lg leading-8 text-muted-foreground md:grid-cols-2">
+              {about.story.slice(0, 2).map((paragraph, index) => (
+                <p key={paragraph} className={index === 0 ? "first-letter:float-left first-letter:mr-3 first-letter:font-serif first-letter:text-7xl first-letter:font-semibold first-letter:leading-[0.8] first-letter:text-accent" : ""}>
+                  {paragraph}
+                </p>
               ))}
             </div>
           </div>
         </section>
 
-        {/* What Makes Us Different */}
-        <section ref={diffRef} className="px-6 py-24 bg-background">
-          <div className="mx-auto max-w-5xl">
-            <div
-              className={`mb-16 text-center transition-all duration-700 ${diffInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-            >
-              <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Why Choose Ubic</p>
-              <h2 className="mt-4 text-4xl md:text-5xl font-semibold tracking-tight">What makes us different</h2>
+        <section className="border-b border-border bg-secondary/15 py-24">
+          <div className="mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-2 lg:px-8">
+            <article className="border-t border-border pt-8">
+              <p className="issue-label">Our Mission</p>
+              <h2 className="mt-4 text-3xl font-serif font-semibold tracking-tight md:text-4xl">What we are here to do</h2>
+              <p className="mt-5 text-base leading-8 text-muted-foreground">{about.mission}</p>
+            </article>
+            <article className="border-t border-border pt-8">
+              <p className="issue-label">Our Vision</p>
+              <h2 className="mt-4 text-3xl font-serif font-semibold tracking-tight md:text-4xl">What success should look like</h2>
+              <p className="mt-5 text-base leading-8 text-muted-foreground">{about.vision}</p>
+            </article>
+          </div>
+        </section>
+
+        <section className="py-24">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="max-w-2xl">
+              <p className="issue-label">Why Choose Ubic</p>
+              <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">What makes us different</h2>
             </div>
 
-            <div className="space-y-0 border-t border-border">
+            <div className="mt-14 border-t border-border">
               {about.differentiators.map((item, index) => (
-                <div
-                  key={index}
-                  className={`group border-b border-border transition-all duration-700 ${
-                    diffInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-                  }`}
-                  style={{ transitionDelay: `${index * 100}ms` }}
-                >
-                  <div className="px-0 py-8 hover:bg-accent/5 transition-colors duration-300">
-                    <div className="flex items-start gap-8">
-                      <div className="w-16 flex-shrink-0">
-                        <span className="text-5xl font-serif font-semibold text-accent/30 group-hover:text-accent transition-colors duration-300">
-                          {String(index + 1).padStart(2, "0")}
-                        </span>
-                      </div>
-                      <div className="flex-grow">
-                        <h3 className="mb-3 text-2xl font-serif font-semibold tracking-tight group-hover:text-accent transition-colors duration-300">
-                          {item.title}
-                        </h3>
-                        <p className="text-muted-foreground leading-relaxed">{item.description}</p>
-                      </div>
-                    </div>
+                <article key={item.title} className="grid gap-6 border-b border-border py-8 lg:grid-cols-[80px_1fr]">
+                  <div className="font-mono text-sm tracking-[0.18em] text-accent">0{index + 1}</div>
+                  <div className="max-w-3xl">
+                    <h3 className="text-3xl font-serif font-semibold tracking-tight">{item.title}</h3>
+                    <p className="mt-4 text-base leading-8 text-muted-foreground">{item.description}</p>
                   </div>
-                </div>
+                </article>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Stats */}
-        <section ref={statsRef} className="border-y border-border bg-secondary/15 px-6 py-24">
-          <div className="mx-auto max-w-6xl">
-            <div className="grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-16">
-              {[
-                { label: "Projects Completed", value: projectsCount, suffix: "+" },
-                { label: "Happy Clients", value: clientsCount, suffix: "+" },
-                { label: "Years Experience", value: yearsCount, suffix: "" },
-              ].map((stat, i) => (
-                <div
-                  key={stat.label}
-                  className={`border border-border bg-card p-8 text-center transition-all duration-700 ${statsInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-                  style={{ transitionDelay: `${i * 150}ms` }}
-                >
-                  <div className="mb-4">
-                    <span className="text-6xl md:text-7xl font-serif font-semibold tracking-tight text-foreground">
-                      {stat.value}
-                    </span>
-                    <span className="text-6xl md:text-7xl font-serif font-semibold text-accent">{stat.suffix}</span>
-                  </div>
-                  <div className="text-sm uppercase tracking-[0.2em] text-muted-foreground">
-                    {stat.label}
-                  </div>
-                </div>
-              ))}
-            </div>
+        <section className="border-y border-border bg-secondary/15 py-20">
+          <div className="mx-auto grid max-w-7xl gap-8 px-6 md:grid-cols-3 lg:px-8">
+            {stats.map((stat) => (
+              <div key={stat.label} className="border-t border-border pt-6">
+                <div className="font-serif text-6xl font-semibold tracking-tight text-foreground">{stat.value}</div>
+                <div className="mt-3 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">{stat.label}</div>
+              </div>
+            ))}
           </div>
         </section>
 
-        {/* Our Promise */}
-        <section ref={promiseRef} className="px-6 py-24 bg-background">
-          <div className="mx-auto max-w-4xl">
-            <div
-              className={`mb-14 text-center transition-all duration-700 ${promiseInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-            >
-              <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Our Promise to You</p>
-              <h2 className="mt-4 text-4xl md:text-5xl font-semibold tracking-tight">What you can expect</h2>
-              <p className="mt-4 text-lg text-muted-foreground">When you work with Ubic, you can expect:</p>
+        <section className="py-24">
+          <div className="mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
+            <div>
+              <p className="issue-label">Our Promise</p>
+              <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">What you can expect</h2>
             </div>
-
-            <div className="mx-auto max-w-2xl space-y-6">
+            <div className="border-t border-border">
               {promises.map((promise, index) => (
-                <div
-                  key={index}
-                  className={`flex items-start gap-4 transition-all duration-700 ${
-                    promiseInView ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"
-                  }`}
-                  style={{ transitionDelay: `${index * 100}ms` }}
-                >
-                  <div className="mt-3 h-2 w-2 flex-shrink-0 rounded-full bg-accent" />
-                  <p className="text-lg leading-relaxed text-foreground">{promise}</p>
+                <div key={promise} className="grid grid-cols-[56px_1fr] gap-4 border-b border-border py-5">
+                  <span className="font-mono text-xs tracking-[0.18em] text-accent">{String(index + 1).padStart(2, "0")}</span>
+                  <p className="text-lg leading-8">{promise}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* CTA */}
-        <section className="border-t border-border bg-accent px-6 py-24 text-accent-foreground">
-          <div className="mx-auto max-w-4xl text-center">
-            <h2 className="text-4xl md:text-5xl font-semibold mb-8 text-balance">
-              Let's Build Something Great Together
-            </h2>
-            <p className="mx-auto mb-12 max-w-2xl text-lg leading-relaxed text-accent-foreground/90">
-              Whether you're launching a new brand or transforming an existing one, we're here to help you succeed.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                size="lg"
-                className="bg-accent-foreground text-accent hover:bg-accent-foreground/90 group"
-                asChild
-              >
-                <Link href="/contact">
-                  Start Your Project{" "}
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-accent-foreground bg-transparent text-accent-foreground hover:bg-accent-foreground/10"
-                asChild
-              >
-                <Link href="/portfolio">View Our Work</Link>
-              </Button>
+        <section className="border-t border-border bg-accent py-24 text-accent-foreground">
+          <div className="mx-auto grid max-w-7xl gap-10 px-6 lg:grid-cols-[1fr_auto] lg:items-end lg:px-8">
+            <div>
+              <p className="issue-label text-accent-foreground/75">Start a Brief</p>
+              <h2 className="mt-4 max-w-3xl text-4xl font-semibold tracking-tight md:text-5xl">
+                Tell us what is not working yet.
+              </h2>
             </div>
+            <Button size="lg" className="editorial-button bg-accent-foreground text-accent hover:bg-accent-foreground/90" asChild>
+              <Link href="/contact">
+                Start Your Project
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
           </div>
         </section>
       </main>
       <Footer />
-
-      <style jsx>{`
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(30px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fadeInUp {
-          animation: fadeInUp 0.8s ease-out forwards;
-          opacity: 0;
-        }
-        .animate-fadeInUp.delay-200 {
-          animation-delay: 0.2s;
-        }
-      `}</style>
     </>
   )
 }

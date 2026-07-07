@@ -94,7 +94,6 @@ export default function HomePageClient() {
       <main className="bg-background text-foreground">
         <section className="relative overflow-hidden border-b border-border pt-28">
           <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(227,167,46,0.08),transparent_28%),linear-gradient(90deg,rgba(32,28,26,0.04)_1px,transparent_1px),linear-gradient(rgba(32,28,26,0.04)_1px,transparent_1px)] bg-[size:auto,48px_48px,48px_48px]" />
-          <div className="absolute left-1/2 top-0 -z-10 h-[32rem] w-[32rem] -translate-x-1/2 rounded-full bg-accent/10 blur-3xl" />
 
           <div className="mx-auto max-w-7xl px-6 pb-16 pt-10 lg:px-8 lg:pb-20 lg:pt-12">
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-4 text-xs uppercase tracking-[0.24em] text-muted-foreground">
@@ -204,7 +203,7 @@ export default function HomePageClient() {
                       sizes="(min-width: 1024px) 50vw, 100vw"
                       className="retro-image object-cover"
                     />
-                    <div className="absolute left-4 top-4 rounded-full bg-background px-3 py-1 text-xs uppercase tracking-[0.18em] text-foreground">
+                    <div className="absolute left-4 top-4 bg-background px-3 py-1 font-mono text-xs uppercase tracking-[0.18em] text-foreground">
                       {project.category}
                     </div>
                   </div>
@@ -256,7 +255,7 @@ export default function HomePageClient() {
               "They asked harder questions about our business than our board does - the brand work was just where it landed first."
             </blockquote>
             <div className="mt-6 flex items-center gap-4 text-sm uppercase tracking-[0.22em] text-accent-foreground/75">
-              <span className="h-10 w-10 rounded-full bg-paper/90" />
+              <span className="h-10 w-10 bg-accent-foreground/90" />
               <span>Managing Director, Retail Group - Accra</span>
             </div>
           </div>

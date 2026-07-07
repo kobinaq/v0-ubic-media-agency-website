@@ -91,7 +91,7 @@ export default function AdminOrdersPage() {
     <div className="min-h-screen bg-background px-6 py-10 text-foreground lg:px-8">
       <div className="mx-auto max-w-7xl space-y-8">
         <div className="border-b border-border pb-6">
-          <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Admin</p>
+          <p className="issue-label">Admin</p>
           <h1 className="mt-3 text-4xl font-semibold tracking-[-0.04em]">Order Management</h1>
           <p className="mt-3 max-w-2xl text-muted-foreground">View and manage all customer orders from one clean dashboard.</p>
         </div>
@@ -118,7 +118,7 @@ export default function AdminOrdersPage() {
                   <SelectItem value="paid">Paid</SelectItem>
                 </SelectContent>
               </Select>
-              <Button onClick={exportToCSV} variant="outline" className="border-border bg-transparent">
+              <Button onClick={exportToCSV} variant="outline" className="editorial-button border-border bg-transparent">
                 <Download className="mr-2 h-4 w-4" />
                 Export CSV
               </Button>
@@ -129,7 +129,7 @@ export default function AdminOrdersPage() {
         <div className="grid gap-6 md:grid-cols-3">
           <Card className="border border-border bg-card">
             <CardHeader>
-              <CardTitle className="text-sm font-medium uppercase tracking-[0.24em] text-muted-foreground">Total Orders</CardTitle>
+              <CardTitle className="font-mono text-sm font-medium uppercase tracking-[0.24em] text-muted-foreground">Total Orders</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-4xl font-serif font-semibold">{orders.length}</div>
@@ -137,7 +137,7 @@ export default function AdminOrdersPage() {
           </Card>
           <Card className="border border-border bg-card">
             <CardHeader>
-              <CardTitle className="text-sm font-medium uppercase tracking-[0.24em] text-muted-foreground">Paid Orders</CardTitle>
+              <CardTitle className="font-mono text-sm font-medium uppercase tracking-[0.24em] text-muted-foreground">Paid Orders</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-4xl font-serif font-semibold">{orders.filter((order) => order.payment_status === "paid").length}</div>
@@ -145,7 +145,7 @@ export default function AdminOrdersPage() {
           </Card>
           <Card className="border border-border bg-card">
             <CardHeader>
-              <CardTitle className="text-sm font-medium uppercase tracking-[0.24em] text-muted-foreground">Total Revenue</CardTitle>
+              <CardTitle className="font-mono text-sm font-medium uppercase tracking-[0.24em] text-muted-foreground">Total Revenue</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-serif font-semibold">GHS {totalRevenue.toLocaleString()}</div>

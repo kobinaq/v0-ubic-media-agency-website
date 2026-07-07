@@ -20,14 +20,15 @@ export function Header() {
   ]
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/70 bg-background/92 backdrop-blur-sm">
+    <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-sm">
       <nav className="mx-auto max-w-7xl px-6 lg:px-8" aria-label="Global">
         <div className="flex items-center justify-between gap-6 py-4 lg:py-5">
           <div className="min-w-0 flex items-center gap-4">
             <Link href="/" className="flex items-center gap-3 text-xl font-semibold tracking-[-0.03em] text-foreground">
               <Image src="/logo.png" alt={siteConfig.siteName} width={70} height={20} priority className="h-auto w-auto max-h-5" />
             </Link>
-            <span className="hidden border-l border-border pl-4 text-xs uppercase tracking-[0.28em] text-muted-foreground xl:inline-flex">
+            <span className="hidden border-l border-border pl-4 font-mono text-[0.68rem] uppercase tracking-[0.22em] text-muted-foreground xl:inline-flex">
+              Accra - Vol. 01
             </span>
           </div>
 
@@ -36,7 +37,7 @@ export function Header() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-sm font-medium leading-6 text-foreground transition-colors hover:text-accent"
+                className="font-mono text-xs uppercase leading-6 tracking-[0.14em] text-foreground transition-colors hover:text-accent"
               >
                 {item.name}
               </Link>
@@ -45,7 +46,7 @@ export function Header() {
 
           <div className="hidden items-center gap-3 lg:flex">
             <ThemeToggle />
-            <Button className="bg-accent text-accent-foreground hover:bg-accent/90" asChild>
+            <Button className="editorial-button border border-foreground bg-transparent text-foreground hover:bg-foreground hover:text-background" asChild>
               <Link href="/contact">Get Started</Link>
             </Button>
           </div>
@@ -54,7 +55,7 @@ export function Header() {
             <ThemeToggle />
             <button
               type="button"
-              className="-m-2.5 inline-flex items-center justify-center rounded-md border border-border bg-card/80 p-2.5 text-foreground"
+              className="-m-2.5 inline-flex items-center justify-center border border-border bg-card/80 p-2.5 text-foreground"
               onClick={() => setMobileMenuOpen(true)}
             >
               <span className="sr-only">Open main menu</span>
@@ -83,7 +84,7 @@ export function Header() {
                 </Link>
                 <button
                   type="button"
-                  className="-m-2.5 rounded-md border border-border bg-card/80 p-2.5 text-foreground"
+                  className="-m-2.5 border border-border bg-card/80 p-2.5 text-foreground"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <span className="sr-only">Close menu</span>
@@ -95,7 +96,7 @@ export function Header() {
                   <Link
                     key={item.name}
                     href={item.href}
-                    className="border-b border-border/70 py-4 text-2xl font-serif font-semibold tracking-tight text-foreground transition-colors hover:text-accent"
+                    className="border-b border-border/70 py-4 font-serif text-2xl font-semibold tracking-tight text-foreground transition-colors hover:text-accent"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {item.name}
@@ -104,7 +105,7 @@ export function Header() {
               </div>
               <div className="flex items-center gap-3 pt-2">
                 <ThemeToggle />
-                <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90" asChild>
+                <Button className="editorial-button w-full border border-foreground bg-transparent text-foreground hover:bg-foreground hover:text-background" asChild>
                   <Link href="/contact" onClick={() => setMobileMenuOpen(false)}>
                     Get Started
                   </Link>

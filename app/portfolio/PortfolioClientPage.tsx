@@ -1,17 +1,17 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
-import { portfolio } from "@/lib/content"
-import { Button } from "@/components/ui/button"
-import { Analytics } from "@/components/analytics"
-import { X, ChevronLeft, ChevronRight } from "lucide-react"
 import Image from "next/image"
+import { useEffect, useRef, useState } from "react"
+import { ChevronLeft, ChevronRight, X } from "lucide-react"
+import { Analytics } from "@/components/analytics"
+import { Button } from "@/components/ui/button"
+import { Footer } from "@/components/footer"
+import { Header } from "@/components/header"
+import { portfolio } from "@/lib/content"
 
 export default function PortfolioPage() {
   const [activeCategory, setActiveCategory] = useState("All")
-  const [selectedProject, setSelectedProject] = useState<any>(null)
+  const [selectedProject, setSelectedProject] = useState<(typeof portfolio.projects)[number] | null>(null)
   const [isVisible, setIsVisible] = useState(false)
   const gridRef = useRef<HTMLDivElement>(null)
 
@@ -20,42 +20,38 @@ export default function PortfolioPage() {
       ? portfolio.projects
       : portfolio.projects.filter((project) => project.category === activeCategory)
 
-  // Bento grid layout pattern - which items should be large
-  const getBentoSize = (index: number) => {
-    const pattern = [2, 1, 1, 1, 2, 1, 1, 1, 2] // 2 = large, 1 = regular
-    return pattern[index % pattern.length]
-  }
-
-  // Animate in on mount
   useEffect(() => {
     setIsVisible(true)
   }, [])
 
-  // Reset animation when category changes
   useEffect(() => {
     setIsVisible(false)
-    setTimeout(() => setIsVisible(true), 50)
+    const timer = setTimeout(() => setIsVisible(true), 50)
+    return () => clearTimeout(timer)
   }, [activeCategory])
 
-  const handleProjectClick = (project: any) => {
+  const handleProjectClick = (project: (typeof portfolio.projects)[number]) => {
     setSelectedProject(project)
-    document.body.style.overflow = 'hidden'
+    document.body.style.overflow = "hidden"
   }
 
   const closeModal = () => {
     setSelectedProject(null)
-    document.body.style.overflow = 'unset'
+    document.body.style.overflow = "unset"
   }
 
-  const navigateProject = (direction: 'prev' | 'next') => {
+  const navigateProject = (direction: "prev" | "next") => {
     if (!selectedProject) return
-    const currentIndex = filteredProjects.findIndex(p => p.id === selectedProject.id)
-    let newIndex
-    if (direction === 'prev') {
-      newIndex = currentIndex > 0 ? currentIndex - 1 : filteredProjects.length - 1
-    } else {
-      newIndex = currentIndex < filteredProjects.length - 1 ? currentIndex + 1 : 0
-    }
+    const currentIndex = filteredProjects.findIndex((project) => project.id === selectedProject.id)
+    const newIndex =
+      direction === "prev"
+        ? currentIndex > 0
+          ? currentIndex - 1
+          : filteredProjects.length - 1
+        : currentIndex < filteredProjects.length - 1
+          ? currentIndex + 1
+          : 0
+
     setSelectedProject(filteredProjects[newIndex])
   }
 
@@ -65,29 +61,39 @@ export default function PortfolioPage() {
       <Header />
 
       <main className="bg-background pt-24 text-foreground">
-        <section className="border-b border-border">
+        <section className="editorial-grid border-b border-border">
           <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-24">
-            <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
+            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-4 font-mono text-xs uppercase tracking-[0.22em] text-muted-foreground">
+              <span>Issue 03 - Portfolio</span>
+              <span>Selected spreads</span>
+              <span>{filteredProjects.length} entries</span>
+            </div>
+
+            <div className="grid gap-12 pt-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
               <div className="max-w-3xl">
-                <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Issue 03 — portfolio</p>
+                <p className="issue-label">Portfolio</p>
                 <h1 className="mt-4 text-5xl font-semibold tracking-[-0.04em] md:text-6xl">
                   Case studies, spreads, and selected work.
                 </h1>
                 <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
-                  A clearer look at the work behind the brand. Each project is presented more like a magazine spread than
-                  a gallery tile, so the portfolio feels aligned with the rest of the site.
+                  A clearer look at the work behind the brand. Each project is presented more like a magazine spread
+                  than a gallery tile, so the portfolio feels aligned with the rest of the site.
                 </p>
               </div>
 
-              <div className="border border-border bg-card p-7">
-                <p className="text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">Browse by category</p>
-                <div className="mt-6 flex flex-wrap gap-3">
+              <div className="border-t border-border pt-7">
+                <p className="font-mono text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">Index by category</p>
+                <div className="mt-6 flex flex-wrap gap-2">
                   {portfolio.categories.map((category) => (
                     <Button
                       key={category}
                       variant={activeCategory === category ? "default" : "outline"}
                       onClick={() => setActiveCategory(category)}
-                      className={activeCategory === category ? "bg-accent text-accent-foreground hover:bg-accent/90" : "border-border bg-transparent"}
+                      className={`editorial-button ${
+                        activeCategory === category
+                          ? "bg-foreground text-background hover:bg-accent"
+                          : "border-border bg-transparent hover:bg-card"
+                      }`}
                     >
                       {category}
                     </Button>
@@ -109,11 +115,11 @@ export default function PortfolioPage() {
                     key={project.id}
                     onClick={() => handleProjectClick(project)}
                     className={`group grid cursor-pointer gap-8 border-b border-border pb-16 transition-all duration-500 last:border-b-0 last:pb-0 lg:grid-cols-2 lg:items-center ${
-                      isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                      isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
                     } ${isReverse ? "lg:[&>*:first-child]:order-2" : ""}`}
                     style={{ transitionDelay: `${index * 60}ms` }}
                   >
-                    <div className="relative aspect-[5/4] overflow-hidden border border-border bg-card">
+                    <div className="image-print-overlay relative aspect-[5/4] overflow-hidden border border-border bg-card">
                       <Image
                         src={project.image || "/placeholder.svg"}
                         alt={project.title}
@@ -121,13 +127,13 @@ export default function PortfolioPage() {
                         sizes="(min-width: 1024px) 50vw, 100vw"
                         className="retro-image object-cover"
                       />
-                      <div className="absolute left-4 top-4 border border-border bg-background px-3 py-1 text-xs uppercase tracking-[0.18em] text-foreground">
+                      <div className="absolute left-4 top-4 z-10 border border-border bg-background px-3 py-1 font-mono text-xs uppercase tracking-[0.18em] text-foreground">
                         {project.category}
                       </div>
                     </div>
 
                     <div className="max-w-xl">
-                      <p className="text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">
+                      <p className="font-mono text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">
                         Fig. 0{index + 1}
                       </p>
                       <h2 className="mt-4 text-3xl font-serif font-semibold tracking-tight md:text-[2.5rem]">
@@ -135,7 +141,7 @@ export default function PortfolioPage() {
                       </h2>
                       <p className="mt-5 text-base leading-8 text-muted-foreground">{project.description}</p>
                       <div className="mt-8 flex flex-wrap items-center gap-3">
-                        <span className="border border-border bg-card px-3 py-1 text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                        <span className="border border-border bg-card px-3 py-1 font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
                           Selected project
                         </span>
                         <span className="text-sm text-accent">Open to view case details</span>
@@ -151,54 +157,49 @@ export default function PortfolioPage() {
         {filteredProjects.length === 0 && (
           <section className="py-24">
             <div className="mx-auto max-w-3xl px-6 text-center lg:px-8">
-              <p className="text-sm font-medium uppercase tracking-[0.24em] text-muted-foreground">No results</p>
+              <p className="font-mono text-sm font-medium uppercase tracking-[0.24em] text-muted-foreground">No results</p>
               <h2 className="mt-4 text-3xl font-semibold tracking-tight">Try another category.</h2>
             </div>
           </section>
         )}
 
-        {/* Full-Screen Project Modal */}
         {selectedProject && (
-          <div 
-            className="fixed inset-0 z-50 bg-background/92 backdrop-blur-md animate-fadeIn"
-            onClick={closeModal}
-          >
+          <div className="fixed inset-0 z-50 animate-fadeIn bg-background/95 backdrop-blur-sm" onClick={closeModal}>
             <div className="absolute inset-0 flex items-center justify-center p-6">
-              {/* Close button */}
               <button
                 onClick={closeModal}
-                className="absolute top-6 right-6 z-10 text-foreground hover:text-accent transition-colors"
+                className="absolute right-6 top-6 z-10 border border-border bg-background p-2 text-foreground transition-colors hover:text-accent"
               >
-                <X className="w-8 h-8" />
+                <span className="sr-only">Close project details</span>
+                <X className="h-6 w-6" />
               </button>
 
-              {/* Navigation */}
               <button
-                onClick={(e) => {
-                  e.stopPropagation()
+                onClick={(event) => {
+                  event.stopPropagation()
                   navigateProject("prev")
                 }}
-                className="absolute left-6 top-1/2 -translate-y-1/2 z-10 text-foreground hover:text-accent transition-colors"
+                className="absolute left-6 top-1/2 z-10 hidden -translate-y-1/2 border border-border bg-background p-2 text-foreground transition-colors hover:text-accent md:block"
               >
-                <ChevronLeft className="w-12 h-12" />
+                <span className="sr-only">Previous project</span>
+                <ChevronLeft className="h-8 w-8" />
               </button>
               <button
-                onClick={(e) => {
-                  e.stopPropagation()
+                onClick={(event) => {
+                  event.stopPropagation()
                   navigateProject("next")
                 }}
-                className="absolute right-6 top-1/2 -translate-y-1/2 z-10 text-foreground hover:text-accent transition-colors"
+                className="absolute right-6 top-1/2 z-10 hidden -translate-y-1/2 border border-border bg-background p-2 text-foreground transition-colors hover:text-accent md:block"
               >
-                <ChevronRight className="w-12 h-12" />
+                <span className="sr-only">Next project</span>
+                <ChevronRight className="h-8 w-8" />
               </button>
 
-              {/* Content */}
-              <div 
-                className="max-w-6xl w-full grid grid-cols-1 gap-8 items-center lg:grid-cols-2"
-                onClick={(e) => e.stopPropagation()}
+              <div
+                className="grid w-full max-w-6xl grid-cols-1 items-center gap-8 border border-border bg-card p-5 lg:grid-cols-2 lg:p-8"
+                onClick={(event) => event.stopPropagation()}
               >
-                {/* Image */}
-                <div className="relative aspect-[4/3] overflow-hidden border border-border bg-card">
+                <div className="image-print-overlay relative aspect-[4/3] overflow-hidden border border-border bg-background">
                   <Image
                     src={selectedProject.image || "/placeholder.svg"}
                     alt={selectedProject.title}
@@ -208,38 +209,28 @@ export default function PortfolioPage() {
                   />
                 </div>
 
-                {/* Details */}
                 <div className="space-y-6 text-foreground">
                   <div>
-                    <span className="mb-4 inline-block border border-border bg-card px-4 py-2 text-sm font-medium uppercase tracking-[0.18em] text-foreground">
+                    <span className="mb-4 inline-block border border-border bg-background px-4 py-2 font-mono text-sm font-medium uppercase tracking-[0.18em] text-foreground">
                       {selectedProject.category}
                     </span>
                     <h2 className="mb-4 text-4xl font-serif font-semibold md:text-5xl">
                       {selectedProject.title}
                     </h2>
-                    <p className="text-lg leading-relaxed text-muted-foreground">
-                      {selectedProject.description}
-                    </p>
+                    <p className="text-lg leading-relaxed text-muted-foreground">{selectedProject.description}</p>
                   </div>
 
-                  {/* Additional project details - customize as needed */}
                   <div className="space-y-4 border-t border-border pt-6">
                     <div>
-                      <h4 className="mb-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                      <h4 className="mb-2 font-mono text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                         Project Type
                       </h4>
                       <p>{selectedProject.category}</p>
                     </div>
                   </div>
 
-                  <Button 
-                    size="lg"
-                    className="mt-8 bg-accent text-accent-foreground hover:bg-accent/90"
-                    asChild
-                  >
-                    <a href="/contact">
-                      Start Your Project
-                    </a>
+                  <Button size="lg" className="editorial-button mt-8 bg-foreground text-background hover:bg-accent" asChild>
+                    <a href="/contact">Start Your Project</a>
                   </Button>
                 </div>
               </div>

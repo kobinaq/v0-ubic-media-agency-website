@@ -55,6 +55,18 @@ export default function PortfolioPage() {
     setSelectedProject(filteredProjects[newIndex])
   }
 
+  const getImageFitClass = (category: string) =>
+    category === "Social Media" ? "object-contain p-3 sm:p-5" : "object-cover"
+
+  const getImageFrameClass = (category: string, context: "list" | "modal") =>
+    category === "Social Media"
+      ? context === "list"
+        ? "aspect-square lg:aspect-[4/3]"
+        : "aspect-square lg:aspect-[16/10]"
+      : context === "list"
+        ? "aspect-[5/4]"
+        : "aspect-[4/3]"
+
   return (
     <>
       <Analytics />
@@ -119,13 +131,18 @@ export default function PortfolioPage() {
                     } ${isReverse ? "lg:[&>*:first-child]:order-2" : ""}`}
                     style={{ transitionDelay: `${index * 60}ms` }}
                   >
-                    <div className="image-print-overlay relative aspect-[5/4] overflow-hidden border border-border bg-card">
+                    <div
+                      className={`image-print-overlay relative overflow-hidden border border-border bg-card ${getImageFrameClass(
+                        project.category,
+                        "list",
+                      )}`}
+                    >
                       <Image
                         src={project.image || "/placeholder.svg"}
                         alt={project.title}
                         fill
                         sizes="(min-width: 1024px) 50vw, 100vw"
-                        className="retro-image object-cover"
+                        className={`retro-image ${getImageFitClass(project.category)}`}
                       />
                       <div className="absolute left-4 top-4 z-10 border border-border bg-background px-3 py-1 font-mono text-xs uppercase tracking-[0.18em] text-foreground">
                         {project.category}
@@ -214,13 +231,18 @@ export default function PortfolioPage() {
                 className="grid w-full max-w-6xl grid-cols-1 items-center gap-8 border border-border bg-card p-5 lg:grid-cols-2 lg:p-8"
                 onClick={(event) => event.stopPropagation()}
               >
-                <div className="image-print-overlay relative aspect-[4/3] overflow-hidden border border-border bg-background">
+                <div
+                  className={`relative overflow-hidden border border-border bg-background ${getImageFrameClass(
+                    selectedProject.category,
+                    "modal",
+                  )}`}
+                >
                   <Image
                     src={selectedProject.image || "/placeholder.svg"}
                     alt={selectedProject.title}
                     fill
                     sizes="(min-width: 1024px) 50vw, 100vw"
-                    className="retro-image object-cover"
+                    className={getImageFitClass(selectedProject.category)}
                   />
                 </div>
 

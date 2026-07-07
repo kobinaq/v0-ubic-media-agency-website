@@ -140,7 +140,7 @@ export default function PackagesPage() {
                     <Link href="/contact">Start a Project</Link>
                   </Button>
                   <Button size="lg" variant="outline" className="editorial-button border-border bg-transparent" asChild>
-                    <Link href="/portfolio">See Selected Work</Link>
+                    <Link href="/case-studies">See Case Studies</Link>
                   </Button>
                 </div>
               </div>

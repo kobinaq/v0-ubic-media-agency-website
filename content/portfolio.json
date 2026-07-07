@@ -1,61 +1,135 @@
 {
-  "categories": ["All", "Photography", "Videography", "Web Design", "Brand Identity", "Print Design"],
+  "categories": ["All", "Photography", "Videography", "Web Design", "Brand Identity", "Social Media", "Print Design"],
   "projects": [
     {
       "id": "starbites-food",
       "title": "Starbites Menu Photography",
       "category": "Photography",
       "image": "/portfolio-1.jpg",
-      "description": "Professional menu photography for social media campaign"
+      "description": "Professional menu photography for a social-first food campaign.",
+      "client": "Starbites",
+      "year": "2025",
+      "services": ["Food photography", "Campaign art direction", "Social content"],
+      "challenge": "Starbites needed menu imagery that made everyday dishes feel craveable across feeds, menus, and promotional touchpoints.",
+      "approach": "We planned a tight shot list, styled plates for texture and clarity, and captured images with enough range for both hero placements and quick social posts.",
+      "outcome": "The final library gave the team polished, consistent food assets they could use across promotions without relying on inconsistent ad hoc photography."
     },
     {
       "id": "gordon-university",
       "title": "Gordon University ISO",
       "category": "Print Design",
       "image": "/portfolio-2.jpg",
-      "description": "Shirt designs for international students at Gordon University"
+      "description": "Shirt designs for international students at Gordon University.",
+      "client": "Gordon University ISO",
+      "year": "2025",
+      "services": ["Print design", "Merch layout", "Production files"],
+      "challenge": "The International Student Organization needed shirt artwork that felt communal, clear, and production-ready for a student audience.",
+      "approach": "We built a simple graphic direction that could hold up on fabric, then prepared clean artwork files for vendor handoff.",
+      "outcome": "The design gave the group a recognizable piece of event merchandise with a cleaner, more intentional visual presence."
     },
     {
       "id": "nexus-it",
       "title": "Nexus IT Systems",
       "category": "Brand Identity",
       "image": "/portfolio-3.jpg",
-      "description": "Professional redesign of Nexus IT Systems' visual identity"
+      "description": "Professional redesign of Nexus IT Systems' visual identity.",
+      "client": "Nexus IT Systems",
+      "year": "2025",
+      "services": ["Visual identity", "Brand system", "Digital rollout"],
+      "challenge": "Nexus IT Systems needed to look more credible to business clients without losing the practical, technical nature of the brand.",
+      "approach": "We refined the identity around clearer typography, a more confident visual system, and brand elements that could scale across digital touchpoints.",
+      "outcome": "The refreshed identity gave Nexus a sharper first impression and a more consistent foundation for sales, proposals, and online communication."
     },
     {
-      "id": "haircessorize",
-      "title": "Haircessorize Social Media Content",
-      "category": "Brand Identity",
-      "image": "/portfolio-4.jpg",
-      "description": "Bold social media content for Haircessorize"
+      "id": "victory-foods-social",
+      "title": "Victory Foods Social Campaign",
+      "category": "Social Media",
+      "image": "/victory foods.jpg",
+      "description": "Bold social media design for a food brand promotion.",
+      "client": "Victory Foods",
+      "year": "2026",
+      "services": ["Social media design", "Campaign layout", "Promotional creative"],
+      "challenge": "Victory Foods needed a scroll-stopping campaign asset that could make the offer feel immediate while keeping the food product clear.",
+      "approach": "We used strong hierarchy, appetite-led imagery, and punchy promotional framing so the message could read quickly on mobile.",
+      "outcome": "The final design gives the brand a sharper social post that can carry a campaign message without feeling cluttered or generic."
+    },
+    {
+      "id": "richkev-social",
+      "title": "Richkev Social Media Design",
+      "category": "Social Media",
+      "image": "/Richkev.jpg",
+      "description": "Clean promotional social design for Richkev.",
+      "client": "Richkev",
+      "year": "2026",
+      "services": ["Social media design", "Promotional concept", "Brand layout"],
+      "challenge": "Richkev needed a social design that presented the offer clearly and made the brand feel more composed in-feed.",
+      "approach": "We shaped the layout around quick readability, controlled spacing, and a visual structure that could be repeated for future promotions.",
+      "outcome": "The piece gives Richkev a more polished campaign presence and a reusable direction for social-first promotional communication."
+    },
+    {
+      "id": "sweat-to-gain-social",
+      "title": "Sweat to Gain Breast Cancer Awareness",
+      "category": "Social Media",
+      "image": "/Sweat to Gain Breast Cancer.jpg",
+      "description": "Awareness-led social media design for Sweat to Gain.",
+      "client": "Sweat to Gain",
+      "year": "2026",
+      "services": ["Awareness campaign design", "Social media creative", "Message hierarchy"],
+      "challenge": "Sweat to Gain needed a sensitive awareness design that could carry a serious message while still feeling strong and shareable.",
+      "approach": "We balanced direct campaign messaging with a clean composition, using visual emphasis to keep the awareness purpose clear at a glance.",
+      "outcome": "The final design gives the campaign a focused social asset that supports awareness, action, and brand credibility."
     },
     {
       "id": "starbites-event-coverage",
       "title": "Karaoke Event Coverage",
       "category": "Photography",
       "image": "/portfolio-5.jpg",
-      "description": "High-quality event photography of a karaoke event at starbites"
+      "description": "High-quality event photography of a karaoke event at Starbites.",
+      "client": "Starbites",
+      "year": "2025",
+      "services": ["Event photography", "Photo editing", "Social content library"],
+      "challenge": "The event needed coverage that captured the atmosphere, crowd energy, and brand experience without feeling staged.",
+      "approach": "We documented the night with a mix of candid moments, venue details, and performance shots designed for post-event storytelling.",
+      "outcome": "Starbites received a usable event library for recaps, social posts, and future event promotion."
     },
     {
       "id": "real-estate",
       "title": "Real Estate Photography",
       "category": "Photography",
       "image": "/portfolio-6.jpg",
-      "description": "Professional property photography for listings"
+      "description": "Professional property photography for listings.",
+      "client": "Private Real Estate Client",
+      "year": "2025",
+      "services": ["Property photography", "Photo editing", "Listing assets"],
+      "challenge": "The property needed listing visuals that communicated space, light, and finish quality quickly to potential buyers or renters.",
+      "approach": "We photographed key rooms and exterior details with a clean, practical style that supports listing decisions without over-stylizing the space.",
+      "outcome": "The final image set made the listing easier to scan, compare, and promote across digital property channels."
     },
     {
       "id": "brand-video",
       "title": "Corps Africa Mini Documentary",
       "category": "Videography",
       "image": "/portfolio-8.jpg",
-      "description": "Cinematic storytelling of Corps Africa's training program"
+      "description": "Cinematic storytelling of Corps Africa's training program.",
+      "client": "Corps Africa",
+      "year": "2025",
+      "services": ["Documentary video", "Story development", "Production support"],
+      "challenge": "Corps Africa needed a compact story that could communicate the value and atmosphere of its training program.",
+      "approach": "We focused on human moments, program context, and a documentary rhythm that could make the training feel tangible to viewers.",
+      "outcome": "The mini documentary created a stronger storytelling asset for awareness, stakeholder updates, and program communication."
     },
     {
       "id": "website",
       "title": "Growth Solutions Website",
       "category": "Web Design",
       "image": "/portfolio-9.jpg",
-      "description": "A clean professional website for Growth Solutions"
+      "description": "A clean professional website for Growth Solutions.",
+      "client": "Growth Solutions",
+      "year": "2025",
+      "services": ["Website design", "Content structure", "Responsive build"],
+      "challenge": "Growth Solutions needed a clearer digital presence that explained the business quickly and built trust with prospective clients.",
+      "approach": "We organized the site around clear messaging, simple navigation, and responsive layouts that keep the offer easy to understand.",
+      "outcome": "The website gave Growth Solutions a more credible home base for inquiries, introductions, and service education."
     }
   ]
 }

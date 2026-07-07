@@ -31,4 +31,10 @@ export type PortfolioProject = {
   category: string
   image: string
   description: string
+  client?: string
+  year?: string
+  services?: string[]
+  challenge?: string
+  approach?: string
+  outcome?: string
 }

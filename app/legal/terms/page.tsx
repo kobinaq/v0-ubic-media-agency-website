@@ -19,7 +19,7 @@ const sections = [
   {
     title: "Intellectual Property",
     body:
-      "Upon full payment, clients receive ownership of deliverables as specified in the project agreement. Ubic Media Agency retains the right to showcase work in our portfolio.",
+      "Upon full payment, clients receive ownership of deliverables as specified in the project agreement. Ubic Media Agency retains the right to showcase work in our case studies.",
   },
   {
     title: "Contact",

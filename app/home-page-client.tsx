@@ -121,7 +121,7 @@ export default function HomePageClient() {
                     </Link>
                   </Button>
                   <Button size="lg" variant="outline" className="border-border bg-background/80" asChild>
-                    <Link href="/portfolio">See Selected Work</Link>
+                    <Link href="/case-studies">See Case Studies</Link>
                   </Button>
                 </div>
               </div>
@@ -183,7 +183,7 @@ export default function HomePageClient() {
                 </h2>
               </div>
               <Button variant="outline" className="border-border bg-transparent" asChild>
-                <Link href="/portfolio">View Full Portfolio</Link>
+                <Link href="/case-studies">View Case Studies</Link>
               </Button>
             </div>
 
@@ -211,7 +211,7 @@ export default function HomePageClient() {
                     <p className="text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">Fig. 0{index + 1}</p>
                     <h3 className="mt-4 text-3xl font-serif font-semibold tracking-tight md:text-[2.5rem]">{project.title}</h3>
                     <p className="mt-5 text-base leading-8 text-muted-foreground">{project.description}</p>
-                    <Link href="/portfolio" className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-accent transition-colors hover:text-accent/80">
+                    <Link href="/case-studies" className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-accent transition-colors hover:text-accent/80">
                       Explore the case study
                       <ArrowRight className="h-4 w-4" />
                     </Link>

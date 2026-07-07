@@ -64,20 +64,20 @@ export default function PortfolioPage() {
         <section className="editorial-grid border-b border-border">
           <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-24">
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-4 font-mono text-xs uppercase tracking-[0.22em] text-muted-foreground">
-              <span>Issue 03 - Portfolio</span>
-              <span>Selected spreads</span>
+              <span>Issue 03 - Case Studies</span>
+              <span>Selected work</span>
               <span>{filteredProjects.length} entries</span>
             </div>
 
             <div className="grid gap-12 pt-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
               <div className="max-w-3xl">
-                <p className="issue-label">Portfolio</p>
+                <p className="issue-label">Case Studies</p>
                 <h1 className="mt-4 text-5xl font-semibold tracking-[-0.04em] md:text-6xl">
                   Case studies, spreads, and selected work.
                 </h1>
                 <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
-                  A clearer look at the work behind the brand. Each project is presented more like a magazine spread
-                  than a gallery tile, so the portfolio feels aligned with the rest of the site.
+                  A clearer look at the work behind the brand. Each study includes the brief, the approach, and the
+                  result so the work reads like more than a gallery tile.
                 </p>
               </div>
 
@@ -142,9 +142,24 @@ export default function PortfolioPage() {
                       <p className="mt-5 text-base leading-8 text-muted-foreground">{project.description}</p>
                       <div className="mt-8 flex flex-wrap items-center gap-3">
                         <span className="border border-border bg-card px-3 py-1 font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
-                          Selected project
+                          {project.client ?? "Selected client"}
                         </span>
-                        <span className="text-sm text-accent">Open to view case details</span>
+                        <span className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                          {project.year ?? "Recent"}
+                        </span>
+                        <span className="text-sm text-accent">Open case study</span>
+                      </div>
+                      <div className="mt-8 grid gap-5 border-t border-border pt-6 sm:grid-cols-3">
+                        {[
+                          ["Challenge", project.challenge],
+                          ["Approach", project.approach],
+                          ["Outcome", project.outcome],
+                        ].map(([label, body]) => (
+                          <div key={label}>
+                            <h3 className="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-accent">{label}</h3>
+                            <p className="mt-2 line-clamp-3 text-sm leading-6 text-muted-foreground">{body}</p>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </article>
@@ -220,12 +235,42 @@ export default function PortfolioPage() {
                     <p className="text-lg leading-relaxed text-muted-foreground">{selectedProject.description}</p>
                   </div>
 
-                  <div className="space-y-4 border-t border-border pt-6">
+                  <div className="grid gap-4 border-y border-border py-5 sm:grid-cols-3">
                     <div>
-                      <h4 className="mb-2 font-mono text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                        Project Type
-                      </h4>
+                      <h4 className="mb-2 font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">Client</h4>
+                      <p>{selectedProject.client ?? "Selected client"}</p>
+                    </div>
+                    <div>
+                      <h4 className="mb-2 font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">Year</h4>
+                      <p>{selectedProject.year ?? "Recent"}</p>
+                    </div>
+                    <div>
+                      <h4 className="mb-2 font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">Type</h4>
                       <p>{selectedProject.category}</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-5">
+                    {[
+                      ["Challenge", selectedProject.challenge],
+                      ["Approach", selectedProject.approach],
+                      ["Outcome", selectedProject.outcome],
+                    ].map(([label, body]) => (
+                      <div key={label}>
+                        <h4 className="font-mono text-xs uppercase tracking-[0.18em] text-accent">{label}</h4>
+                        <p className="mt-2 text-sm leading-7 text-muted-foreground">{body}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div>
+                    <h4 className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">Services</h4>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {(selectedProject.services ?? [selectedProject.category]).map((service) => (
+                        <span key={service} className="border border-border bg-background px-3 py-1 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">
+                          {service}
+                        </span>
+                      ))}
                     </div>
                   </div>
 

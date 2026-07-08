@@ -93,8 +93,9 @@ Notification variables:
 - `ADMIN_NOTIFICATION_EMAIL` - admin inbox for order and lead emails. Defaults to `weareubic@gmail.com`.
 - `ADMIN_SMS_RECIPIENTS` - comma-separated phone numbers for admin SMS prompts, for example `233XXXXXXXXX,233YYYYYYYYY`.
 - `ARKESEL_API_KEY` - Arkesel SMS API key.
-- `ARKESEL_SENDER_ID` - SMS sender ID. Defaults to `UBIC`.
+- `ARKESEL_SENDER_ID` - SMS sender ID, 11 characters maximum. Defaults to `UBIC`.
 - `ARKESEL_SMS_ENDPOINT` - optional override for the Arkesel SMS endpoint. Defaults to `https://sms.arkesel.com/api/v2/sms/send`.
+- `ARKESEL_SMS_FALLBACK_V1` - optional. Leave unset to retry Arkesel's v1 GET endpoint if v2 fails; set to `false` to disable fallback.
 
 ## Payment Flow
 

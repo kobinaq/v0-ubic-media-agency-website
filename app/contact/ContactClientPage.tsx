@@ -47,7 +47,6 @@ const contactRoutes = [
 ]
 
 export default function ContactPage() {
-  const web3FormsAccessKey = "726b78c9-6173-49f7-8c34-5e7cacf58af1"
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -63,22 +62,13 @@ export default function ContactPage() {
     setSubmitStatus("idle")
 
     try {
-      const payload = new FormData()
-      payload.append("access_key", web3FormsAccessKey)
-      payload.append("name", formData.name)
-      payload.append("email", formData.email)
-      payload.append("phone", formData.phone)
-      payload.append("message", formData.message)
-      payload.append("subject", "New contact form submission from UBIC website")
-
-      const response = await fetch("https://api.web3forms.com/submit", {
+      const response = await fetch("/api/leads", {
         method: "POST",
-        body: payload,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       })
 
-      const result = await response.json()
-
-      if (response.ok && result.success) {
+      if (response.ok) {
         setSubmitStatus("success")
         setFormData({ name: "", email: "", phone: "", message: "" })
       } else {

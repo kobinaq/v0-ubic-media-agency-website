@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server"
 import { query } from "@/lib/db"
+import { ensureInvoiceTables } from "@/lib/invoice-db"
 
 const SETTING_KEY = "invoice_logo"
 const MAX_LOGO_LENGTH = 750_000
 
 export async function GET() {
   try {
+    await ensureInvoiceTables()
     const result = await query("SELECT value FROM admin_settings WHERE key = $1", [SETTING_KEY])
     return NextResponse.json({ logo: result.rows[0]?.value ?? "" })
   } catch (error) {
@@ -16,6 +18,7 @@ export async function GET() {
 
 export async function PUT(request: Request) {
   try {
+    await ensureInvoiceTables()
     const body = await request.json()
     const logo = String(body.logo ?? "")
 

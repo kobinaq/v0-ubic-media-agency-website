@@ -32,9 +32,9 @@ export const metadata: Metadata = {
   title: `${siteConfig.siteName} - ${siteConfig.tagline}`,
   description: siteConfig.description,
   icons: {
-    icon: "/logo.png",
-    shortcut: "/logo.png",
-    apple: "/logo.png",
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
   },
   keywords: [
     "brand development",

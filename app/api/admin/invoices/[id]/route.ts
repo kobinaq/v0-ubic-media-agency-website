@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { query } from "@/lib/db"
+import { ensureInvoiceTables } from "@/lib/invoice-db"
 
 type InvoiceLineItem = {
   description: string
@@ -40,6 +41,7 @@ const calculateTotals = (lineItems: InvoiceLineItem[], tax: unknown, discount: u
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    await ensureInvoiceTables()
     const { id } = await params
     const body = await request.json()
     const invoiceNumber = String(body.invoiceNumber ?? "").trim()

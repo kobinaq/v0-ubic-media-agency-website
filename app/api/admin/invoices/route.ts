@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { query } from "@/lib/db"
+import { ensureInvoiceTables } from "@/lib/invoice-db"
 
 type InvoiceLineItem = {
   description: string
@@ -40,6 +41,7 @@ const calculateTotals = (lineItems: InvoiceLineItem[], tax: unknown, discount: u
 
 export async function GET() {
   try {
+    await ensureInvoiceTables()
     const result = await query("SELECT * FROM invoices ORDER BY created_at DESC")
     return NextResponse.json({ invoices: result.rows })
   } catch (error) {
@@ -50,6 +52,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    await ensureInvoiceTables()
     const body = await request.json()
     const invoiceNumber = String(body.invoiceNumber ?? "").trim()
     const customerName = String(body.customerName ?? "").trim()

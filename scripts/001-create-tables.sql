@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS orders (
   order_reference VARCHAR(100) UNIQUE NOT NULL,
   customer_name VARCHAR(255) NOT NULL,
   customer_email VARCHAR(255) NOT NULL,
+  customer_phone VARCHAR(80),
   package_id VARCHAR(100) NOT NULL,
   package_name VARCHAR(255) NOT NULL,
   amount DECIMAL(10, 2) NOT NULL,
@@ -28,6 +29,8 @@ CREATE TABLE IF NOT EXISTS orders (
 CREATE INDEX IF NOT EXISTS idx_orders_payment_status ON orders(payment_status);
 CREATE INDEX IF NOT EXISTS idx_orders_created_at ON orders(created_at);
 CREATE INDEX IF NOT EXISTS idx_leads_created_at ON leads(created_at);
+
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS customer_phone VARCHAR(80);
 
 -- Create invoices table for manual invoice and receipt records
 CREATE TABLE IF NOT EXISTS invoices (

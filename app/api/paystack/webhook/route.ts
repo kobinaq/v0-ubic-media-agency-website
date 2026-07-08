@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import { verifyPaystackWebhookSignature } from "@/lib/paystack"
 import { query } from "@/lib/db"
 import { sendOrderConfirmationEmail, sendAdminOrderNotification } from "@/lib/email"
-import { sendAdminSms } from "@/lib/sms"
+import { sendAdminSms, sendClientSms } from "@/lib/sms"
 
 export async function POST(request: Request) {
   try {
@@ -50,9 +50,17 @@ export async function POST(request: Request) {
             currency: order.currency,
           })
 
-          await sendAdminSms({
-            message: `UBIC payment completed: ${order.customer_name} paid ${order.currency} ${Number(order.amount).toLocaleString()} for ${order.package_name}. Ref: ${order.order_reference}.`,
-          })
+          await Promise.allSettled([
+            order.customer_phone
+              ? sendClientSms({
+                  recipients: [order.customer_phone],
+                  message: `Payment received. Thanks ${order.customer_name}, your ${order.package_name} order with Ubic Media Agency is confirmed. Ref: ${order.order_reference}.`,
+                })
+              : Promise.resolve(),
+            sendAdminSms({
+              message: "UBIC alert: an order payment has been completed.",
+            }),
+          ])
 
           console.log("[v0] Confirmation emails sent for order:", order.order_reference)
         } catch (emailError) {

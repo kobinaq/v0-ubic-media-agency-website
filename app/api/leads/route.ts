@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { query } from "@/lib/db"
 import { sendLeadConfirmationEmail, sendAdminLeadNotification } from "@/lib/email"
-import { sendAdminSms } from "@/lib/sms"
+import { sendAdminSms, sendClientSms } from "@/lib/sms"
 
 export async function POST(request: Request) {
   try {
@@ -23,8 +23,14 @@ export async function POST(request: Request) {
     const notificationResults = await Promise.allSettled([
       sendLeadConfirmationEmail(email, name),
       sendAdminLeadNotification({ customerName: name, customerEmail: email, message }),
+      phone
+        ? sendClientSms({
+            recipients: [phone],
+            message: "Thanks for contacting Ubic Media Agency. We've received your brief and will get back to you shortly.",
+          })
+        : Promise.resolve(),
       sendAdminSms({
-        message: `UBIC contact form: ${name} (${email}${phone ? `, ${phone}` : ""}) sent: ${String(message).slice(0, 120)}`,
+        message: "UBIC alert: a new lead filled the contact form.",
       }),
     ])
 

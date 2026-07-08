@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import { verifyPaystackTransaction } from "@/lib/paystack"
 import { query } from "@/lib/db"
 import { sendAdminOrderNotification, sendOrderConfirmationEmail } from "@/lib/email"
-import { sendAdminSms } from "@/lib/sms"
+import { sendAdminSms, sendClientSms } from "@/lib/sms"
 
 export async function GET(request: Request) {
   try {
@@ -43,8 +43,14 @@ export async function GET(request: Request) {
             amount: Number(order.amount),
             currency: order.currency,
           }),
+          order.customer_phone
+            ? sendClientSms({
+                recipients: [order.customer_phone],
+                message: `Payment received. Thanks ${order.customer_name}, your ${order.package_name} order with Ubic Media Agency is confirmed. Ref: ${order.order_reference}.`,
+              })
+            : Promise.resolve(),
           sendAdminSms({
-            message: `UBIC payment completed: ${order.customer_name} paid ${order.currency} ${Number(order.amount).toLocaleString()} for ${order.package_name}. Ref: ${order.order_reference}.`,
+            message: "UBIC alert: an order payment has been completed.",
           }),
         ]
         const notificationResults = await Promise.allSettled(notificationTasks)

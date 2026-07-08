@@ -59,6 +59,14 @@ const sendViaV1 = async ({
 }
 
 export async function sendAdminSms({ message, recipients = splitRecipients(process.env.ADMIN_SMS_RECIPIENTS) }: SmsPayload) {
+  return sendSms({ message, recipients })
+}
+
+export async function sendClientSms({ message, recipients }: SmsPayload) {
+  return sendSms({ message, recipients })
+}
+
+async function sendSms({ message, recipients = [] }: SmsPayload) {
   const apiKey = process.env.ARKESEL_API_KEY
   const sender = (process.env.ARKESEL_SENDER_ID || "UBIC").slice(0, 11)
   const endpoint = process.env.ARKESEL_SMS_ENDPOINT || "https://sms.arkesel.com/api/v2/sms/send"

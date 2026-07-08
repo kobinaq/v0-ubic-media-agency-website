@@ -18,6 +18,7 @@ interface Order {
   order_reference: string
   customer_name: string
   customer_email: string
+  customer_phone?: string
   package_name: string
   amount: number
   currency: string
@@ -267,11 +268,12 @@ export default function AdminOrdersPage() {
   const totalInvoiceValue = invoices.reduce((sum, invoice) => sum + Number(invoice.total), 0)
 
   const exportToCSV = () => {
-    const headers = ["Order Reference", "Customer Name", "Email", "Package", "Amount", "Currency", "Status", "Date"]
+    const headers = ["Order Reference", "Customer Name", "Email", "Phone", "Package", "Amount", "Currency", "Status", "Date"]
     const rows = filteredOrders.map((order) => [
       order.order_reference,
       order.customer_name,
       order.customer_email,
+      order.customer_phone || "",
       order.package_name,
       order.amount,
       order.currency,
@@ -706,6 +708,7 @@ export default function AdminOrdersPage() {
                               <div>
                                 <div className="font-medium">{order.customer_name}</div>
                                 <div className="text-sm text-muted-foreground">{order.customer_email}</div>
+                                {order.customer_phone && <div className="text-sm text-muted-foreground">{order.customer_phone}</div>}
                               </div>
                             </td>
                             <td className="p-4 text-sm">{order.package_name}</td>

@@ -97,6 +97,11 @@ Notification variables:
 - `ARKESEL_SMS_ENDPOINT` - optional override for the Arkesel SMS endpoint. Defaults to `https://sms.arkesel.com/api/v2/sms/send`.
 - `ARKESEL_SMS_FALLBACK_V1` - optional. Leave unset to retry Arkesel's v1 GET endpoint if v2 fails; set to `false` to disable fallback.
 
+SMS notifications:
+
+- Admin SMS is sent when a lead is submitted, checkout starts, and payment completes.
+- Client SMS is sent when a lead is submitted with a phone number and when an order payment completes with a phone number on the order.
+
 ## Payment Flow
 
 1. User selects a package

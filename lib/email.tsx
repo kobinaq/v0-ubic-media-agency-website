@@ -134,7 +134,7 @@ export async function sendLeadConfirmationEmail(customerEmail: string, customerN
   const mailOptions = {
     from: `"Ubic Media Agency" <${process.env.SMTP_USER}>`,
     to: customerEmail,
-    subject: "We've Received Your Message - Ubic Media Agency",
+    subject: "We received your brief - Ubic Media Agency",
     html: `
       <!DOCTYPE html>
       <html>
@@ -155,7 +155,8 @@ export async function sendLeadConfirmationEmail(customerEmail: string, customerN
             </div>
             <div class="content">
               <p>Hi ${customerName},</p>
-              <p>We've received your message and we're excited to connect with you. Our team will review your inquiry and get back to you within 24 hours.</p>
+              <p>Thanks for reaching out. We've received your brief and our team will review it shortly.</p>
+              <p>We'll get back to you soon with a clear next step, whether that's a quick answer, a scope recommendation, or a call to talk through the project properly.</p>
               
               <p>In the meantime, feel free to explore more about our services on our website or reach out directly:</p>
               <p>

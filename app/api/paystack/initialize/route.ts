@@ -7,10 +7,10 @@ import { sendAdminSms } from "@/lib/sms"
 
 export async function POST(request: Request) {
   try {
-    const { email, name, packageId, packageName, amount, currency } = await request.json()
+    const { email, name, phone, packageId, packageName, amount, currency } = await request.json()
 
     // Validate input
-    if (!email || !name || !packageId || !packageName || !amount || !currency) {
+    if (!email || !name || !phone || !packageId || !packageName || !amount || !currency) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
@@ -19,12 +19,13 @@ export async function POST(request: Request) {
 
     // Create order in database
     await query(
-      `INSERT INTO orders (order_reference, customer_name, customer_email, package_id, package_name, amount, currency, payment_status)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-      [orderReference, name, email, packageId, packageName, amount, currency, "pending"],
+      `ALTER TABLE orders ADD COLUMN IF NOT EXISTS customer_phone VARCHAR(80);
+       INSERT INTO orders (order_reference, customer_name, customer_email, customer_phone, package_id, package_name, amount, currency, payment_status)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+      [orderReference, name, email, phone, packageId, packageName, amount, currency, "pending"],
     )
 
-    const pendingMessage = `UBIC checkout started: ${name} (${email}) selected ${packageName} for ${currency} ${Number(amount).toLocaleString()}. Ref: ${orderReference}. Status: pending.`
+    const pendingMessage = `UBIC alert: a customer started checkout. Status: pending. Ref: ${orderReference}.`
 
     const notificationTasks = [
       sendAdminOrderStartedNotification({

@@ -35,7 +35,7 @@ const serviceIntroductions: Record<string, string> = {
 export default function PackagesPage() {
   const [currency, setCurrency] = useState<Currency>("USD")
   const [selectedPackage, setSelectedPackage] = useState<Package | null>(null)
-  const [customerInfo, setCustomerInfo] = useState({ name: "", email: "" })
+  const [customerInfo, setCustomerInfo] = useState({ name: "", email: "", phone: "" })
   const [isProcessing, setIsProcessing] = useState(false)
   const [mounted, setMounted] = useState(false)
 
@@ -90,6 +90,7 @@ export default function PackagesPage() {
         body: JSON.stringify({
           email: customerInfo.email,
           name: customerInfo.name,
+          phone: customerInfo.phone,
           packageId: selectedPackage.id,
           packageName: selectedPackage.name,
           amount,
@@ -333,6 +334,19 @@ export default function PackagesPage() {
                       value={customerInfo.email}
                       onChange={(e) => setCustomerInfo({ ...customerInfo, email: e.target.value })}
                       placeholder="john@example.com"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="phone" className="mb-2 block text-sm font-medium">
+                      Phone Number
+                    </label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      required
+                      value={customerInfo.phone}
+                      onChange={(e) => setCustomerInfo({ ...customerInfo, phone: e.target.value })}
+                      placeholder="+233 XX XXX XXXX"
                     />
                   </div>
                   <div className="flex gap-3 pt-4">

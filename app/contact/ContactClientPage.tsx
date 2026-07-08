@@ -11,13 +11,6 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { siteConfig } from "@/lib/content"
 
-const briefPrompts = [
-  "What are you trying to launch, improve, or fix?",
-  "Which service do you think you need most right now?",
-  "Do you have a timeline, budget range, or launch date in mind?",
-  "What is not working well with your current brand or website?",
-]
-
 const contactRoutes = [
   {
     title: "Chat on WhatsApp",
@@ -163,19 +156,7 @@ export default function ContactPage() {
         </section>
 
         <section className="py-24">
-          <div className="mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-[0.78fr_1.22fr] lg:px-8">
-            <aside className="bg-accent px-7 py-8 text-accent-foreground">
-              <p className="issue-label text-accent-foreground/80">Helpful Brief Guide</p>
-              <div className="mt-8 space-y-0 border-t border-accent-foreground/20">
-                {briefPrompts.map((item, index) => (
-                  <div key={item} className="grid gap-4 border-b border-accent-foreground/20 py-5 sm:grid-cols-[84px_1fr]">
-                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-accent-foreground/65">Prompt {index + 1}</p>
-                    <p className="text-sm leading-7 text-accent-foreground/90">{item}</p>
-                  </div>
-                ))}
-              </div>
-            </aside>
-
+          <div className="mx-auto max-w-4xl px-6 lg:px-8">
             <form onSubmit={handleSubmit} className="border border-foreground bg-card p-8 md:p-10">
               <div className="mb-8 border-b border-border pb-6">
                 <p className="issue-label">Project Enquiry</p>

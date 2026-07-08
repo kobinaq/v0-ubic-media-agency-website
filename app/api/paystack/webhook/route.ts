@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { verifyPaystackWebhookSignature } from "@/lib/paystack"
 import { query } from "@/lib/db"
 import { sendOrderConfirmationEmail, sendAdminOrderNotification } from "@/lib/email"
+import { sendAdminSms } from "@/lib/sms"
 
 export async function POST(request: Request) {
   try {
@@ -47,6 +48,10 @@ export async function POST(request: Request) {
             packageName: order.package_name,
             amount: order.amount,
             currency: order.currency,
+          })
+
+          await sendAdminSms({
+            message: `UBIC payment completed: ${order.customer_name} paid ${order.currency} ${Number(order.amount).toLocaleString()} for ${order.package_name}. Ref: ${order.order_reference}.`,
           })
 
           console.log("[v0] Confirmation emails sent for order:", order.order_reference)

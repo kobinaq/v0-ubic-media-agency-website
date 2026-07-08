@@ -88,6 +88,14 @@ All site content is managed through JSON files in the `/content` directory. Simp
 
 Make sure to add all variables from `.env.example` to your Vercel project settings.
 
+Notification variables:
+
+- `ADMIN_NOTIFICATION_EMAIL` - admin inbox for order and lead emails. Defaults to `weareubic@gmail.com`.
+- `ADMIN_SMS_RECIPIENTS` - comma-separated phone numbers for admin SMS prompts, for example `233XXXXXXXXX,233YYYYYYYYY`.
+- `ARKESEL_API_KEY` - Arkesel SMS API key.
+- `ARKESEL_SENDER_ID` - SMS sender ID. Defaults to `UBIC`.
+- `ARKESEL_SMS_ENDPOINT` - optional override for the Arkesel SMS endpoint. Defaults to `https://sms.arkesel.com/api/v2/sms/send`.
+
 ## Payment Flow
 
 1. User selects a package

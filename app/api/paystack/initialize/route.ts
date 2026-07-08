@@ -2,6 +2,8 @@ import { NextResponse } from "next/server"
 import { initializePaystackTransaction } from "@/lib/paystack"
 import { query } from "@/lib/db"
 import { nanoid } from "nanoid"
+import { sendAdminOrderStartedNotification } from "@/lib/email"
+import { sendAdminSms } from "@/lib/sms"
 
 export async function POST(request: Request) {
   try {
@@ -21,6 +23,27 @@ export async function POST(request: Request) {
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
       [orderReference, name, email, packageId, packageName, amount, currency, "pending"],
     )
+
+    const pendingMessage = `UBIC checkout started: ${name} (${email}) selected ${packageName} for ${currency} ${Number(amount).toLocaleString()}. Ref: ${orderReference}. Status: pending.`
+
+    const notificationTasks = [
+      sendAdminOrderStartedNotification({
+        orderReference,
+        customerName: name,
+        customerEmail: email,
+        packageName,
+        amount: Number(amount),
+        currency,
+      }),
+      sendAdminSms({ message: pendingMessage }),
+    ]
+    const notificationResults = await Promise.allSettled(notificationTasks)
+
+    notificationResults.forEach((result) => {
+      if (result.status === "rejected") {
+        console.error("[notification] Checkout-start notification failed:", result.reason)
+      }
+    })
 
     // Initialize Paystack transaction
     const paystackResponse = await initializePaystackTransaction(email, amount, currency, {

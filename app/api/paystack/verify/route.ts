@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server"
 import { verifyPaystackTransaction } from "@/lib/paystack"
 import { query } from "@/lib/db"
+import { sendAdminOrderNotification, sendOrderConfirmationEmail } from "@/lib/email"
+import { sendAdminSms } from "@/lib/sms"
 
 export async function GET(request: Request) {
   try {
@@ -16,12 +18,43 @@ export async function GET(request: Request) {
 
     if (verification.status && verification.data.status === "success") {
       // Update order status in database
-      await query(
+      const updateResult = await query(
         `UPDATE orders 
          SET payment_status = $1, updated_at = CURRENT_TIMESTAMP 
-         WHERE paystack_reference = $2`,
+         WHERE paystack_reference = $2
+         RETURNING *`,
         ["paid", reference],
       )
+
+      const order = updateResult.rows[0]
+      if (order) {
+        const notificationTasks = [
+          sendOrderConfirmationEmail(order.customer_email, order.customer_name, {
+            orderReference: order.order_reference,
+            packageName: order.package_name,
+            amount: Number(order.amount),
+            currency: order.currency,
+          }),
+          sendAdminOrderNotification({
+            orderReference: order.order_reference,
+            customerName: order.customer_name,
+            customerEmail: order.customer_email,
+            packageName: order.package_name,
+            amount: Number(order.amount),
+            currency: order.currency,
+          }),
+          sendAdminSms({
+            message: `UBIC payment completed: ${order.customer_name} paid ${order.currency} ${Number(order.amount).toLocaleString()} for ${order.package_name}. Ref: ${order.order_reference}.`,
+          }),
+        ]
+        const notificationResults = await Promise.allSettled(notificationTasks)
+
+        notificationResults.forEach((result) => {
+          if (result.status === "rejected") {
+            console.error("[notification] Payment notification failed:", result.reason)
+          }
+        })
+      }
 
       return NextResponse.json({ success: true, message: "Payment verified successfully" })
     } else {

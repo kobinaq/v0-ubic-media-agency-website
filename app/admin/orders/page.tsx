@@ -126,6 +126,12 @@ const formatMoney = (amount: number, currency: string) =>
     maximumFractionDigits: 2,
   })}`
 
+const formatInvoiceNumber = (amount: number) =>
+  Number(amount || 0).toLocaleString("en-GH", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })
+
 const normalizeInvoiceFromApi = (invoice: Invoice): Invoice => ({
   ...invoice,
   line_items: normalizeLineItems(invoice.line_items),
@@ -134,6 +140,23 @@ const normalizeInvoiceFromApi = (invoice: Invoice): Invoice => ({
   discount: Number(invoice.discount),
   total: Number(invoice.total),
 })
+
+const getImageSize = (src: string) =>
+  new Promise<{ width: number; height: number }>((resolve, reject) => {
+    const image = new Image()
+    image.onload = () => resolve({ width: image.naturalWidth || image.width, height: image.naturalHeight || image.height })
+    image.onerror = reject
+    image.src = src
+  })
+
+const fitIntoBox = (width: number, height: number, maxWidth: number, maxHeight: number) => {
+  if (!width || !height) return { width: maxWidth, height: maxHeight }
+  const ratio = Math.min(maxWidth / width, maxHeight / height)
+  return {
+    width: width * ratio,
+    height: height * ratio,
+  }
+}
 
 export default function AdminOrdersPage() {
   const [activeView, setActiveView] = useState<AdminView>("orders")
@@ -397,6 +420,27 @@ export default function AdminOrdersPage() {
     }
   }
 
+  const deleteInvoice = async (invoice: Invoice) => {
+    const confirmed = window.confirm(`Delete invoice ${invoice.invoice_number}? This cannot be undone.`)
+    if (!confirmed) return
+
+    try {
+      const response = await fetch(`/api/admin/invoices/${invoice.id}`, { method: "DELETE" })
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to delete invoice")
+      }
+
+      setInvoices((current) => current.filter((item) => item.id !== invoice.id))
+      if (editingInvoiceId === invoice.id) {
+        resetInvoiceForm()
+      }
+    } catch (error: any) {
+      alert(error.message || "Failed to delete invoice")
+    }
+  }
+
   const downloadInvoicePdf = async (invoice: Invoice) => {
     const { jsPDF } = await import("jspdf")
     const doc = new jsPDF({ unit: "pt", format: "a4" })
@@ -412,10 +456,21 @@ export default function AdminOrdersPage() {
 
     if (invoiceLogo) {
       try {
-        doc.addImage(invoiceLogo, "PNG", pageWidth - 148, 42, 100, 44, undefined, "FAST")
+        const imageSize = await getImageSize(invoiceLogo)
+        const fitted = fitIntoBox(imageSize.width, imageSize.height, 112, 54)
+        doc.addImage(
+          invoiceLogo,
+          invoiceLogo.includes("image/png") ? "PNG" : "JPEG",
+          pageWidth - margin - fitted.width,
+          42,
+          fitted.width,
+          fitted.height,
+          undefined,
+          "FAST",
+        )
       } catch {
         try {
-          doc.addImage(invoiceLogo, "JPEG", pageWidth - 148, 42, 100, 44, undefined, "FAST")
+          doc.addImage(invoiceLogo, "PNG", pageWidth - 148, 42, 100, 44, undefined, "FAST")
         } catch {
           // Keep generating the document even if the uploaded logo format is not supported by jsPDF.
         }
@@ -427,20 +482,17 @@ export default function AdminOrdersPage() {
     doc.text(siteConfig.siteName, margin, 92)
     doc.text(siteConfig.contact.email, margin, 108)
     doc.text(siteConfig.contact.phone, margin, 124)
-    doc.text(siteConfig.contact.address, margin, 140, { maxWidth: 240 })
 
     doc.setFont("helvetica", "bold")
     doc.setFontSize(11)
     doc.text(`${documentTitle} No.`, pageWidth - 190, 112)
-    doc.text("Status", pageWidth - 190, 142)
-    doc.text("Issue Date", pageWidth - 190, 172)
-    if (invoice.due_date) doc.text("Due Date", pageWidth - 190, 202)
+    doc.text("Issue Date", pageWidth - 190, 142)
+    if (invoice.due_date) doc.text("Due Date", pageWidth - 190, 172)
 
     doc.setFont("helvetica", "normal")
     doc.text(invoice.invoice_number, pageWidth - 95, 112)
-    doc.text(invoice.status.toUpperCase(), pageWidth - 95, 142)
-    doc.text(new Date(invoice.issue_date).toLocaleDateString(), pageWidth - 95, 172)
-    if (invoice.due_date) doc.text(new Date(invoice.due_date).toLocaleDateString(), pageWidth - 95, 202)
+    doc.text(new Date(invoice.issue_date).toLocaleDateString(), pageWidth - 95, 142)
+    if (invoice.due_date) doc.text(new Date(invoice.due_date).toLocaleDateString(), pageWidth - 95, 172)
 
     doc.setDrawColor(216, 202, 180)
     doc.line(margin, 230, pageWidth - margin, 230)
@@ -460,21 +512,35 @@ export default function AdminOrdersPage() {
     doc.rect(margin, y - 20, pageWidth - margin * 2, 28, "F")
     doc.setTextColor(244, 237, 220)
     doc.setFont("helvetica", "bold")
-    doc.text("Description", margin + 12, y)
-    doc.text("Qty", pageWidth - 210, y)
-    doc.text("Unit", pageWidth - 160, y)
-    doc.text("Total", pageWidth - 92, y)
+    const descriptionX = margin + 12
+    const qtyX = pageWidth - 218
+    const unitX = pageWidth - 168
+    const totalX = pageWidth - margin
+    const descriptionWidth = qtyX - descriptionX - 18
+
+    doc.text("Description", descriptionX, y)
+    doc.text("Qty", qtyX, y)
+    doc.text(`Unit (${invoice.currency})`, unitX, y)
+    doc.text(`Total (${invoice.currency})`, totalX, y, { align: "right" })
     doc.setTextColor(32, 28, 26)
     doc.setFont("helvetica", "normal")
 
     y += 30
     lineItems.forEach((item) => {
       const itemTotal = parseAmount(item.quantity) * parseAmount(item.unitPrice)
-      doc.text(item.description, margin + 12, y, { maxWidth: pageWidth - 300 })
-      doc.text(String(item.quantity), pageWidth - 210, y)
-      doc.text(formatMoney(item.unitPrice, invoice.currency), pageWidth - 160, y, { align: "left" })
-      doc.text(formatMoney(itemTotal, invoice.currency), pageWidth - 48, y, { align: "right" })
-      y += 28
+      const descriptionLines = doc.splitTextToSize(item.description, descriptionWidth)
+      const rowHeight = Math.max(28, descriptionLines.length * 13 + 10)
+
+      if (y + rowHeight > 730) {
+        doc.addPage()
+        y = 72
+      }
+
+      doc.text(descriptionLines, descriptionX, y)
+      doc.text(String(item.quantity), qtyX, y)
+      doc.text(formatInvoiceNumber(item.unitPrice), unitX, y)
+      doc.text(formatInvoiceNumber(itemTotal), totalX, y, { align: "right" })
+      y += rowHeight
       if (y > 700) {
         doc.addPage()
         y = 72
@@ -484,19 +550,19 @@ export default function AdminOrdersPage() {
     y += 20
     const totalsX = pageWidth - 220
     doc.line(totalsX, y - 12, pageWidth - margin, y - 12)
-    doc.text("Subtotal", totalsX, y)
-    doc.text(formatMoney(invoice.subtotal, invoice.currency), pageWidth - margin, y, { align: "right" })
+    doc.text(`Subtotal (${invoice.currency})`, totalsX, y)
+    doc.text(formatInvoiceNumber(invoice.subtotal), pageWidth - margin, y, { align: "right" })
     y += 22
-    doc.text("Tax", totalsX, y)
-    doc.text(formatMoney(invoice.tax, invoice.currency), pageWidth - margin, y, { align: "right" })
+    doc.text(`Tax (${invoice.currency})`, totalsX, y)
+    doc.text(formatInvoiceNumber(invoice.tax), pageWidth - margin, y, { align: "right" })
     y += 22
-    doc.text("Discount", totalsX, y)
-    doc.text(formatMoney(invoice.discount, invoice.currency), pageWidth - margin, y, { align: "right" })
+    doc.text(`Discount (${invoice.currency})`, totalsX, y)
+    doc.text(formatInvoiceNumber(invoice.discount), pageWidth - margin, y, { align: "right" })
     y += 28
     doc.setFont("helvetica", "bold")
     doc.setFontSize(14)
-    doc.text("Total", totalsX, y)
-    doc.text(formatMoney(invoice.total, invoice.currency), pageWidth - margin, y, { align: "right" })
+    doc.text(`Total (${invoice.currency})`, totalsX, y)
+    doc.text(formatInvoiceNumber(invoice.total), pageWidth - margin, y, { align: "right" })
 
     if (invoice.notes) {
       y += 44
@@ -1039,6 +1105,15 @@ export default function AdminOrdersPage() {
                               >
                                 {invoice.status === "paid" ? <ReceiptText className="h-4 w-4" /> : <Download className="h-4 w-4" />}
                                 PDF
+                              </Button>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                className="editorial-button border-red-500/30 bg-transparent text-red-700 hover:bg-red-500/10"
+                                onClick={() => deleteInvoice(invoice)}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                                Delete
                               </Button>
                             </div>
                           </div>

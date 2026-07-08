@@ -10,6 +10,15 @@ const transporter = nodemailer.createTransport({
   },
 })
 
+const adminRecipients = () =>
+  Array.from(
+    new Set(
+      [process.env.ADMIN_NOTIFICATION_EMAIL || "weareubic@gmail.com", process.env.SMTP_USER].filter(
+        (recipient): recipient is string => Boolean(recipient),
+      ),
+    ),
+  )
+
 export async function sendOrderConfirmationEmail(
   customerEmail: string,
   customerName: string,
@@ -83,7 +92,7 @@ export async function sendAdminOrderNotification(orderDetails: {
 }) {
   const mailOptions = {
     from: `"Ubic Media Agency" <${process.env.SMTP_USER}>`,
-    to: process.env.SMTP_USER,
+    to: adminRecipients(),
     subject: `New Order: ${orderDetails.packageName}`,
     html: `
       <!DOCTYPE html>
@@ -176,7 +185,7 @@ export async function sendAdminLeadNotification(leadDetails: {
 }) {
   const mailOptions = {
     from: `"Ubic Media Agency" <${process.env.SMTP_USER}>`,
-    to: process.env.SMTP_USER,
+    to: adminRecipients(),
     subject: `New Lead: ${leadDetails.customerName}`,
     html: `
       <!DOCTYPE html>
@@ -208,6 +217,46 @@ export async function sendAdminLeadNotification(leadDetails: {
               </div>
               
               <p>Please follow up with this lead as soon as possible.</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `,
+  }
+
+  await transporter.sendMail(mailOptions)
+}
+
+export async function sendAdminOrderStartedNotification(orderDetails: {
+  orderReference: string
+  customerName: string
+  customerEmail: string
+  packageName: string
+  amount: number
+  currency: string
+}) {
+  const mailOptions = {
+    from: `"Ubic Media Agency" <${process.env.SMTP_USER}>`,
+    to: adminRecipients(),
+    subject: `Checkout Started: ${orderDetails.packageName}`,
+    html: `
+      <!DOCTYPE html>
+      <html>
+        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+          <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+            <div style="background-color: #c1442d; color: white; padding: 20px;">
+              <h2>Checkout Started</h2>
+            </div>
+            <div style="padding: 20px;">
+              <p>A customer started checkout. Payment is still pending until Paystack confirms completion.</p>
+              <div style="background-color: #f9f9f9; padding: 15px; border-left: 4px solid #c1442d;">
+                <p><strong>Order Reference:</strong> ${orderDetails.orderReference}</p>
+                <p><strong>Customer Name:</strong> ${orderDetails.customerName}</p>
+                <p><strong>Customer Email:</strong> ${orderDetails.customerEmail}</p>
+                <p><strong>Package:</strong> ${orderDetails.packageName}</p>
+                <p><strong>Amount:</strong> ${orderDetails.currency} ${orderDetails.amount.toLocaleString()}</p>
+                <p><strong>Status:</strong> Pending</p>
+              </div>
             </div>
           </div>
         </body>

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { query } from "@/lib/db"
 import { sendLeadConfirmationEmail, sendAdminLeadNotification } from "@/lib/email"
+import { sendAdminSms } from "@/lib/sms"
 
 export async function POST(request: Request) {
   try {
@@ -19,13 +20,19 @@ export async function POST(request: Request) {
       message,
     ])
 
-    try {
-      await sendLeadConfirmationEmail(email, name)
-      await sendAdminLeadNotification({ customerName: name, customerEmail: email, message })
-    } catch (emailError) {
-      console.error("[v0] Error sending emails:", emailError)
-      // Don't fail the request if emails fail - lead is already saved
-    }
+    const notificationResults = await Promise.allSettled([
+      sendLeadConfirmationEmail(email, name),
+      sendAdminLeadNotification({ customerName: name, customerEmail: email, message }),
+      sendAdminSms({
+        message: `UBIC contact form: ${name} (${email}${phone ? `, ${phone}` : ""}) sent: ${String(message).slice(0, 120)}`,
+      }),
+    ])
+
+    notificationResults.forEach((result) => {
+      if (result.status === "rejected") {
+        console.error("[v0] Error sending lead notification:", result.reason)
+      }
+    })
 
     return NextResponse.json({ success: true }, { status: 200 })
   } catch (error) {

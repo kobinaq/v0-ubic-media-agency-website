@@ -117,3 +117,20 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     return NextResponse.json({ error: "Failed to update invoice" }, { status: 500 })
   }
 }
+
+export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+  try {
+    await ensureInvoiceTables()
+    const { id } = await params
+    const result = await query("DELETE FROM invoices WHERE id = $1 RETURNING id", [id])
+
+    if (!result.rows[0]) {
+      return NextResponse.json({ error: "Invoice not found" }, { status: 404 })
+    }
+
+    return NextResponse.json({ deleted: true })
+  } catch (error) {
+    console.error("[invoice] Error deleting invoice:", error)
+    return NextResponse.json({ error: "Failed to delete invoice" }, { status: 500 })
+  }
+}

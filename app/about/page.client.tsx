@@ -7,13 +7,16 @@ import { Analytics } from "@/components/analytics"
 import { Button } from "@/components/ui/button"
 import { Footer } from "@/components/footer"
 import { Header } from "@/components/header"
+import { PageIntro } from "@/components/page-intro"
+import { StaggerChildren } from "@/components/animations/stagger-children"
+import { FadeUp, TextReveal } from "@/components/home/text-reveal"
 import { about } from "@/lib/content"
 import { generateBreadcrumbSchema, generateFAQSchema } from "@/lib/schema"
 
 const stats = [
   { value: "123+", label: "Projects completed" },
   { value: "96+", label: "Happy clients" },
-  { value: "5", label: "Years experience" },
+  { value: "5+", label: "Years experience" },
 ]
 
 const promises = [
@@ -72,130 +75,149 @@ export function AboutClientPage() {
       />
       <Header />
 
-      <main className="bg-background pt-24 text-foreground">
-        <section className="editorial-grid border-b border-border">
-          <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-24">
-            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-4 font-mono text-xs uppercase tracking-[0.22em] text-muted-foreground">
-              <span>Vol. 01 - About</span>
-              <span>Accra, Ghana</span>
-              <span>Strategy - Story - Systems</span>
-            </div>
+      <main className="bg-background text-foreground">
+        <PageIntro
+          eyebrow="About"
+          meta={
+            <>
+              <span className="studio-label">The studio</span>
+              <span className="studio-label">Accra, Ghana</span>
+              <span className="studio-label">Strategy · Identity · Web · Social · Photo · Video · Print</span>
+            </>
+          }
+          title={
+            <h1 className="studio-display text-[clamp(1.65rem,4.75vw,3.6rem)]">
+              A creative studio
+              <span className="mt-1 block font-serif italic text-accent">for full brand work.</span>
+            </h1>
+          }
+          aside={
+            <p className="max-w-md text-sm leading-7 text-muted-foreground md:text-base md:leading-7">
+              We handle strategy, identity, websites, social, photo, video, and print so your brand stays consistent
+              everywhere.
+            </p>
+          }
+        />
 
-            <div className="grid gap-12 pt-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
-              <div>
-                <p className="issue-label">The Studio</p>
-                <h1 className="mt-5 max-w-4xl text-5xl font-semibold leading-[0.94] tracking-[-0.04em] md:text-6xl lg:text-[6.5rem]">
-                  We build brands that
-                  <span className="block font-serif italic text-accent">hold together.</span>
-                </h1>
-              </div>
-              <div className="border-t border-border pt-6">
-                <p className="text-lg leading-8 text-muted-foreground">
-                  Ubic Media Agency was founded on a simple belief: great brands are crafted through strategy,
-                  creativity, and an unwavering commitment to consistency.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="border-b border-border py-24">
-          <div className="mx-auto grid max-w-7xl gap-14 px-6 lg:grid-cols-[0.85fr_1.15fr] lg:px-8">
-            <div>
-              <p className="issue-label">The Brief</p>
-              <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
+        <section className="border-b border-border px-5 py-24 md:px-8 lg:px-10">
+          <div className="mx-auto grid max-w-[1400px] gap-14 lg:grid-cols-[0.85fr_1.15fr]">
+            <FadeUp>
+              <p className="studio-label-accent">the brief</p>
+              <TextReveal className="studio-display mt-4 text-4xl md:text-5xl">
                 Present everywhere, consistent everywhere.
-              </h2>
-            </div>
-            <div className="grid gap-8 text-lg leading-8 text-muted-foreground md:grid-cols-2">
+              </TextReveal>
+            </FadeUp>
+            <StaggerChildren
+              className="grid gap-8 text-lg leading-8 text-muted-foreground md:grid-cols-2"
+              y={24}
+              stagger={0.1}
+            >
               {about.story.slice(0, 2).map((paragraph, index) => (
-                <p key={paragraph} className={index === 0 ? "first-letter:float-left first-letter:mr-3 first-letter:font-serif first-letter:text-7xl first-letter:font-semibold first-letter:leading-[0.8] first-letter:text-accent" : ""}>
+                <p
+                  key={paragraph}
+                  className={
+                    index === 0
+                      ? "first-letter:float-left first-letter:mr-3 first-letter:font-serif first-letter:text-7xl first-letter:font-semibold first-letter:leading-[0.8] first-letter:text-accent"
+                      : ""
+                  }
+                >
                   {paragraph}
                 </p>
               ))}
-            </div>
+            </StaggerChildren>
           </div>
         </section>
 
-        <section className="border-b border-border bg-secondary/15 py-24">
-          <div className="mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-2 lg:px-8">
+        <section className="border-b border-border bg-secondary/20 px-5 py-24 md:px-8 lg:px-10">
+          <StaggerChildren className="mx-auto grid max-w-[1400px] gap-12 lg:grid-cols-2" y={32} stagger={0.12}>
             <article className="border-t border-border pt-8">
-              <p className="issue-label">Our Mission</p>
-              <h2 className="mt-4 text-3xl font-serif font-semibold tracking-tight md:text-4xl">What we are here to do</h2>
+              <p className="studio-label-accent">Our Mission</p>
+              <h2 className="mt-4 font-serif text-3xl font-semibold tracking-tight md:text-4xl">What we are here to do</h2>
               <p className="mt-5 text-base leading-8 text-muted-foreground">{about.mission}</p>
             </article>
             <article className="border-t border-border pt-8">
-              <p className="issue-label">Our Vision</p>
-              <h2 className="mt-4 text-3xl font-serif font-semibold tracking-tight md:text-4xl">What success should look like</h2>
+              <p className="studio-label-accent">Our Vision</p>
+              <h2 className="mt-4 font-serif text-3xl font-semibold tracking-tight md:text-4xl">
+                What success should look like
+              </h2>
               <p className="mt-5 text-base leading-8 text-muted-foreground">{about.vision}</p>
             </article>
-          </div>
+          </StaggerChildren>
         </section>
 
-        <section className="py-24">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="max-w-2xl">
-              <p className="issue-label">Why Choose Ubic</p>
-              <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">What makes us different</h2>
-            </div>
+        <section className="px-5 py-24 md:px-8 lg:px-10">
+          <div className="mx-auto max-w-[1400px]">
+            <FadeUp className="max-w-2xl">
+              <p className="studio-label-accent">why ubic</p>
+              <TextReveal className="studio-display mt-4 text-4xl md:text-5xl">What makes us different</TextReveal>
+            </FadeUp>
 
-            <div className="mt-14 border-t border-border">
+            <StaggerChildren className="mt-14 border-t border-border" y={26} stagger={0.1}>
               {about.differentiators.map((item, index) => (
-                <article key={item.title} className="grid gap-6 border-b border-border py-8 lg:grid-cols-[80px_1fr]">
-                  <div className="font-mono text-sm tracking-[0.18em] text-accent">0{index + 1}</div>
+                <article
+                  key={item.title}
+                  className="grid gap-6 border-b border-border py-9 lg:grid-cols-[80px_1fr]"
+                >
+                  <div className="font-mono text-sm tracking-[0.18em] text-accent">00-{index + 1}</div>
                   <div className="max-w-3xl">
-                    <h3 className="text-3xl font-serif font-semibold tracking-tight">{item.title}</h3>
+                    <h3 className="font-serif text-3xl font-semibold tracking-tight">{item.title}</h3>
                     <p className="mt-4 text-base leading-8 text-muted-foreground">{item.description}</p>
                   </div>
                 </article>
               ))}
-            </div>
+            </StaggerChildren>
           </div>
         </section>
 
-        <section className="border-y border-border bg-secondary/15 py-20">
-          <div className="mx-auto grid max-w-7xl gap-8 px-6 md:grid-cols-3 lg:px-8">
+        <section className="border-y border-border bg-secondary/20 px-5 py-20 md:px-8 lg:px-10">
+          <StaggerChildren className="mx-auto grid max-w-[1400px] gap-8 md:grid-cols-3" y={24} stagger={0.1}>
             {stats.map((stat) => (
               <div key={stat.label} className="border-t border-border pt-6">
                 <div className="font-serif text-6xl font-semibold tracking-tight text-foreground">{stat.value}</div>
-                <div className="mt-3 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">{stat.label}</div>
+                <div className="mt-3 studio-label">{stat.label}</div>
               </div>
             ))}
-          </div>
+          </StaggerChildren>
         </section>
 
-        <section className="py-24">
-          <div className="mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
-            <div>
-              <p className="issue-label">Our Promise</p>
-              <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">What you can expect</h2>
-            </div>
-            <div className="border-t border-border">
+        <section className="px-5 py-24 md:px-8 lg:px-10">
+          <div className="mx-auto grid max-w-[1400px] gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+            <FadeUp>
+              <p className="studio-label-accent">Our Promise</p>
+              <TextReveal className="studio-display mt-4 text-4xl md:text-5xl">What you can expect</TextReveal>
+            </FadeUp>
+            <StaggerChildren className="border-t border-border" y={18} stagger={0.07}>
               {promises.map((promise, index) => (
                 <div key={promise} className="grid grid-cols-[56px_1fr] gap-4 border-b border-border py-5">
-                  <span className="font-mono text-xs tracking-[0.18em] text-accent">{String(index + 1).padStart(2, "0")}</span>
+                  <span className="font-mono text-xs tracking-[0.18em] text-accent">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
                   <p className="text-lg leading-8">{promise}</p>
                 </div>
               ))}
-            </div>
+            </StaggerChildren>
           </div>
         </section>
 
         <section className="border-t border-border bg-accent py-24 text-accent-foreground">
-          <div className="mx-auto grid max-w-7xl gap-10 px-6 lg:grid-cols-[1fr_auto] lg:items-end lg:px-8">
+          <FadeUp className="mx-auto grid max-w-[1400px] gap-10 px-5 md:px-8 lg:grid-cols-[1fr_auto] lg:items-end lg:px-10">
             <div>
-              <p className="issue-label text-accent-foreground/75">Start a Brief</p>
-              <h2 className="mt-4 max-w-3xl text-4xl font-semibold tracking-tight md:text-5xl">
+              <p className="studio-label text-accent-foreground/75">Start a Brief</p>
+              <h2 className="mt-4 max-w-3xl font-serif text-4xl font-semibold tracking-tight md:text-5xl">
                 Tell us what is not working yet.
               </h2>
             </div>
-            <Button size="lg" className="editorial-button bg-accent-foreground text-accent hover:bg-accent-foreground/90" asChild>
-              <Link href="/contact">
+            <Button
+              size="lg"
+              className="editorial-button bg-accent-foreground text-accent hover:bg-accent-foreground/90"
+              asChild
+            >
+              <Link href="/contact" data-cursor="hover">
                 Start Your Project
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-          </div>
+          </FadeUp>
         </section>
       </main>
       <Footer />

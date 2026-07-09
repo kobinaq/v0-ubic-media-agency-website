@@ -1,34 +1,26 @@
 "use client"
 
 import Image from "next/image"
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import { ChevronLeft, ChevronRight, X } from "lucide-react"
 import { Analytics } from "@/components/analytics"
 import { Button } from "@/components/ui/button"
 import { Footer } from "@/components/footer"
 import { Header } from "@/components/header"
+import { PageIntro } from "@/components/page-intro"
+import { ImageReveal } from "@/components/animations/image-reveal"
+import { FadeUp } from "@/components/home/text-reveal"
 import { portfolio } from "@/lib/content"
 
 export default function PortfolioPage() {
   const [activeCategory, setActiveCategory] = useState("All")
   const [selectedProject, setSelectedProject] = useState<(typeof portfolio.projects)[number] | null>(null)
-  const [isVisible, setIsVisible] = useState(false)
   const gridRef = useRef<HTMLDivElement>(null)
 
   const filteredProjects =
     activeCategory === "All"
       ? portfolio.projects
       : portfolio.projects.filter((project) => project.category === activeCategory)
-
-  useEffect(() => {
-    setIsVisible(true)
-  }, [])
-
-  useEffect(() => {
-    setIsVisible(false)
-    const timer = setTimeout(() => setIsVisible(true), 50)
-    return () => clearTimeout(timer)
-  }, [activeCategory])
 
   const handleProjectClick = (project: (typeof portfolio.projects)[number]) => {
     setSelectedProject(project)
@@ -72,114 +64,113 @@ export default function PortfolioPage() {
       <Analytics />
       <Header />
 
-      <main className="bg-background pt-24 text-foreground">
-        <section className="editorial-grid border-b border-border">
-          <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-24">
-            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-4 font-mono text-xs uppercase tracking-[0.22em] text-muted-foreground">
-              <span>Issue 03 - Case Studies</span>
-              <span>Selected work</span>
-              <span>{filteredProjects.length} entries</span>
-            </div>
-
-            <div className="grid gap-12 pt-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
-              <div className="max-w-3xl">
-                <p className="issue-label">Case Studies</p>
-                <h1 className="mt-4 text-5xl font-semibold tracking-[-0.04em] md:text-6xl">
-                  Case studies, spreads, and selected work.
-                </h1>
-                <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
-                  A clearer look at the work behind the brand. Each study includes the brief, the approach, and the
-                  result so the work reads like more than a gallery tile.
-                </p>
-              </div>
-
-              <div className="border-t border-border pt-7">
-                <p className="font-mono text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">Index by category</p>
-                <div className="mt-6 flex flex-wrap gap-2">
-                  {portfolio.categories.map((category) => (
-                    <Button
-                      key={category}
-                      variant={activeCategory === category ? "default" : "outline"}
-                      onClick={() => setActiveCategory(category)}
-                      className={`editorial-button ${
-                        activeCategory === category
-                          ? "bg-foreground text-background hover:bg-accent"
-                          : "border-border bg-transparent hover:bg-card"
-                      }`}
-                    >
-                      {category}
-                    </Button>
-                  ))}
-                </div>
+      <main className="bg-background text-foreground">
+        <PageIntro
+          eyebrow="Work"
+          meta={
+            <>
+              <span className="studio-label">Case studies</span>
+              <span className="studio-label">{filteredProjects.length} projects</span>
+              <span className="studio-label">Strategy · Identity · Web · Social · Photo · Video · Print</span>
+            </>
+          }
+          title={
+            <h1 className="studio-display text-5xl md:text-6xl lg:text-[5.5rem]">
+              Selected work.
+            </h1>
+          }
+          description="Projects across strategy, identity, websites, social, photo, video, and print."
+          aside={
+            <div>
+              <p className="studio-label">Index by category</p>
+              <div className="mt-6 flex flex-wrap gap-2">
+                {portfolio.categories.map((category) => (
+                  <Button
+                    key={category}
+                    variant={activeCategory === category ? "default" : "outline"}
+                    onClick={() => setActiveCategory(category)}
+                    className={`editorial-button ${
+                      activeCategory === category
+                        ? "bg-foreground text-background hover:bg-accent"
+                        : "border-border bg-transparent hover:bg-card"
+                    }`}
+                    data-cursor="hover"
+                  >
+                    {category}
+                  </Button>
+                ))}
               </div>
             </div>
-          </div>
-        </section>
+          }
+        />
 
-        <section className="py-24">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <section className="px-5 py-24 md:px-8 lg:px-10">
+          <div className="mx-auto max-w-[1400px]">
             <div ref={gridRef} className="space-y-20">
               {filteredProjects.map((project, index) => {
                 const isReverse = index % 2 === 1
 
                 return (
-                  <article
-                    key={project.id}
-                    onClick={() => handleProjectClick(project)}
-                    className={`group grid cursor-pointer gap-8 border-b border-border pb-16 transition-all duration-500 last:border-b-0 last:pb-0 lg:grid-cols-2 lg:items-center ${
-                      isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
-                    } ${isReverse ? "lg:[&>*:first-child]:order-2" : ""}`}
-                    style={{ transitionDelay: `${index * 60}ms` }}
-                  >
-                    <div
-                      className={`image-print-overlay relative overflow-hidden border border-border bg-card ${getImageFrameClass(
-                        project.category,
-                        "list",
-                      )}`}
+                  <FadeUp key={project.id} delay={index * 0.04} y={48}>
+                    <article
+                      onClick={() => handleProjectClick(project)}
+                      className={`group grid cursor-pointer gap-8 border-b border-border pb-16 last:border-b-0 last:pb-0 lg:grid-cols-2 lg:items-center ${
+                        isReverse ? "lg:[&>*:first-child]:order-2" : ""
+                      }`}
+                      data-cursor="view"
                     >
-                      <Image
-                        src={project.image || "/placeholder.svg"}
-                        alt={project.title}
-                        fill
-                        sizes="(min-width: 1024px) 50vw, 100vw"
-                        className={`retro-image ${getImageFitClass(project.category)}`}
-                      />
-                      <div className="absolute left-4 top-4 z-10 border border-border bg-background px-3 py-1 font-mono text-xs uppercase tracking-[0.18em] text-foreground">
-                        {project.category}
-                      </div>
-                    </div>
+                      <ImageReveal
+                        className={`relative border border-border bg-card ${getImageFrameClass(
+                          project.category,
+                          "list",
+                        )}`}
+                      >
+                        <Image
+                          src={project.image || "/placeholder.svg"}
+                          alt={project.title}
+                          fill
+                          sizes="(min-width: 1024px) 50vw, 100vw"
+                          className={`retro-image ${getImageFitClass(project.category)}`}
+                        />
+                        <div className="absolute left-4 top-4 z-10 border border-border bg-background px-3 py-1 font-mono text-xs uppercase tracking-[0.18em] text-foreground">
+                          {project.category}
+                        </div>
+                      </ImageReveal>
 
-                    <div className="max-w-xl">
-                      <p className="font-mono text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">
-                        Fig. 0{index + 1}
-                      </p>
-                      <h2 className="mt-4 text-3xl font-serif font-semibold tracking-tight md:text-[2.5rem]">
-                        {project.title}
-                      </h2>
-                      <p className="mt-5 text-base leading-8 text-muted-foreground">{project.description}</p>
-                      <div className="mt-8 flex flex-wrap items-center gap-3">
-                        <span className="border border-border bg-card px-3 py-1 font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
-                          {project.client ?? "Selected client"}
-                        </span>
-                        <span className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
-                          {project.year ?? "Recent"}
-                        </span>
-                        <span className="text-sm text-accent">Open case study</span>
+                      <div className="max-w-xl">
+                        <p className="font-mono text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">
+                          Fig. {String(index + 1).padStart(2, "0")}
+                        </p>
+                        <h2 className="mt-4 font-serif text-3xl font-semibold tracking-tight transition-transform duration-500 group-hover:translate-x-1 md:text-[2.5rem]">
+                          {project.title}
+                        </h2>
+                        <p className="mt-5 text-base leading-8 text-muted-foreground">{project.description}</p>
+                        <div className="mt-8 flex flex-wrap items-center gap-3">
+                          <span className="border border-border bg-card px-3 py-1 font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                            {project.client ?? "Selected client"}
+                          </span>
+                          <span className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                            {project.year ?? "Recent"}
+                          </span>
+                          <span className="text-sm text-accent">Open case study</span>
+                        </div>
+                        <div className="mt-8 grid gap-5 border-t border-border pt-6 sm:grid-cols-3">
+                          {[
+                            ["Challenge", project.challenge],
+                            ["Approach", project.approach],
+                            ["Outcome", project.outcome],
+                          ].map(([label, body]) => (
+                            <div key={label as string}>
+                              <h3 className="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-accent">
+                                {label}
+                              </h3>
+                              <p className="mt-2 line-clamp-3 text-sm leading-6 text-muted-foreground">{body}</p>
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                      <div className="mt-8 grid gap-5 border-t border-border pt-6 sm:grid-cols-3">
-                        {[
-                          ["Challenge", project.challenge],
-                          ["Approach", project.approach],
-                          ["Outcome", project.outcome],
-                        ].map(([label, body]) => (
-                          <div key={label}>
-                            <h3 className="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-accent">{label}</h3>
-                            <p className="mt-2 line-clamp-3 text-sm leading-6 text-muted-foreground">{body}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </article>
+                    </article>
+                  </FadeUp>
                 )
               })}
             </div>

@@ -1,49 +1,52 @@
+"use client"
+
 import Link from "next/link"
 import Image from "next/image"
 import Script from "next/script"
-import { ArrowRight, CalendarDays, Check, MessageCircle } from "lucide-react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { Button } from "@/components/ui/button"
 import { Analytics } from "@/components/analytics"
+import { InteractiveHero } from "@/components/hero/interactive-hero"
+import { WorkHoverList } from "@/components/home/work-hover-list"
+import { ServicesPanel } from "@/components/home/services-panel"
+import { Marquee } from "@/components/home/marquee"
+import { TextReveal, FadeUp } from "@/components/home/text-reveal"
 import { about, packages, services, siteConfig } from "@/lib/content"
 import portfolioData from "@/content/portfolio.json"
 import { generateBreadcrumbSchema, generateFAQSchema } from "@/lib/schema"
+import { Magnetic } from "@/components/animations/magnetic"
+import { MobileCtaBar } from "@/components/mobile-cta-bar"
 
 const formatGHS = (amount: number) => `GHS ${amount.toLocaleString("en-GH")}`
 
-const primaryServices = services.services.filter((service) =>
-  ["brand-identity", "web-design", "social-media"].includes(service.id),
-)
+const primaryServices = [
+  services.services.find((s) => s.id === "brand-identity"),
+  services.services.find((s) => s.id === "web-design"),
+  services.services.find((s) => s.id === "social-media"),
+  services.services.find((s) => s.id === "photography-videography"),
+  services.services.find((s) => s.id === "brand-strategy"),
+].filter(Boolean) as (typeof services.services)[number][]
+
+const featuredProjects = portfolioData.projects
+  .filter((project) =>
+    ["nexus-it", "starbites-food", "victory-foods-social", "richkev-social", "gordon-university", "starbites-event-coverage"].includes(
+      project.id,
+    ),
+  )
+  .map((p) => ({
+    id: p.id,
+    title: p.title,
+    category: p.category,
+    year: p.year,
+    image: p.image,
+    description: p.description,
+  }))
 
 const pricingHighlights = [
   packages.packages.find((pkg) => pkg.id === "brand-starter"),
   packages.packages.find((pkg) => pkg.id === "website-starter"),
   packages.packages.find((pkg) => pkg.id === "social-starter"),
 ].filter(Boolean) as NonNullable<(typeof packages.packages)[number]>[]
-
-const featuredProjects = portfolioData.projects.filter((project) =>
-  ["nexus-it", "website", "starbites-food"].includes(project.id),
-)
-
-const processSteps = [
-  {
-    title: "Clarify the strategy",
-    description: "We align on your audience, offer, goals, and what the website or brand needs to do commercially.",
-  },
-  {
-    title: "Shape the message",
-    description: "We build the positioning, structure, and visual direction so your brand feels clear and credible.",
-  },
-  {
-    title: "Design the experience",
-    description: "We create the website, identity, and content system with conversion, trust, and mobile usability in mind.",
-  },
-  {
-    title: "Launch and support",
-    description: "We help you go live with confidence and stay available for refinement, updates, and rollout support.",
-  },
-]
 
 const faqSchema = generateFAQSchema([
   {
@@ -91,294 +94,163 @@ export default function HomePageClient() {
       />
       <Header />
 
-      <main className="bg-background text-foreground">
-        <section className="relative overflow-hidden border-b border-border pt-28">
-          <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(227,167,46,0.08),transparent_28%),linear-gradient(90deg,rgba(32,28,26,0.04)_1px,transparent_1px),linear-gradient(rgba(32,28,26,0.04)_1px,transparent_1px)] bg-[size:auto,48px_48px,48px_48px]" />
+      <main className="bg-background pb-20 text-foreground md:pb-0">
+        <InteractiveHero />
 
-          <div className="mx-auto max-w-7xl px-6 pb-16 pt-10 lg:px-8 lg:pb-20 lg:pt-12">
-            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-4 text-xs uppercase tracking-[0.24em] text-muted-foreground">
-              <span>Vol. 01 - No. 04</span>
-              <span>Accra, Ghana</span>
-              <span>Brand - Web - Content</span>
+        <Marquee items={about.clients} speed={35} />
+
+        {/* Selected work */}
+        <section id="work" className="px-5 py-24 md:px-8 md:py-32 lg:px-10">
+          <div className="mx-auto max-w-[1400px]">
+            <div className="mb-14 flex flex-col gap-6 md:mb-16 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p className="studio-label-accent">s e l e c t e d&nbsp;&nbsp;w o r k</p>
+                <TextReveal className="studio-display mt-4 max-w-2xl text-3xl sm:text-4xl md:text-6xl">
+                  Projects that earned the trust.
+                </TextReveal>
+              </div>
+              <FadeUp>
+                <Link href="/case-studies" className="studio-label text-foreground studio-link" data-cursor="hover">
+                  view all work →
+                </Link>
+              </FadeUp>
             </div>
 
-            <div className="mt-12 max-w-4xl">
-              <div className="max-w-3xl">
-                <h1 className="mt-5 max-w-4xl text-5xl font-semibold leading-[0.94] tracking-[-0.04em] md:text-6xl lg:text-[6.5rem]">
-                  Build a brand
-                  <span className="block font-serif italic text-accent">people trust.</span>
-                </h1>
+            <WorkHoverList projects={featuredProjects} />
+          </div>
+        </section>
 
-                <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground md:text-xl">
-                  Strategy, identity, websites, and content systems for ambitious businesses that need to look sharper and convert better.
+        {/* Services */}
+        <ServicesPanel services={primaryServices} formatPrice={formatGHS} />
+
+        {/* About */}
+        <section className="border-t border-border px-5 py-24 md:px-8 md:py-32 lg:px-10">
+          <div className="mx-auto grid max-w-[1400px] gap-14 lg:grid-cols-2 lg:items-center">
+            <div>
+              <p className="studio-label-accent">About</p>
+              <TextReveal className="studio-display mt-4 text-3xl sm:text-4xl md:text-6xl">
+                Built to launch. Built to last.
+              </TextReveal>
+              <FadeUp className="mt-8 space-y-5 text-base leading-8 text-muted-foreground md:text-lg md:leading-9">
+                <p>
+                  Ubic is the studio behind brands that need lift. We turn strategy, identity, websites, social, photo,
+                  video, and print into work that can leave the desk and hold up in the world.
                 </p>
-
-                <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-                  <Button size="lg" className="group bg-accent text-accent-foreground hover:bg-accent/90" asChild>
-                    <Link href="/contact">
-                      Book a Strategy Call
-                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </Link>
-                  </Button>
-                  <Button size="lg" variant="outline" className="border-border bg-background/80" asChild>
-                    <Link href="/case-studies">See Case Studies</Link>
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="border-b border-border bg-secondary/20">
-          <div className="mx-auto max-w-7xl px-6 py-8 lg:px-8">
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-              <p className="text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">Trusted by teams including</p>
-              <div className="flex flex-wrap gap-x-8 gap-y-3 text-sm font-medium text-foreground/80">
-                {about.clients.map((client) => (
-                  <span key={client}>{client}</span>
+                <p>
+                  A lean team in Accra. Clear thinking, sharp craft, and enough firepower to get ambitious brands off
+                  the ground without the agency fog.
+                </p>
+              </FadeUp>
+              <FadeUp className="mt-10 grid grid-cols-3 gap-4 border-t border-border pt-8" delay={0.1}>
+                {[
+                  { n: "123+", l: "Projects" },
+                  { n: "96+", l: "Clients" },
+                  { n: "5+", l: "Years" },
+                ].map((stat) => (
+                  <div key={stat.l}>
+                    <p className="font-serif text-3xl font-semibold tracking-tight md:text-4xl">{stat.n}</p>
+                    <p className="mt-1 studio-label">{stat.l}</p>
+                  </div>
                 ))}
+              </FadeUp>
+              <FadeUp className="mt-10" delay={0.15}>
+                <Link href="/about" className="studio-label text-foreground studio-link" data-cursor="hover">
+                  more about ubic →
+                </Link>
+              </FadeUp>
+            </div>
+
+            <FadeUp className="relative" delay={0.08}>
+              <div className="studio-media relative aspect-[4/5] w-full border border-border">
+                <Image
+                  src="/hero-creative-workspace.jpg"
+                  alt="Rocket launch from a creative desk, a metaphor for Ubic brand work taking off"
+                  fill
+                  sizes="(min-width: 1024px) 40vw, 100vw"
+                  className="object-cover"
+                />
               </div>
+              <div className="absolute -bottom-6 -left-4 border border-border bg-card p-5 shadow-sm md:-left-8 md:p-6">
+                <p className="studio-label">The studio</p>
+                <p className="mt-2 max-w-[12rem] font-serif text-xl font-semibold tracking-tight">
+                  Accra-based. Ready for lift-off.
+                </p>
+              </div>
+            </FadeUp>
+          </div>
+        </section>
+
+        {/* Pricing */}
+        <section className="border-t border-border px-5 py-24 md:px-8 md:py-32 lg:px-10">
+          <div className="mx-auto max-w-[1400px]">
+            <div className="mb-14 max-w-2xl">
+              <p className="studio-label-accent">p r i c i n g</p>
+              <TextReveal className="studio-display mt-4 text-4xl md:text-6xl">Clear starting points.</TextReveal>
+              <FadeUp className="mt-5 text-sm leading-7 text-muted-foreground md:text-base">
+                No discovery call required just to understand the budget range.
+              </FadeUp>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-3">
+              {pricingHighlights.map((pkg, i) => (
+                <FadeUp key={pkg.id} delay={i * 0.08}>
+                  <div className="flex h-full flex-col border border-border bg-card p-7 transition-colors hover:border-accent/40">
+                    <p className="studio-label">{pkg.service}</p>
+                    <h3 className="mt-4 font-serif text-2xl font-semibold tracking-tight">{pkg.name}</h3>
+                    <p className="mt-3 flex-1 text-sm leading-7 text-muted-foreground">{pkg.description}</p>
+                    <p className="mt-8 font-serif text-4xl font-semibold tracking-tight">{formatGHS(pkg.priceGHS)}</p>
+                    <Link
+                      href="/packages"
+                      className="mt-8 inline-flex border border-border px-5 py-3 font-mono text-xs uppercase tracking-[0.14em] transition-colors hover:border-accent hover:text-accent"
+                      data-cursor="hover"
+                    >
+                      View package
+                    </Link>
+                  </div>
+                </FadeUp>
+              ))}
             </div>
           </div>
         </section>
 
-        <section id="services" className="py-24">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="max-w-2xl">
-              <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">In This Issue</p>
-              <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
-                When the brand feels unclear, the website usually underperforms too.
-              </h2>
-              <p className="mt-5 text-lg leading-8 text-muted-foreground">
-                We focus on the parts that affect trust and action most: positioning, visual identity, website clarity, content structure, and rollout consistency.
-              </p>
-            </div>
-
-            <div className="mt-14 border-t border-border">
-              {primaryServices.map((service, index) => (
+        {/* Final CTA */}
+        <section className="border-t border-border px-5 py-24 md:px-8 md:py-32 lg:px-10">
+          <div className="mx-auto max-w-[1400px] text-center">
+            <p className="studio-label-accent">n e x t&nbsp;&nbsp;s t e p</p>
+            <TextReveal className="studio-display mx-auto mt-6 max-w-4xl text-3xl sm:text-4xl md:text-6xl">
+              Your brand deserves a sharper first impression.
+            </TextReveal>
+            <FadeUp className="mx-auto mt-6 max-w-lg text-sm leading-7 text-muted-foreground">
+              Book a strategy call or message us on WhatsApp. We&apos;ll map the right path for where you are now.
+            </FadeUp>
+            <FadeUp className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row" delay={0.1}>
+              <Magnetic strength={0.28}>
                 <Link
-                  key={service.id}
-                  href="/services"
-                  className="group grid gap-6 border-b border-border py-7 transition-colors hover:bg-card/60 lg:grid-cols-[72px_1fr_auto] lg:items-baseline lg:py-8"
+                  href="/contact"
+                  className="inline-flex w-full items-center justify-center bg-accent px-8 py-4 font-mono text-xs uppercase tracking-[0.16em] text-accent-foreground sm:w-auto"
+                  data-cursor="hover"
                 >
-                  <span className="font-mono text-sm tracking-[0.16em] text-accent">0{index + 1}</span>
-                  <span>
-                    <span className="block text-2xl font-serif font-medium tracking-tight md:text-[2rem]">{service.title}</span>
-                    <span className="mt-2 block max-w-2xl text-sm leading-7 text-muted-foreground md:text-base">{service.description}</span>
-                  </span>
-                  <span className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">From {formatGHS(service.startingPrice)}</span>
+                  Start a project
                 </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="work" className="border-y border-border bg-secondary/15 py-24">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-              <div className="max-w-2xl">
-                <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Selected spreads</p>
-                <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
-                  Work that reads more serious, more polished, and easier to use.
-                </h2>
-              </div>
-              <Button variant="outline" className="border-border bg-transparent" asChild>
-                <Link href="/case-studies">View Case Studies</Link>
-              </Button>
-            </div>
-
-            <div className="mt-14 space-y-16">
-              {featuredProjects.map((project, index) => (
-                <article
-                  key={project.id}
-                  className={`grid gap-8 border-b border-border pb-16 last:border-b-0 last:pb-0 lg:grid-cols-2 lg:items-center ${
-                    index % 2 === 1 ? "lg:[&>*:first-child]:order-2" : ""
-                  }`}
+              </Magnetic>
+              <Magnetic strength={0.22}>
+                <a
+                  href={siteConfig.contact.whatsapp}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex w-full items-center justify-center border border-border px-8 py-4 font-mono text-xs uppercase tracking-[0.16em] sm:w-auto"
+                  data-cursor="hover"
                 >
-                  <div className="relative aspect-[5/4] overflow-hidden border border-border bg-card">
-                    <Image
-                      src={project.image}
-                      alt={project.title}
-                      fill
-                      sizes="(min-width: 1024px) 50vw, 100vw"
-                      className="retro-image object-cover"
-                    />
-                    <div className="absolute left-4 top-4 bg-background px-3 py-1 font-mono text-xs uppercase tracking-[0.18em] text-foreground">
-                      {project.category}
-                    </div>
-                  </div>
-                  <div className="max-w-xl">
-                    <p className="text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">Fig. 0{index + 1}</p>
-                    <h3 className="mt-4 text-3xl font-serif font-semibold tracking-tight md:text-[2.5rem]">{project.title}</h3>
-                    <p className="mt-5 text-base leading-8 text-muted-foreground">{project.description}</p>
-                    <Link href="/case-studies" className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-accent transition-colors hover:text-accent/80">
-                      Explore the case study
-                      <ArrowRight className="h-4 w-4" />
-                    </Link>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="process" className="py-24">
-          <div className="mx-auto grid max-w-7xl gap-16 px-6 lg:grid-cols-[0.8fr_1.2fr] lg:px-8">
-            <div className="max-w-xl">
-              <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">How we work</p>
-              <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
-                A process built for clarity, not endless revisions.
-              </h2>
-              <p className="mt-5 text-lg leading-8 text-muted-foreground">
-                Buyers convert better when the message is sharp and the experience feels easy. Our process is designed to get there faster.
-              </p>
-            </div>
-
-            <div className="space-y-5">
-              {processSteps.map((step, index) => (
-                <div key={step.title} className="grid gap-4 border border-border bg-card p-6 md:grid-cols-[84px_1fr] md:gap-6 md:p-7">
-                  <div className="font-serif text-4xl italic text-accent">0{index + 1}</div>
-                  <div>
-                    <h3 className="text-2xl font-serif font-semibold tracking-tight">{step.title}</h3>
-                    <p className="mt-3 text-sm leading-7 text-muted-foreground">{step.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="border-y border-border bg-accent text-accent-foreground">
-          <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
-            <p className="text-xs font-medium uppercase tracking-[0.24em] text-accent-foreground/75">On Record</p>
-            <blockquote className="mt-6 max-w-4xl font-serif text-3xl leading-[1.25] md:text-5xl">
-              "They asked harder questions about our business than our board does - the brand work was just where it landed first."
-            </blockquote>
-            <div className="mt-6 flex items-center gap-4 text-sm uppercase tracking-[0.22em] text-accent-foreground/75">
-              <span className="h-10 w-10 bg-accent-foreground/90" />
-              <span>Managing Director, Retail Group - Accra</span>
-            </div>
-          </div>
-        </section>
-
-        <section className="py-24">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="max-w-2xl">
-              <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Starting prices</p>
-              <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
-                Transparent entry points for the services clients ask about most.
-              </h2>
-              <p className="mt-5 text-lg leading-8 text-muted-foreground">
-                You should not need a discovery call just to understand whether we are in your budget range.
-              </p>
-            </div>
-
-            <div className="mt-14 grid gap-6 lg:grid-cols-3">
-              {pricingHighlights.map((pkg) => (
-                <div key={pkg.id} className="border border-border bg-card p-7">
-                  <p className="text-xs font-medium uppercase tracking-[0.24em] text-accent">{pkg.service}</p>
-                  <h3 className="mt-4 text-2xl font-serif font-semibold">{pkg.name}</h3>
-                  <p className="mt-3 text-sm leading-7 text-muted-foreground">{pkg.description}</p>
-                  <div className="mt-6 text-4xl font-serif font-semibold tracking-tight">{formatGHS(pkg.priceGHS)}</div>
-                  <ul className="mt-6 space-y-3 text-sm text-muted-foreground">
-                    {pkg.features.slice(0, 4).map((feature) => (
-                      <li key={feature} className="flex items-start gap-3">
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-10">
-              <Button size="lg" variant="outline" className="border-border bg-transparent" asChild>
-                <Link href="/packages">
-                  Explore All Packages
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </section>
-
-        <section className="border-t border-border bg-secondary/15 py-24">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-              <div className="max-w-xl">
-                <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Why clients choose Ubic</p>
-                <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
-                  The reason people stay is the system, not just the output.
-                </h2>
-                <p className="mt-5 text-lg leading-8 text-muted-foreground">
-                  We work like a small editorial team: one point of view, one standard, and no disconnect between strategy, design, and rollout.
-                </p>
-              </div>
-
-              <div className="border-t border-border">
-                {about.differentiators.slice(0, 3).map((item, index) => (
-                  <div key={item.title} className="grid gap-4 border-b border-border py-8 md:grid-cols-[72px_1fr] md:gap-6">
-                    <div className="font-mono text-sm tracking-[0.18em] text-accent">0{index + 1}</div>
-                    <div>
-                      <h3 className="text-2xl font-serif font-semibold tracking-tight">{item.title}</h3>
-                      <p className="mt-3 text-sm leading-7 text-muted-foreground md:text-base">{item.description}</p>
-                    </div>
-                  </div>
-                ))}
-
-                <div className="grid gap-6 border-b border-border py-8 md:grid-cols-[72px_1fr] md:gap-6">
-                  <div className="font-mono text-sm tracking-[0.18em] text-accent">04</div>
-                  <div>
-                    <h3 className="text-2xl font-serif font-semibold tracking-tight">Pick the next step that fits your buying style.</h3>
-                    <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                      <a
-                        href="https://calendar.app.google/TPjTbTnJ5f9ztbvz5"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="border border-border bg-card p-5 transition-colors hover:border-accent/50 hover:bg-accent/5"
-                      >
-                        <CalendarDays className="h-5 w-5 text-accent" />
-                        <h4 className="mt-4 text-lg font-semibold">Book a call</h4>
-                        <p className="mt-2 text-sm leading-7 text-muted-foreground">
-                          Best if you want to talk through goals, scope, and timing live.
-                        </p>
-                      </a>
-                      <a
-                        href={siteConfig.contact.whatsapp}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="border border-border bg-card p-5 transition-colors hover:border-accent/50 hover:bg-accent/5"
-                      >
-                        <MessageCircle className="h-5 w-5 text-accent" />
-                        <h4 className="mt-4 text-lg font-semibold">Message on WhatsApp</h4>
-                        <p className="mt-2 text-sm leading-7 text-muted-foreground">
-                          Best if you want a quick answer, budget check, or a faster start.
-                        </p>
-                      </a>
-                    </div>
-
-                    <div className="mt-8 flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
-                      <p className="text-sm leading-7 text-muted-foreground">
-                        Prefer email? Reach us at{" "}
-                        <a href={`mailto:${siteConfig.contact.email}`} className="font-medium text-accent hover:text-accent/80">
-                          {siteConfig.contact.email}
-                        </a>
-                        .
-                      </p>
-                      <Button className="bg-accent text-accent-foreground hover:bg-accent/90" asChild>
-                        <Link href="/contact">Go to Contact Form</Link>
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+                  WhatsApp
+                </a>
+              </Magnetic>
+            </FadeUp>
           </div>
         </section>
       </main>
 
       <Footer />
+      <MobileCtaBar />
     </>
   )
 }

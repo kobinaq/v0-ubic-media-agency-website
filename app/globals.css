@@ -3,6 +3,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Original Ubic warm editorial palette */
 :root {
   --background: #f4eddc;
   --foreground: #201c1a;
@@ -52,14 +53,15 @@
   --secondary-foreground: #f6f0e6;
   --muted: #1e1f1d;
   --muted-foreground: #b2aba2;
-  --accent: #e3a72e;
-  --accent-foreground: #201c1a;
+  /* Bright cyan accent (lifted from light #1f4741) */
+  --accent: #4fd6c4;
+  --accent-foreground: #0a1f1c;
   --destructive: #ff7f66;
   --destructive-foreground: #2d120e;
   --border: #2d2d2a;
   --input: #262623;
-  --ring: #e3a72e;
-  --chart-1: #e3a72e;
+  --ring: #4fd6c4;
+  --chart-1: #4fd6c4;
   --chart-2: #c1442d;
   --chart-3: #1f4741;
   --chart-4: #9c3521;
@@ -68,10 +70,10 @@
   --sidebar-foreground: #f6f0e6;
   --sidebar-primary: #f6f0e6;
   --sidebar-primary-foreground: #141514;
-  --sidebar-accent: #e3a72e;
-  --sidebar-accent-foreground: #201c1a;
+  --sidebar-accent: #4fd6c4;
+  --sidebar-accent-foreground: #0a1f1c;
   --sidebar-border: #2d2d2a;
-  --sidebar-ring: #e3a72e;
+  --sidebar-ring: #4fd6c4;
 }
 
 @theme inline {
@@ -95,7 +97,7 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  --radius: 0.75rem;
+  --radius: 0px;
 
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
@@ -106,10 +108,10 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -144,10 +146,15 @@
     position: fixed;
     z-index: 500;
   }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--accent-foreground);
+  }
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   color-scheme: light;
 }
 
@@ -155,8 +162,25 @@ html.dark {
   color-scheme: dark;
 }
 
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -164,62 +188,297 @@ html.dark {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--muted-foreground);
-  border-radius: 999px;
+  background: var(--border);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--foreground);
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.5s ease-out;
+  background: var(--muted-foreground);
 }
 
 *:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
+  outline: 1px solid var(--ring);
+  outline-offset: 3px;
 }
 
-.retro-image {
-  filter: grayscale(1) sepia(0.2) contrast(1.06) saturate(0.65);
-  transition: filter 220ms ease, transform 220ms ease;
+/* Hide horizontal scrollbars on mobile snap strips */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .group:hover .retro-image,
-  .retro-image:hover {
-    filter: none;
+/* Motion system utilities */
+
+/*
+ * Hero/page intro start hidden. GSAP owns opacity after .is-ready.
+ * This prevents a static full-opacity layer sitting under the animation.
+ */
+.hero-stage [data-hero-line],
+.hero-stage [data-hero-meta],
+.hero-stage [data-hero-cta],
+.hero-stage [data-hero-rule],
+.hero-floaters [data-floater] {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.hero-stage.is-ready [data-hero-line],
+.hero-stage.is-ready [data-hero-meta],
+.hero-stage.is-ready [data-hero-cta],
+.hero-stage.is-ready [data-hero-rule],
+.hero-floaters.is-ready [data-floater] {
+  visibility: visible;
+  /* opacity stays GSAP-controlled */
+}
+
+.page-intro [data-page-intro] {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-stage [data-hero-line],
+  .hero-stage [data-hero-meta],
+  .hero-stage [data-hero-cta],
+  .hero-stage [data-hero-rule],
+  .hero-floaters [data-floater],
+  .page-intro [data-page-intro] {
+    opacity: 1 !important;
+    visibility: visible !important;
   }
 }
 
-.retro-image {
-  filter: grayscale(100%) contrast(1.08) sepia(0.22) saturate(0.72) brightness(0.94);
-  transition: filter 220ms ease, transform 220ms ease;
+.line-mask {
+  display: block;
+  overflow: hidden;
+}
+
+.line-mask > span {
+  display: block;
+  will-change: transform;
+}
+
+.clip-reveal {
+  clip-path: inset(0 0 100% 0);
+}
+
+.studio-label {
+  font-family: var(--font-space-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+.studio-label-accent {
+  font-family: var(--font-space-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.studio-display {
+  font-family: var(--font-fraunces);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 0.94;
+}
+
+.studio-link {
+  position: relative;
+  display: inline-flex;
+  transition: color 0.25s ease;
+}
+
+.studio-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.studio-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.studio-media {
+  overflow: hidden;
+  background: var(--card);
+}
+
+.studio-media img {
+  transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s ease;
+}
+
+.group:hover .studio-media img {
+  transform: scale(1.08);
+}
+
+/* Work hover preview follows cursor. Opacity controlled only by GSAP. */
+.work-preview {
+  pointer-events: none !important;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 40;
+  width: min(28vw, 340px);
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--card);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.work-preview img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  pointer-events: none !important;
+}
+
+/* Preloader */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 2rem;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* Infinite marquee */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+.marquee-track span {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* Horizontal scroll section */
+.h-scroll-panel {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+/* Custom cursor. Subtle, only on fine pointers. */
+.studio-cursor {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
+  border-radius: 999px;
+  background: var(--accent);
+  opacity: 0;
+  mix-blend-mode: multiply;
+  transition:
+    width 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    height 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    margin 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.studio-cursor.is-visible {
+  opacity: 0.9;
+}
+
+.studio-cursor.is-hover {
+  width: 56px;
+  height: 56px;
+  margin: -28px 0 0 -28px;
+  background: transparent;
+  border: 1px solid var(--foreground);
+  mix-blend-mode: normal;
+}
+
+.studio-cursor.is-view {
+  width: 88px;
+  height: 88px;
+  margin: -44px 0 0 -44px;
+  background: var(--accent);
+  border: none;
+  mix-blend-mode: normal;
+}
+
+.studio-cursor.is-view::after {
+  content: "view";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-space-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent-foreground);
+}
+
+/* Dark mode: lighter cursor so it stays visible on dark surfaces */
+html.dark .studio-cursor {
+  background: #f3faf8;
+  mix-blend-mode: difference;
+  opacity: 0;
+}
+
+html.dark .studio-cursor.is-visible {
+  opacity: 1;
+}
+
+html.dark .studio-cursor.is-hover {
+  background: transparent;
+  border-color: #f3faf8;
+  mix-blend-mode: difference;
+}
+
+html.dark .studio-cursor.is-view {
+  background: #4fd6c4;
+  mix-blend-mode: normal;
+}
+
+html.dark .studio-cursor.is-view::after {
+  color: #0a1f1c;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .retro-image:hover {
-    filter: none;
+  body.has-custom-cursor,
+  body.has-custom-cursor a,
+  body.has-custom-cursor button,
+  body.has-custom-cursor [data-cursor] {
+    cursor: none;
   }
 }
 
-.editorial-grid {
-  background-image:
-    linear-gradient(90deg, rgba(32, 28, 26, 0.045) 1px, transparent 1px),
-    linear-gradient(rgba(32, 28, 26, 0.045) 1px, transparent 1px);
-  background-size: 48px 48px;
+/* Legacy aliases */
+.editorial-button {
+  border-radius: 0;
+  font-family: var(--font-space-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .issue-label {
@@ -240,32 +499,26 @@ html.dark {
   width: 1.5rem;
 }
 
-.editorial-button {
-  border-radius: 0;
-  font-family: var(--font-space-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+.editorial-grid {
+  background-image:
+    linear-gradient(90deg, rgba(32, 28, 26, 0.045) 1px, transparent 1px),
+    linear-gradient(rgba(32, 28, 26, 0.045) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.retro-image {
+  filter: grayscale(0.15) contrast(1.04) saturate(0.9);
+  transition: filter 300ms ease, transform 800ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .retro-image,
+  .retro-image:hover {
+    filter: none;
+  }
 }
 
 .image-print-overlay::before,
 .image-print-overlay::after {
-  content: "";
-  inset: 0;
-  pointer-events: none;
-  position: absolute;
-  z-index: 1;
-}
-
-.image-print-overlay::before {
-  background-image: radial-gradient(rgba(244, 237, 220, 0.48) 1px, transparent 1.35px);
-  background-size: 6px 6px;
-  mix-blend-mode: overlay;
-  opacity: 0.5;
-}
-
-.image-print-overlay::after {
-  background-image: var(--paper-grain);
-  mix-blend-mode: multiply;
-  opacity: 0.09;
+  display: none;
 }

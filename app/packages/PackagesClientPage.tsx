@@ -3,7 +3,8 @@
 import type React from "react"
 import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
-import { CheckCircle2, Loader2, MessageCircle } from "lucide-react"
+import { useSearchParams } from "next/navigation"
+import { ArrowLeft, ArrowRight, CheckCircle2, Loader2, MessageCircle } from "lucide-react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { packages, siteConfig } from "@/lib/content"
@@ -13,77 +14,78 @@ import { Input } from "@/components/ui/input"
 import { formatPrice, detectCurrency, type Currency } from "@/lib/currency"
 import type { Package } from "@/lib/content"
 import { Analytics } from "@/components/analytics"
-
-const serviceOrder = [
-  "Brand Identity",
-  "Website Development",
-  "Social Media Management",
-  "Brand Strategy",
-  "Photography & Videography",
-  "Print & Collateral",
-]
-
-const serviceIntroductions: Record<string, string> = {
-  "Brand Identity": "For businesses that need a stronger first impression and more visual consistency.",
-  "Website Development": "For teams that need a clearer online experience and a more credible digital presence.",
-  "Social Media Management": "For businesses that want consistent output, sharper content, and stronger visibility.",
-  "Brand Strategy": "For companies that need direction before execution, rebranding, or growth campaigns.",
-  "Photography & Videography": "For brands that need polished visuals for campaigns, launches, and day-to-day content.",
-  "Print & Collateral": "For businesses that still need their physical touchpoints to feel as strong as their digital ones.",
-}
+import { PageIntro } from "@/components/page-intro"
+import { FadeUp } from "@/components/home/text-reveal"
+import {
+  PACKAGE_PATHS,
+  getPathById,
+  type PackagePathId,
+} from "@/lib/outcomes"
+import { cn } from "@/lib/utils"
 
 export default function PackagesPage() {
+  const searchParams = useSearchParams()
+  const pathFromUrl = searchParams.get("path")
+
   const [currency, setCurrency] = useState<Currency>("USD")
+  const [selectedPath, setSelectedPath] = useState<PackagePathId | null>(null)
   const [selectedPackage, setSelectedPackage] = useState<Package | null>(null)
   const [customerInfo, setCustomerInfo] = useState({ name: "", email: "", phone: "" })
   const [isProcessing, setIsProcessing] = useState(false)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    const detectAndSetCurrency = async () => {
+    const run = async () => {
       const detected = await detectCurrency(navigator.language)
       setCurrency(detected)
       setMounted(true)
     }
-
-    detectAndSetCurrency()
+    run()
   }, [])
 
-  const serviceGroups = useMemo(() => {
-    const grouped = packages.packages.reduce(
-      (acc, pkg) => {
-        const service = (pkg as any).service || "Other"
-        if (!acc[service]) acc[service] = []
-        acc[service].push(pkg)
-        return acc
-      },
-      {} as Record<string, Package[]>,
+  // Deep-link from Services outcome map: /packages?path=website
+  useEffect(() => {
+    const path = getPathById(pathFromUrl)
+    if (path) setSelectedPath(path.id)
+  }, [pathFromUrl])
+
+  const activePath = useMemo(
+    () => (selectedPath ? getPathById(selectedPath) : undefined),
+    [selectedPath],
+  )
+
+  const filteredPackages = useMemo(() => {
+    if (!activePath) return []
+    return packages.packages.filter((pkg) =>
+      activePath.packageServices.includes(pkg.service as never),
     )
+  }, [activePath])
 
-    return serviceOrder
-      .filter((service) => grouped[service])
-      .map((service) => [service, grouped[service]] as const)
-  }, [])
+  const groupedFiltered = useMemo(() => {
+    const groups: Record<string, Package[]> = {}
+    for (const pkg of filteredPackages) {
+      const key = pkg.service || "Other"
+      if (!groups[key]) groups[key] = []
+      groups[key].push(pkg)
+    }
+    return Object.entries(groups)
+  }, [filteredPackages])
 
-  const handlePurchase = async (pkg: Package) => {
+  const handlePurchase = (pkg: Package) => {
     const amount = currency === "GHS" ? pkg.priceGHS : pkg.priceUSD
     if (amount <= 0 || pkg.isHourly) {
       window.open(siteConfig.contact.whatsapp, "_blank", "noopener,noreferrer")
       return
     }
-
     setSelectedPackage(pkg)
   }
 
   const handleCheckout = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!selectedPackage) return
-
     setIsProcessing(true)
-
     try {
       const amount = currency === "GHS" ? selectedPackage.priceGHS : selectedPackage.priceUSD
-
       const response = await fetch("/api/paystack/initialize", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -97,287 +99,402 @@ export default function PackagesPage() {
           currency,
         }),
       })
-
       const data = await response.json()
-
       if (data.authorization_url) {
         window.location.href = data.authorization_url
       } else {
         alert("Failed to initialize payment. Please try again.")
       }
-    } catch (error) {
-      console.error("[v0] Payment initialization error:", error)
+    } catch {
       alert("An error occurred. Please try again.")
     } finally {
       setIsProcessing(false)
     }
   }
 
+  const step = selectedPath ? 2 : 1
+
   return (
     <>
       <Analytics />
       <Header />
 
-      <main className="bg-background pt-24 text-foreground">
-        <section className="editorial-grid border-b border-border">
-          <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-24">
-            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-4 font-mono text-xs uppercase tracking-[0.22em] text-muted-foreground">
-              <span>Issue 02 - Pricing</span>
-              <span>Starting points</span>
-              <span>Scope before spend</span>
-            </div>
-            <div className="grid gap-12 lg:grid-cols-[1.08fr_0.92fr] lg:items-end">
-              <div className="max-w-3xl">
-                <p className="issue-label mt-12">Pricing</p>
-                <h1 className="mt-4 text-5xl font-semibold tracking-[-0.04em] md:text-6xl">
-                  Clear entry points for brands that want to move without guessing.
-                </h1>
-                <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
-                  Packages are starting points, not cages. They help you understand the range before a call, then we
-                  shape scope around what the business actually needs.
-                </p>
-                <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-                  <Button size="lg" className="editorial-button bg-foreground text-background hover:bg-accent" asChild>
-                    <Link href="/contact">Start a Project</Link>
-                  </Button>
-                  <Button size="lg" variant="outline" className="editorial-button border-border bg-transparent" asChild>
-                    <Link href="/case-studies">See Case Studies</Link>
-                  </Button>
+      <main className="bg-background text-foreground">
+        <PageIntro
+          eyebrow="Packages"
+          meta={
+            <>
+              <span className="studio-label">Pricing</span>
+              <span className="studio-label">Step {step} of 2</span>
+              <span className="studio-label">{mounted ? currency : "…"}</span>
+            </>
+          }
+          title={
+            <h1 className="studio-display text-5xl md:text-6xl lg:text-[5.25rem]">
+              {step === 1 ? (
+                <>
+                  Simple pricing.
+                  <span className="mt-2 block font-serif italic text-accent">Pick a path.</span>
+                </>
+              ) : (
+                <>
+                  {activePath?.label ?? "Packages"}
+                  <span className="mt-2 block font-serif italic text-accent">Choose a package.</span>
+                </>
+              )}
+            </h1>
+          }
+          description={
+            step === 1
+              ? "Packages for strategy, identity, websites, social, photo, video, and print. Start with a path to see only what matches."
+              : activePath?.description
+          }
+          aside={
+            <div className="space-y-6">
+              <div className="flex items-center justify-between gap-4 border-b border-border pb-4">
+                <p className="studio-label">Currency</p>
+                <div className="inline-flex items-center border border-border bg-background p-1">
+                  {(["GHS", "USD"] as Currency[]).map((c) => (
+                    <button
+                      key={c}
+                      type="button"
+                      onClick={() => setCurrency(c)}
+                      data-cursor="hover"
+                      className={cn(
+                        "px-4 py-2 font-mono text-xs font-medium uppercase tracking-[0.12em] transition-colors",
+                        currency === c ? "bg-accent text-accent-foreground" : "text-muted-foreground",
+                      )}
+                    >
+                      {c}
+                    </button>
+                  ))}
                 </div>
               </div>
+              {step === 2 && (
+                <button
+                  type="button"
+                  onClick={() => setSelectedPath(null)}
+                  data-cursor="hover"
+                  className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  <ArrowLeft className="h-3.5 w-3.5" />
+                  Change path
+                </button>
+              )}
+              <p className="text-sm leading-7 text-muted-foreground">
+                Not sure which path?{" "}
+                <Link href="/services" className="text-accent underline-offset-4 hover:underline" data-cursor="hover">
+                  Use the outcome map
+                </Link>{" "}
+                on Services, or message us on WhatsApp.
+              </p>
+            </div>
+          }
+        />
 
-              <div className="border-t border-border pt-7">
-                <div className="flex items-center justify-between gap-4 border-b border-border pb-4">
-                  <p className="font-mono text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">Currency</p>
-                  <div className="inline-flex items-center border border-border bg-background p-1">
+        {/* Step 1: Path picker */}
+        {step === 1 && (
+          <section className="px-5 pb-24 md:px-8 lg:px-10">
+            <div className="mx-auto max-w-[1400px]">
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {PACKAGE_PATHS.map((path, index) => (
+                  <FadeUp key={path.id} delay={index * 0.05}>
                     <button
                       type="button"
-                      onClick={() => setCurrency("GHS")}
-                      className={`px-4 py-2 font-mono text-xs font-medium uppercase tracking-[0.12em] transition-colors ${
-                        currency === "GHS" ? "bg-accent text-accent-foreground" : "text-muted-foreground"
-                      }`}
+                      onClick={() => setSelectedPath(path.id)}
+                      data-cursor="hover"
+                      className={cn(
+                        "group flex h-full w-full flex-col border border-border bg-card p-7 text-left transition-colors",
+                        "hover:border-accent/40 hover:bg-accent/[0.03]",
+                        path.recommended && "border-accent/30",
+                      )}
                     >
-                      GHS
+                      <div className="flex items-start justify-between gap-3">
+                        <span className="font-mono text-xs tracking-[0.18em] text-accent">
+                          0{index + 1}
+                        </span>
+                        {path.recommended && (
+                          <span className="font-mono text-[0.6rem] uppercase tracking-[0.14em] text-accent">
+                            Often chosen
+                          </span>
+                        )}
+                      </div>
+                      <h2 className="mt-6 font-serif text-2xl font-semibold tracking-tight transition-transform duration-300 group-hover:translate-x-1">
+                        {path.label}
+                      </h2>
+                      <p className="mt-3 flex-1 text-sm leading-7 text-muted-foreground">{path.description}</p>
+                      <span className="mt-8 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-foreground">
+                        View packages
+                        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                      </span>
                     </button>
-                    <button
-                      type="button"
-                      onClick={() => setCurrency("USD")}
-                      className={`px-4 py-2 font-mono text-xs font-medium uppercase tracking-[0.12em] transition-colors ${
-                        currency === "USD" ? "bg-accent text-accent-foreground" : "text-muted-foreground"
-                      }`}
-                    >
-                      USD
-                    </button>
+                  </FadeUp>
+                ))}
+              </div>
+
+              <FadeUp className="mt-16 border border-border bg-secondary/30 p-7 md:p-9" delay={0.15}>
+                <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+                  <div>
+                    <p className="studio-label-accent">Need a custom mix?</p>
+                    <p className="mt-3 max-w-xl text-sm leading-7 text-muted-foreground">
+                      Multi-service launches and rebrands often need a tailored scope. We’ll shape a proposal instead of
+                      forcing a single package.
+                    </p>
                   </div>
+                  <Button className="editorial-button shrink-0 bg-foreground text-background hover:bg-accent" asChild>
+                    <a href={siteConfig.contact.whatsapp} target="_blank" rel="noopener noreferrer" data-cursor="hover">
+                      <MessageCircle className="mr-2 h-4 w-4" />
+                      Request custom quote
+                    </a>
+                  </Button>
                 </div>
-                <div className="mt-6 space-y-3 text-sm leading-7 text-muted-foreground">
-                  <p>{mounted ? `Showing ${currency} pricing based on your likely region.` : "Detecting the most useful currency for you."}</p>
-                  <p>Some production-heavy work needs a custom quote, so those paths move straight into a consult instead of forcing checkout.</p>
-                </div>
-              </div>
+              </FadeUp>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
-        <section className="py-24">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="border-t border-border">
-              {serviceGroups.map(([service, servicePackages], serviceIndex) => (
-                <section key={service} className="border-b border-border py-12">
-                  <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
-                    <div className="max-w-lg">
-                      <p className="text-xs font-medium uppercase tracking-[0.24em] text-accent">0{serviceIndex + 1}</p>
-                      <h2 className="mt-4 text-3xl font-serif font-semibold tracking-tight md:text-[2.5rem]">{service}</h2>
-                      <p className="mt-4 text-lg leading-8 text-muted-foreground">
-                        {serviceIntroductions[service] ?? "Flexible packages shaped around scope, goals, and rollout needs."}
+        {/* Step 2: Packages for path */}
+        {step === 2 && activePath && (
+          <section className="px-5 pb-28 md:px-8 md:pb-24 lg:px-10">
+            <div className="mx-auto max-w-[1400px] space-y-16">
+              {groupedFiltered.map(([serviceName, servicePackages], groupIndex) => (
+                <FadeUp key={serviceName} delay={groupIndex * 0.06}>
+                  <div>
+                    <div className="mb-8 flex flex-col gap-2 border-b border-border pb-6 sm:flex-row sm:items-end sm:justify-between">
+                      <div>
+                        <p className="studio-label-accent">{serviceName}</p>
+                        <h2 className="mt-2 font-serif text-2xl font-semibold tracking-tight md:text-3xl">
+                          Choose a starting tier
+                        </h2>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        {servicePackages.length} package{servicePackages.length === 1 ? "" : "s"}
                       </p>
                     </div>
 
-                    <div className="grid gap-6 lg:grid-cols-2">
+                    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                       {servicePackages.map((pkg) => {
                         const amount = currency === "GHS" ? pkg.priceGHS : pkg.priceUSD
-                        const needsQuote = amount <= 0 || pkg.isHourly
+                        const needsQuote = amount <= 0 || Boolean(pkg.isHourly)
 
                         return (
-                          <Card
+                          <div
                             key={pkg.id}
-                            className={`relative overflow-hidden border bg-card ${pkg.popular ? "border-accent" : "border-border"}`}
+                            className={cn(
+                              "relative flex flex-col border bg-card p-7 transition-colors",
+                              pkg.popular ? "border-accent" : "border-border hover:border-foreground/25",
+                            )}
                           >
                             {pkg.popular && (
-                              <div className="absolute right-5 top-5 border border-accent/20 bg-accent/10 px-3 py-1 text-xs font-medium text-accent">
-                                Popular
-                              </div>
+                              <span className="absolute right-5 top-5 font-mono text-[0.6rem] uppercase tracking-[0.14em] text-accent">
+                                Most chosen
+                              </span>
                             )}
-                            <CardHeader className="space-y-4 pb-6 pt-8">
-                              <div>
-                                <p className="text-xs font-medium uppercase tracking-[0.24em] text-accent">Package</p>
-                                <h3 className="mt-4 text-2xl font-serif font-semibold tracking-tight">{pkg.name}</h3>
-                              </div>
-                              <p className="text-sm leading-7 text-muted-foreground">{pkg.description}</p>
-                              <div>
-                                {needsQuote ? (
-                                  <>
-                                    <div className="text-3xl font-serif font-semibold tracking-tight">Custom quote</div>
-                                    <div className="mt-1 text-sm text-muted-foreground">Best handled after a quick scope chat</div>
-                                  </>
-                                ) : (
-                                  <>
-                                    <div className="text-4xl font-serif font-semibold tracking-tight">{formatPrice(amount, currency)}</div>
-                                    <div className="mt-1 text-sm text-muted-foreground">
-                                      {service === "Social Media Management" ? "Monthly starting point" : "Starting package"}
-                                    </div>
-                                  </>
-                                )}
-                              </div>
-                            </CardHeader>
-                            <CardContent>
-                              <ul className="space-y-3">
-                                {pkg.features.map((feature) => (
-                                  <li key={feature} className="flex items-start gap-3 text-sm text-muted-foreground">
-                                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-                                    <span>{feature}</span>
-                                  </li>
-                                ))}
-                              </ul>
+                            <p className="studio-label">Package</p>
+                            <h3 className="mt-3 font-serif text-2xl font-semibold tracking-tight">{pkg.name}</h3>
+                            <p className="mt-3 text-sm leading-7 text-muted-foreground">{pkg.description}</p>
 
-                              <Button
-                                className="editorial-button mt-8 w-full bg-foreground text-background hover:bg-accent"
-                                size="lg"
-                                onClick={() => handlePurchase(pkg)}
-                              >
-                                {needsQuote ? "Request Quote" : "Continue"}
-                              </Button>
-                            </CardContent>
-                          </Card>
+                            <div className="mt-6">
+                              {needsQuote ? (
+                                <>
+                                  <p className="font-serif text-3xl font-semibold tracking-tight">Custom quote</p>
+                                  <p className="mt-1 text-xs text-muted-foreground">Scoped after a short chat</p>
+                                </>
+                              ) : (
+                                <>
+                                  <p className="font-serif text-4xl font-semibold tracking-tight">
+                                    {formatPrice(amount, currency)}
+                                  </p>
+                                  <p className="mt-1 text-xs text-muted-foreground">
+                                    {serviceName === "Social Media Management"
+                                      ? "Monthly starting point"
+                                      : "Starting package"}
+                                  </p>
+                                </>
+                              )}
+                            </div>
+
+                            <ul className="mt-6 flex-1 space-y-3">
+                              {pkg.features.map((feature) => (
+                                <li key={feature} className="flex items-start gap-3 text-sm text-muted-foreground">
+                                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                                  <span>{feature}</span>
+                                </li>
+                              ))}
+                            </ul>
+
+                            <Button
+                              className="editorial-button mt-8 w-full bg-foreground text-background hover:bg-accent"
+                              size="lg"
+                              onClick={() => handlePurchase(pkg)}
+                              data-cursor="hover"
+                            >
+                              {needsQuote ? "Request quote" : "Continue"}
+                            </Button>
+                          </div>
                         )
                       })}
                     </div>
                   </div>
-                </section>
+                </FadeUp>
               ))}
-            </div>
-          </div>
-        </section>
 
-        <section className="border-y border-border bg-secondary/15 py-24">
-          <div className="mx-auto grid max-w-7xl gap-8 px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
-            <div className="bg-accent px-7 py-8 text-accent-foreground">
-              <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent-foreground/80">Need something tailored?</p>
-              <h2 className="mt-4 text-4xl font-semibold tracking-tight">Custom scope is normal for serious brand work.</h2>
-              <p className="mt-4 text-sm leading-7 text-accent-foreground/90">
-                If your project spans multiple services, launch phases, or internal stakeholders, we can shape a proposal around that rather than forcing a package fit.
-              </p>
-              <Button className="editorial-button mt-8 bg-accent-foreground text-accent hover:bg-accent-foreground/90" asChild>
-                <a href={siteConfig.contact.whatsapp} target="_blank" rel="noopener noreferrer">
-                  <MessageCircle className="mr-2 h-4 w-4" />
-                  Discuss a Custom Quote
-                </a>
-              </Button>
-            </div>
+              {filteredPackages.length === 0 && (
+                <div className="border border-border p-10 text-center">
+                  <p className="studio-label">No packages in this path</p>
+                  <p className="mt-4 text-muted-foreground">Try another path or request a custom quote.</p>
+                  <Button className="mt-6" variant="outline" onClick={() => setSelectedPath(null)}>
+                    Back to paths
+                  </Button>
+                </div>
+              )}
 
-            <div className="border border-border bg-card p-7">
-              <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Before you buy</p>
-              <ul className="mt-6 space-y-4 text-sm text-muted-foreground">
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-                  <span>We recommend the smallest package that can still achieve the result you need.</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-                  <span>If your project needs strategy first, we will say so before taking payment.</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-                  <span>You can always start with a quick consultation and convert that into a wider scope later.</span>
-                </li>
-              </ul>
-              <Button variant="outline" className="mt-8 border-border bg-transparent" asChild>
-                <Link href="/services">Review Services Again</Link>
-              </Button>
-            </div>
-          </div>
-        </section>
-
-        {selectedPackage && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-6 backdrop-blur-sm">
-            <Card className="w-full max-w-md border border-border bg-card">
-              <CardHeader>
-                <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Secure checkout</p>
-                <h3 className="mt-3 text-3xl font-serif font-semibold">{selectedPackage.name}</h3>
-                <p className="text-sm text-muted-foreground">
-                  {formatPrice(currency === "GHS" ? selectedPackage.priceGHS : selectedPackage.priceUSD, currency)}
-                </p>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleCheckout} className="space-y-4">
+              <FadeUp className="border border-border bg-accent p-8 text-accent-foreground md:p-10">
+                <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
                   <div>
-                    <label htmlFor="name" className="mb-2 block text-sm font-medium">
-                      Full Name
-                    </label>
-                    <Input
-                      id="name"
-                      type="text"
-                      required
-                      value={customerInfo.name}
-                      onChange={(e) => setCustomerInfo({ ...customerInfo, name: e.target.value })}
-                      placeholder="John Doe"
-                    />
+                    <p className="studio-label text-accent-foreground/75">Still deciding?</p>
+                    <h3 className="mt-3 font-serif text-3xl font-semibold tracking-tight">
+                      Map the problem first, then price it.
+                    </h3>
                   </div>
-                  <div>
-                    <label htmlFor="email" className="mb-2 block text-sm font-medium">
-                      Email Address
-                    </label>
-                    <Input
-                      id="email"
-                      type="email"
-                      required
-                      value={customerInfo.email}
-                      onChange={(e) => setCustomerInfo({ ...customerInfo, email: e.target.value })}
-                      placeholder="john@example.com"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="phone" className="mb-2 block text-sm font-medium">
-                      Phone Number
-                    </label>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      required
-                      value={customerInfo.phone}
-                      onChange={(e) => setCustomerInfo({ ...customerInfo, phone: e.target.value })}
-                      placeholder="+233 XX XXX XXXX"
-                    />
-                  </div>
-                  <div className="flex gap-3 pt-4">
+                  <div className="flex flex-col gap-3 sm:flex-row">
                     <Button
-                      type="button"
-                      variant="outline"
-                      className="flex-1 bg-transparent"
-                      onClick={() => setSelectedPackage(null)}
-                      disabled={isProcessing}
+                      className="editorial-button bg-accent-foreground text-accent hover:bg-accent-foreground/90"
+                      asChild
                     >
-                      Cancel
+                      <Link href="/services" data-cursor="hover">
+                        Outcome map
+                      </Link>
                     </Button>
-                    <Button type="submit" className="editorial-button flex-1 bg-foreground text-background hover:bg-accent" disabled={isProcessing}>
-                      {isProcessing ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Processing...
-                        </>
-                      ) : (
-                        "Proceed"
-                      )}
+                    <Button
+                      variant="outline"
+                      className="editorial-button border-accent-foreground/30 bg-transparent text-accent-foreground hover:bg-accent-foreground/10"
+                      asChild
+                    >
+                      <a href={siteConfig.contact.whatsapp} target="_blank" rel="noopener noreferrer" data-cursor="hover">
+                        WhatsApp
+                      </a>
                     </Button>
                   </div>
-                </form>
-              </CardContent>
-            </Card>
-          </div>
+                </div>
+              </FadeUp>
+            </div>
+          </section>
         )}
       </main>
 
       <Footer />
+
+      {step === 2 && (
+        <div
+          className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 backdrop-blur-md md:hidden"
+          style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+        >
+          <div className="flex gap-2 px-4 py-3">
+            <Button
+              type="button"
+              variant="outline"
+              className="editorial-button min-h-11 flex-1 border-border"
+              onClick={() => setSelectedPath(null)}
+            >
+              Change path
+            </Button>
+            <Button className="editorial-button min-h-11 flex-1 bg-accent text-accent-foreground" asChild>
+              <a href={siteConfig.contact.whatsapp} target="_blank" rel="noopener noreferrer">
+                WhatsApp
+              </a>
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {selectedPackage && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/45 p-0 backdrop-blur-sm sm:items-center sm:p-6">
+          <Card className="max-h-[90dvh] w-full max-w-md overflow-y-auto rounded-none border border-border bg-card sm:rounded-none">
+            <CardHeader className="p-5 sm:p-6">
+              <p className="studio-label-accent">Secure checkout</p>
+              <h3 className="mt-3 font-serif text-2xl font-semibold sm:text-3xl">{selectedPackage.name}</h3>
+              <p className="text-sm text-muted-foreground">
+                {formatPrice(
+                  currency === "GHS" ? selectedPackage.priceGHS : selectedPackage.priceUSD,
+                  currency,
+                )}
+              </p>
+            </CardHeader>
+            <CardContent className="p-5 pt-0 sm:p-6 sm:pt-0">
+              <form onSubmit={handleCheckout} className="space-y-4">
+                <div>
+                  <label htmlFor="name" className="mb-2 block text-sm font-medium">
+                    Full Name
+                  </label>
+                  <Input
+                    id="name"
+                    type="text"
+                    required
+                    value={customerInfo.name}
+                    onChange={(e) => setCustomerInfo({ ...customerInfo, name: e.target.value })}
+                    placeholder="John Doe"
+                    className="min-h-11"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="email" className="mb-2 block text-sm font-medium">
+                    Email
+                  </label>
+                  <Input
+                    id="email"
+                    type="email"
+                    required
+                    value={customerInfo.email}
+                    onChange={(e) => setCustomerInfo({ ...customerInfo, email: e.target.value })}
+                    placeholder="you@company.com"
+                    className="min-h-11"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="phone" className="mb-2 block text-sm font-medium">
+                    Phone / WhatsApp
+                  </label>
+                  <Input
+                    id="phone"
+                    type="tel"
+                    required
+                    value={customerInfo.phone}
+                    onChange={(e) => setCustomerInfo({ ...customerInfo, phone: e.target.value })}
+                    placeholder="+233 …"
+                    className="min-h-11"
+                  />
+                </div>
+                <div className="flex flex-col gap-3 pt-2 sm:flex-row">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="min-h-11 flex-1 border-border"
+                    onClick={() => setSelectedPackage(null)}
+                    disabled={isProcessing}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="submit"
+                    className="editorial-button min-h-11 flex-1 bg-foreground text-background hover:bg-accent"
+                    disabled={isProcessing}
+                  >
+                    {isProcessing ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Processing
+                      </>
+                    ) : (
+                      "Pay with Paystack"
+                    )}
+                  </Button>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </>
   )
 }

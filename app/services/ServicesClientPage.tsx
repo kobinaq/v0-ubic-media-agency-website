@@ -1,50 +1,22 @@
 "use client"
 
+import { useMemo, useState } from "react"
 import Link from "next/link"
 import Script from "next/script"
-import { ArrowRight, CalendarDays, Check, MessageCircle } from "lucide-react"
+import { ArrowRight, Check, MessageCircle } from "lucide-react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { services, siteConfig } from "@/lib/content"
 import { Analytics } from "@/components/analytics"
 import { Button } from "@/components/ui/button"
+import { PageIntro } from "@/components/page-intro"
+import { FadeUp } from "@/components/home/text-reveal"
+import { services, siteConfig } from "@/lib/content"
 import { useCurrency } from "@/lib/currency"
+import { OUTCOMES, type OutcomeId } from "@/lib/outcomes"
 import { generateServiceSchema, generateFAQSchema, generateBreadcrumbSchema } from "@/lib/schema"
+import { cn } from "@/lib/utils"
 
-const serviceDetails: Record<string, string[]> = {
-  "social-media": [
-    "Content planning and creative direction",
-    "Platform-ready design and captions",
-    "Publishing rhythm built around your audience",
-  ],
-  "web-design": [
-    "Clear page structure and conversion-focused UX",
-    "Responsive build with contact or payment flows",
-    "Launch support and quality checks",
-  ],
-  "brand-identity": [
-    "Logo and visual identity direction",
-    "Typography, color system, and brand rules",
-    "Templates that keep the brand consistent",
-  ],
-  "brand-strategy": [
-    "Positioning, messaging, and audience clarity",
-    "Brand audit and direction-setting sessions",
-    "Recommendations you can act on quickly",
-  ],
-  "photography-videography": [
-    "Production planning and shot direction",
-    "Polished stills or video assets for campaigns",
-    "Content tailored for digital and brand use",
-  ],
-  "print-production": [
-    "Collateral design for physical touchpoints",
-    "Production-ready files and specifications",
-    "Brand consistency across print materials",
-  ],
-}
-
-const serviceSchemas = services.services.map((service) => generateServiceSchema(service))
+const serviceById = Object.fromEntries(services.services.map((s) => [s.id, s]))
 
 const faqSchema = generateFAQSchema([
   {
@@ -58,14 +30,14 @@ const faqSchema = generateFAQSchema([
       "Yes. Ubic is structured to handle strategy, identity, website design and development, and supporting content so the final experience feels coherent.",
   },
   {
-    question: "Do you offer one-off projects and retainers?",
+    question: "How do services relate to packages?",
     answer:
-      "Yes. Some clients work with us for a one-time launch project while others stay on for content, social media, or ongoing creative support.",
+      "Services describe what we do. Packages are priced entry points for that work. Pick the outcome that matches your situation, then open packages filtered to that path.",
   },
   {
     question: "How quickly can a project start?",
     answer:
-      "That depends on scope and queue, but the fastest way to get clarity is to book a strategy call or message us on WhatsApp with your timeline.",
+      "That depends on scope and queue. Book a strategy call or message us on WhatsApp with your timeline for the fastest clarity.",
   },
 ])
 
@@ -74,8 +46,18 @@ const breadcrumbSchema = generateBreadcrumbSchema([
   { name: "Services", url: `${process.env.NEXT_PUBLIC_SITE_URL}/services` },
 ])
 
+const serviceSchemas = services.services.map((service) => generateServiceSchema(service))
+
 export function ServicesClientPage() {
   const { formatPrice } = useCurrency()
+  const [activeId, setActiveId] = useState<OutcomeId>("unclear-brand")
+
+  const active = useMemo(() => OUTCOMES.find((o) => o.id === activeId) ?? OUTCOMES[0], [activeId])
+
+  const activeServices = useMemo(
+    () => active.serviceIds.map((id) => serviceById[id]).filter(Boolean),
+    [active],
+  )
 
   return (
     <>
@@ -101,137 +83,263 @@ export function ServicesClientPage() {
 
       <Header />
 
-      <main className="bg-background pt-24 text-foreground">
-        <section className="editorial-grid border-b border-border">
-          <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-24">
-            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-4 font-mono text-xs uppercase tracking-[0.22em] text-muted-foreground">
-              <span>Issue 01 - Contents</span>
-              <span>{services.services.length} services</span>
-              <span>Brand - Web - Content</span>
-            </div>
-            <div className="max-w-3xl">
-              <p className="issue-label mt-12">In this issue</p>
-              <h1 className="mt-4 text-5xl font-semibold tracking-[-0.04em] md:text-6xl">
-                The services we use to make brands clearer, more credible, and easier to choose.
-              </h1>
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
-                We do not treat brand, website, and content as separate problems. We shape them together so the business
-                feels more trustworthy wherever people find you.
-              </p>
-              <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-                <Button size="lg" className="editorial-button bg-foreground text-background hover:bg-accent" asChild>
-                  <Link href="/contact">Start a Project</Link>
-                </Button>
-                <Button size="lg" variant="outline" className="editorial-button border-border bg-transparent" asChild>
-                  <Link href="/packages">See Packages & Pricing</Link>
-                </Button>
-              </div>
-            </div>
-          </div>
-        </section>
+      <main className="bg-background text-foreground">
+        <PageIntro
+          eyebrow="Services"
+          meta={
+            <>
+              <span className="studio-label">All services</span>
+              <span className="studio-label">Strategy · Identity · Web · Social</span>
+              <span className="studio-label">Photo · Video · Print</span>
+            </>
+          }
+          title={
+            <h1 className="studio-display text-3xl sm:text-4xl md:text-6xl lg:text-[5.25rem]">
+              What we do.
+            </h1>
+          }
+          description="Strategy, identity, websites, social, photo, video, and print. Pick what is stuck and we will show the right work."
+        />
 
-        <section className="py-24">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="border-t border-border">
-              {services.services.map((service, index) => (
-                <article key={service.id} className="grid gap-6 border-b border-border py-8 lg:grid-cols-[72px_1fr_220px] lg:items-start lg:py-10">
-                  <div className="font-mono text-sm tracking-[0.16em] text-accent">0{index + 1}</div>
-                  <div className="max-w-2xl">
-                    <h2 className="text-3xl font-serif font-semibold tracking-tight md:text-[2.5rem]">{service.title}</h2>
-                    <p className="mt-4 text-sm leading-7 text-muted-foreground md:text-base">{service.description}</p>
-                    <ul className="mt-6 grid gap-3 text-sm text-muted-foreground">
-                      {(serviceDetails[service.id] ?? []).map((detail) => (
-                        <li key={detail} className="flex items-start gap-3">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-                          <span>{detail}</span>
+        {/* Outcome map: accordion on mobile, list + sticky panel on desktop */}
+        <section className="border-b border-border px-5 py-16 md:px-8 md:py-24 lg:px-10">
+          <div className="mx-auto max-w-[1400px]">
+            <p className="studio-label-accent mb-6">What is not working yet?</p>
+
+            {/* Mobile accordion */}
+            <div className="border-t border-border lg:hidden">
+              {OUTCOMES.map((outcome) => {
+                const isActive = outcome.id === activeId
+                const outcomeServices = outcome.serviceIds.map((id) => serviceById[id]).filter(Boolean)
+                return (
+                  <div key={outcome.id} className="border-b border-border">
+                    <button
+                      type="button"
+                      onClick={() => setActiveId(outcome.id)}
+                      className={cn(
+                        "flex min-h-14 w-full items-start gap-4 py-5 text-left",
+                        isActive && "bg-foreground/[0.03]",
+                      )}
+                      aria-expanded={isActive}
+                    >
+                      <span
+                        className={cn(
+                          "mt-1 shrink-0 font-mono text-xs tracking-[0.18em]",
+                          isActive ? "text-accent" : "text-muted-foreground",
+                        )}
+                      >
+                        {outcome.number}
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block font-serif text-xl font-semibold tracking-tight">{outcome.title}</span>
+                        <span className="mt-1 block text-sm leading-6 text-muted-foreground">{outcome.problem}</span>
+                      </span>
+                      <span className="mt-1 font-mono text-xs text-muted-foreground">{isActive ? "−" : "+"}</span>
+                    </button>
+                    {isActive && (
+                      <div className="border-t border-border bg-card px-4 py-6 sm:px-5">
+                        <p className="studio-label-accent">Where this lands</p>
+                        <p className="mt-3 text-sm leading-7 text-foreground">{outcome.outcome}</p>
+                        <p className="studio-label mt-6 mb-3">Services that solve this</p>
+                        <ul className="space-y-3">
+                          {outcomeServices.map((service) => (
+                            <li key={service.id} className="border-b border-border/70 pb-3 last:border-0">
+                              <p className="font-serif text-base font-semibold">{service.title}</p>
+                              <p className="mt-1 font-mono text-[0.65rem] uppercase tracking-[0.12em] text-muted-foreground">
+                                from {formatPrice(service.startingPrice)}
+                              </p>
+                            </li>
+                          ))}
+                        </ul>
+                        <div className="mt-6 flex flex-col gap-3">
+                          <Button className="editorial-button min-h-11 bg-accent text-accent-foreground hover:bg-accent/90" asChild>
+                            <Link href={`/packages?path=${outcome.pathId}`}>
+                              See packages for this
+                              <ArrowRight className="ml-2 h-4 w-4" />
+                            </Link>
+                          </Button>
+                          <Button variant="outline" className="editorial-button min-h-11 border-border bg-transparent" asChild>
+                            <a href={siteConfig.contact.whatsapp} target="_blank" rel="noopener noreferrer">
+                              <MessageCircle className="mr-2 h-4 w-4" />
+                              Talk it through
+                            </a>
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+
+            {/* Desktop list + panel */}
+            <div className="hidden gap-14 lg:grid lg:grid-cols-[0.95fr_1.05fr]">
+              <div className="border-t border-border">
+                {OUTCOMES.map((outcome) => {
+                  const isActive = outcome.id === activeId
+                  return (
+                    <button
+                      key={outcome.id}
+                      type="button"
+                      onClick={() => setActiveId(outcome.id)}
+                      data-cursor="hover"
+                      className={cn(
+                        "group flex w-full items-baseline gap-6 border-b border-border py-6 text-left transition-colors",
+                        isActive ? "bg-foreground/[0.03]" : "hover:bg-foreground/[0.02]",
+                      )}
+                    >
+                      <span
+                        className={cn(
+                          "shrink-0 font-mono text-xs tracking-[0.18em]",
+                          isActive ? "text-accent" : "text-muted-foreground",
+                        )}
+                      >
+                        {outcome.number}
+                      </span>
+                      <span
+                        className={cn(
+                          "block flex-1 font-serif text-2xl font-semibold tracking-tight transition-transform duration-300",
+                          isActive ? "text-foreground translate-x-1" : "text-foreground/80 group-hover:translate-x-1",
+                        )}
+                      >
+                        {outcome.title}
+                      </span>
+                      <span
+                        className={cn(
+                          "shrink-0 font-mono text-[0.65rem] uppercase tracking-[0.16em] transition-opacity",
+                          isActive ? "text-accent opacity-100" : "opacity-0 group-hover:opacity-60",
+                        )}
+                      >
+                        View →
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+
+              <FadeUp key={active.id} className="sticky top-28 self-start">
+                <div className="border border-border bg-card p-9">
+                  <p className="studio-label">Path {active.number}</p>
+                  <h2 className="mt-4 font-serif text-4xl font-semibold tracking-tight">{active.title}</h2>
+                  <p className="mt-4 text-base leading-7 text-muted-foreground">{active.problem}</p>
+
+                  <div className="mt-8 border-t border-border pt-6">
+                    <p className="studio-label-accent">Where this lands</p>
+                    <p className="mt-3 text-lg leading-8 text-foreground">{active.outcome}</p>
+                  </div>
+
+                  <div className="mt-8 border-t border-border pt-6">
+                    <p className="studio-label mb-4">Services that solve this</p>
+                    <ul className="space-y-4">
+                      {activeServices.map((service) => (
+                        <li
+                          key={service.id}
+                          className="flex items-start justify-between gap-4 border-b border-border/70 pb-4 last:border-0 last:pb-0"
+                        >
+                          <div>
+                            <p className="font-serif text-lg font-semibold tracking-tight">{service.title}</p>
+                            <p className="mt-1 line-clamp-2 text-sm leading-6 text-muted-foreground">
+                              {service.description}
+                            </p>
+                          </div>
+                          <p className="shrink-0 font-mono text-[0.65rem] uppercase tracking-[0.12em] text-muted-foreground">
+                            from {formatPrice(service.startingPrice)}
+                          </p>
                         </li>
                       ))}
                     </ul>
                   </div>
-                  <div className="text-sm uppercase tracking-[0.22em] text-muted-foreground lg:text-right">
-                    Starting from {formatPrice(service.startingPrice)}
+
+                  <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                    <Button className="editorial-button bg-accent text-accent-foreground hover:bg-accent/90" asChild>
+                      <Link href={`/packages?path=${active.pathId}`} data-cursor="hover">
+                        See packages for this
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Link>
+                    </Button>
+                    <Button variant="outline" className="editorial-button border-border bg-transparent" asChild>
+                      <a href={siteConfig.contact.whatsapp} target="_blank" rel="noopener noreferrer" data-cursor="hover">
+                        <MessageCircle className="mr-2 h-4 w-4" />
+                        Talk it through
+                      </a>
+                    </Button>
                   </div>
-                </article>
+                </div>
+              </FadeUp>
+            </div>
+          </div>
+        </section>
+
+        {/* All services compact index */}
+        <section className="px-5 py-20 md:px-8 md:py-24 lg:px-10">
+          <div className="mx-auto max-w-[1400px]">
+            <FadeUp className="mb-12 max-w-xl">
+              <p className="studio-label-accent">Full index</p>
+              <h2 className="studio-display mt-3 text-3xl md:text-5xl">Everything we offer</h2>
+              <p className="mt-4 text-sm leading-7 text-muted-foreground">
+                Prefer browsing by service name? Same work, different door.
+              </p>
+            </FadeUp>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {services.services.map((service, index) => (
+                <FadeUp key={service.id} delay={index * 0.05}>
+                  <div className="flex h-full flex-col border border-border bg-card p-6 transition-colors hover:border-accent/35">
+                    <span className="font-mono text-xs tracking-[0.16em] text-accent">
+                      00-{index + 1}
+                    </span>
+                    <h3 className="mt-4 font-serif text-xl font-semibold tracking-tight">{service.title}</h3>
+                    <p className="mt-3 flex-1 text-sm leading-7 text-muted-foreground">{service.description}</p>
+                    <p className="mt-6 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">
+                      From {formatPrice(service.startingPrice)}
+                    </p>
+                  </div>
+                </FadeUp>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="border-y border-border bg-secondary/15 py-24">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr]">
-              <div className="max-w-xl">
-                <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">How engagements usually work</p>
-                <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
-                  We help clients buy with more confidence by making scope visible early.
+        {/* Decision footer */}
+        <section className="border-t border-border bg-secondary/25 px-5 py-20 md:px-8 lg:px-10">
+          <FadeUp className="mx-auto max-w-[1400px]">
+            <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+              <div>
+                <p className="studio-label-accent">Still unsure?</p>
+                <h2 className="studio-display mt-4 text-4xl md:text-5xl">
+                  You don’t need the perfect name for it.
                 </h2>
+                <p className="mt-5 max-w-lg text-sm leading-7 text-muted-foreground md:text-base">
+                  Tell us what is stuck: budget, timeline, or a rough brief. We will point you at the smallest scope that
+                  actually helps.
+                </p>
+                <ul className="mt-6 space-y-3 text-sm text-muted-foreground">
+                  {[
+                    "Best path if you have a deadline",
+                    "Best path if the brand and site both need work",
+                    "Honest “start smaller” recommendations",
+                  ].map((item) => (
+                    <li key={item} className="flex items-start gap-3">
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-
-              <div className="border-t border-border">
-                {[
-                  "We start with the outcome you need, not a generic package.",
-                  "We recommend the smallest scope that solves the real problem.",
-                  "If the brand needs strategy first, we say that before design starts.",
-                  "If the website is the blocker, we show what has to change to improve conversion.",
-                ].map((point, index) => (
-                  <div key={point} className="grid gap-4 border-b border-border py-6 sm:grid-cols-[64px_1fr]">
-                    <div className="font-mono text-sm tracking-[0.18em] text-accent">
-                      0{index + 1}
-                    </div>
-                      <p className="text-sm leading-7 text-muted-foreground">{point}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="py-24">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="grid gap-8 lg:grid-cols-2">
-              <div className="bg-accent px-7 py-8 text-accent-foreground">
-                <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent-foreground/80">When to reach out</p>
-                <div className="mt-6 space-y-4 text-sm leading-7 text-accent-foreground/90">
-                  <p>Your website looks dated or unclear and visitors are not taking action.</p>
-                  <p>Your business has grown but the brand presentation still feels small or inconsistent.</p>
-                  <p>You need one partner to connect strategy, visuals, and execution instead of managing multiple vendors.</p>
-                </div>
-              </div>
-
-              <div className="border-t border-border p-0 pt-7">
-                <p className="text-sm font-medium uppercase tracking-[0.24em] text-accent">Next step</p>
-                <h2 className="mt-4 text-4xl font-semibold tracking-tight">Choose a quick route to clarity.</h2>
-                <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                  <a
-                    href="https://calendar.app.google/TPjTbTnJ5f9ztbvz5"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="border-t border-border pt-5 transition-colors hover:text-accent"
-                  >
-                    <CalendarDays className="h-5 w-5 text-accent" />
-                    <h3 className="mt-4 text-lg font-semibold">Book a meeting</h3>
-                    <p className="mt-2 text-sm leading-7 text-muted-foreground">Best for planning a project with multiple deliverables.</p>
-                  </a>
-                  <a
-                    href={siteConfig.contact.whatsapp}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="border-t border-border pt-5 transition-colors hover:text-accent"
-                  >
-                    <MessageCircle className="h-5 w-5 text-accent" />
-                    <h3 className="mt-4 text-lg font-semibold">Chat on WhatsApp</h3>
-                    <p className="mt-2 text-sm leading-7 text-muted-foreground">Best for a quick budget check or scope question.</p>
-                  </a>
-                </div>
-                <Button className="editorial-button mt-8 bg-foreground text-background hover:bg-accent" asChild>
-                  <Link href="/packages">
-                    Compare Packages
-                    <ArrowRight className="ml-2 h-4 w-4" />
+              <div className="flex flex-col gap-3 sm:flex-row lg:flex-col xl:flex-row">
+                <Button size="lg" className="editorial-button bg-foreground text-background hover:bg-accent" asChild>
+                  <Link href="/packages" data-cursor="hover">
+                    Browse all packages
+                  </Link>
+                </Button>
+                <Button size="lg" variant="outline" className="editorial-button border-border bg-transparent" asChild>
+                  <Link href="/contact" data-cursor="hover">
+                    Send a brief
                   </Link>
                 </Button>
               </div>
             </div>
-          </div>
+          </FadeUp>
         </section>
       </main>
 

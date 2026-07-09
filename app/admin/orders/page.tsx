@@ -447,24 +447,101 @@ export default function AdminOrdersPage() {
     const { jsPDF } = await import("jspdf")
     const doc = new jsPDF({ unit: "pt", format: "a4" })
     const pageWidth = doc.internal.pageSize.getWidth()
+    const pageHeight = doc.internal.pageSize.getHeight()
     const margin = 48
     const documentTitle = invoice.status === "paid" ? "Receipt" : "Invoice"
     const lineItems = normalizeLineItems(invoice.line_items)
+    const colors = {
+      paper: [244, 237, 220] as const,
+      card: [251, 247, 236] as const,
+      ink: [32, 28, 26] as const,
+      muted: [101, 92, 82] as const,
+      rule: [216, 202, 180] as const,
+      teal: [31, 71, 65] as const,
+      rust: [193, 68, 45] as const,
+      gold: [226, 166, 46] as const,
+    }
+    const contentWidth = pageWidth - margin * 2
+    const descriptionX = margin + 16
+    const qtyX = pageWidth - 224
+    const unitX = pageWidth - 164
+    const totalX = pageWidth - margin - 14
+    const descriptionWidth = qtyX - descriptionX - 22
 
-    doc.setTextColor(32, 28, 26)
+    const setFill = (color: readonly number[]) => doc.setFillColor(color[0], color[1], color[2])
+    const setDraw = (color: readonly number[]) => doc.setDrawColor(color[0], color[1], color[2])
+    const setText = (color: readonly number[]) => doc.setTextColor(color[0], color[1], color[2])
+
+    const drawPageShell = () => {
+      setFill(colors.paper)
+      doc.rect(0, 0, pageWidth, pageHeight, "F")
+      setDraw(colors.rule)
+      doc.setLineWidth(0.8)
+      doc.line(margin, 28, pageWidth - margin, 28)
+      doc.line(margin, pageHeight - 42, pageWidth - margin, pageHeight - 42)
+      setText(colors.muted)
+      doc.setFont("helvetica", "bold")
+      doc.setFontSize(7)
+      doc.text("UBIC MEDIA AGENCY", margin, pageHeight - 24)
+      doc.text(siteConfig.contact.email, pageWidth - margin, pageHeight - 24, { align: "right" })
+    }
+
+    const drawTableHeader = (headerY: number) => {
+      setFill(colors.teal)
+      doc.rect(margin, headerY - 21, contentWidth, 30, "F")
+      setFill(colors.rust)
+      doc.rect(margin, headerY - 21, 5, 30, "F")
+      setText(colors.paper)
+      doc.setFont("helvetica", "bold")
+      doc.setFontSize(8)
+      doc.text("DESCRIPTION", descriptionX, headerY)
+      doc.text("QTY", qtyX, headerY)
+      doc.text(`UNIT (${invoice.currency})`, unitX, headerY)
+      doc.text(`TOTAL (${invoice.currency})`, totalX, headerY, { align: "right" })
+      setText(colors.ink)
+      doc.setFont("helvetica", "normal")
+      doc.setFontSize(9)
+    }
+
+    const addContentPage = () => {
+      doc.addPage()
+      drawPageShell()
+      drawTableHeader(82)
+      return 118
+    }
+
+    drawPageShell()
+
     doc.setFont("helvetica", "bold")
-    doc.setFontSize(28)
-    doc.text(documentTitle.toUpperCase(), margin, 64)
+    doc.setFontSize(8)
+    setText(colors.rust)
+    doc.text("ISSUE 01 / FINANCE DESK", margin, 58)
+    setText(colors.ink)
+    doc.setFont("times", "bold")
+    doc.setFontSize(45)
+    doc.text(documentTitle, margin, 105)
+    setDraw(colors.ink)
+    doc.setLineWidth(1.2)
+    doc.line(margin, 120, pageWidth - margin, 120)
+    setFill(colors.gold)
+    doc.rect(margin, 124, 86, 6, "F")
 
     if (invoiceLogo) {
+      const logoBoxWidth = 128
+      const logoBoxHeight = 66
+      const logoBoxX = pageWidth - margin - logoBoxWidth
+      const logoBoxY = 49
+      setFill(colors.card)
+      setDraw(colors.rule)
+      doc.rect(logoBoxX, logoBoxY, logoBoxWidth, logoBoxHeight, "FD")
       try {
         const imageSize = await getImageSize(invoiceLogo)
-        const fitted = fitIntoBox(imageSize.width, imageSize.height, 112, 54)
+        const fitted = fitIntoBox(imageSize.width, imageSize.height, logoBoxWidth - 24, logoBoxHeight - 20)
         doc.addImage(
           invoiceLogo,
           invoiceLogo.includes("image/png") ? "PNG" : "JPEG",
-          pageWidth - margin - fitted.width,
-          42,
+          logoBoxX + (logoBoxWidth - fitted.width) / 2,
+          logoBoxY + (logoBoxHeight - fitted.height) / 2,
           fitted.width,
           fitted.height,
           undefined,
@@ -472,109 +549,159 @@ export default function AdminOrdersPage() {
         )
       } catch {
         try {
-          doc.addImage(invoiceLogo, "PNG", pageWidth - 148, 42, 100, 44, undefined, "FAST")
+          doc.addImage(invoiceLogo, "PNG", logoBoxX + 18, logoBoxY + 18, 92, 30, undefined, "FAST")
         } catch {
           // Keep generating the document even if the uploaded logo format is not supported by jsPDF.
         }
       }
     }
 
+    setText(colors.ink)
     doc.setFont("helvetica", "normal")
     doc.setFontSize(10)
-    doc.text(siteConfig.siteName, margin, 92)
-    doc.text(siteConfig.contact.email, margin, 108)
-    doc.text(siteConfig.contact.phone, margin, 124)
+    doc.text(siteConfig.siteName, margin, 154)
+    setText(colors.muted)
+    doc.text(siteConfig.contact.email, margin, 170)
+    doc.text(siteConfig.contact.phone, margin, 186)
+    if (siteConfig.contact.website) doc.text(siteConfig.contact.website, margin, 202)
 
+    const metaX = pageWidth - margin - 204
+    setFill(colors.card)
+    setDraw(colors.rule)
+    doc.rect(metaX, 146, 204, 86, "FD")
+    setText(colors.muted)
     doc.setFont("helvetica", "bold")
-    doc.setFontSize(11)
-    doc.text(`${documentTitle} No.`, pageWidth - 190, 112)
-    doc.text("Issue Date", pageWidth - 190, 142)
-    if (invoice.due_date) doc.text("Due Date", pageWidth - 190, 172)
+    doc.setFontSize(7)
+    doc.text(`${documentTitle.toUpperCase()} NO.`, metaX + 14, 164)
+    doc.text("ISSUE DATE", metaX + 14, 190)
+    if (invoice.due_date) doc.text("DUE DATE", metaX + 112, 190)
 
-    doc.setFont("helvetica", "normal")
-    doc.text(invoice.invoice_number, pageWidth - 95, 112)
-    doc.text(new Date(invoice.issue_date).toLocaleDateString(), pageWidth - 95, 142)
-    if (invoice.due_date) doc.text(new Date(invoice.due_date).toLocaleDateString(), pageWidth - 95, 172)
-
-    doc.setDrawColor(216, 202, 180)
-    doc.line(margin, 230, pageWidth - margin, 230)
-
-    doc.setFont("helvetica", "bold")
-    doc.setFontSize(12)
-    doc.text("Bill To", margin, 260)
+    setText(colors.ink)
     doc.setFont("helvetica", "normal")
     doc.setFontSize(10)
-    doc.text(invoice.customer_name, margin, 280)
-    if (invoice.customer_company) doc.text(invoice.customer_company, margin, 296)
-    if (invoice.customer_email) doc.text(invoice.customer_email, margin, 312)
-    if (invoice.customer_phone) doc.text(invoice.customer_phone, margin, 328)
+    doc.text(invoice.invoice_number, metaX + 14, 177)
+    doc.text(new Date(invoice.issue_date).toLocaleDateString(), metaX + 14, 204)
+    if (invoice.due_date) doc.text(new Date(invoice.due_date).toLocaleDateString(), metaX + 112, 204)
 
-    let y = 372
-    doc.setFillColor(31, 71, 65)
-    doc.rect(margin, y - 20, pageWidth - margin * 2, 28, "F")
-    doc.setTextColor(244, 237, 220)
+    setFill(colors.card)
+    setDraw(colors.rule)
+    doc.rect(margin, 252, contentWidth, 86, "FD")
+    setFill(colors.rust)
+    doc.rect(margin, 252, 6, 86, "F")
+    setText(colors.muted)
     doc.setFont("helvetica", "bold")
-    const descriptionX = margin + 12
-    const qtyX = pageWidth - 218
-    const unitX = pageWidth - 168
-    const totalX = pageWidth - margin
-    const descriptionWidth = qtyX - descriptionX - 18
-
-    doc.text("Description", descriptionX, y)
-    doc.text("Qty", qtyX, y)
-    doc.text(`Unit (${invoice.currency})`, unitX, y)
-    doc.text(`Total (${invoice.currency})`, totalX, y, { align: "right" })
-    doc.setTextColor(32, 28, 26)
+    doc.setFontSize(8)
+    doc.text("BILL TO", margin + 18, 274)
+    setText(colors.ink)
     doc.setFont("helvetica", "normal")
+    doc.setFontSize(10)
+    let billY = 292
+    doc.text(invoice.customer_name, margin + 18, billY)
+    if (invoice.customer_company) {
+      billY += 14
+      doc.text(invoice.customer_company, margin + 18, billY)
+    }
+    if (invoice.customer_email) {
+      billY += 14
+      doc.text(invoice.customer_email, margin + 18, billY)
+    }
+    if (invoice.customer_phone) {
+      billY += 14
+      doc.text(invoice.customer_phone, margin + 18, billY)
+    }
 
-    y += 30
-    lineItems.forEach((item) => {
+    let y = 378
+    drawTableHeader(y)
+    y += 35
+    lineItems.forEach((item, index) => {
       const itemTotal = parseAmount(item.quantity) * parseAmount(item.unitPrice)
       const descriptionLines = doc.splitTextToSize(item.description, descriptionWidth)
-      const rowHeight = Math.max(28, descriptionLines.length * 13 + 10)
+      const rowHeight = Math.max(34, descriptionLines.length * 13 + 14)
 
-      if (y + rowHeight > 730) {
-        doc.addPage()
-        y = 72
+      if (y + rowHeight > pageHeight - 126) {
+        y = addContentPage()
       }
 
+      if (index % 2 === 0) {
+        setFill(colors.card)
+        doc.rect(margin, y - 16, contentWidth, rowHeight, "F")
+      }
+      setDraw(colors.rule)
+      doc.setLineWidth(0.5)
+      doc.line(margin, y - 16, pageWidth - margin, y - 16)
+      setText(colors.ink)
+      doc.setFont("helvetica", "normal")
+      doc.setFontSize(9)
       doc.text(descriptionLines, descriptionX, y)
       doc.text(String(item.quantity), qtyX, y)
       doc.text(formatInvoiceNumber(item.unitPrice), unitX, y)
+      doc.setFont("helvetica", "bold")
       doc.text(formatInvoiceNumber(itemTotal), totalX, y, { align: "right" })
       y += rowHeight
-      if (y > 700) {
-        doc.addPage()
-        y = 72
-      }
     })
 
-    y += 20
-    const totalsX = pageWidth - 220
-    doc.line(totalsX, y - 12, pageWidth - margin, y - 12)
-    doc.text(`Subtotal (${invoice.currency})`, totalsX, y)
-    doc.text(formatInvoiceNumber(invoice.subtotal), pageWidth - margin, y, { align: "right" })
-    y += 22
-    doc.text(`Tax (${invoice.currency})`, totalsX, y)
-    doc.text(formatInvoiceNumber(invoice.tax), pageWidth - margin, y, { align: "right" })
-    y += 22
-    doc.text(`Discount (${invoice.currency})`, totalsX, y)
-    doc.text(formatInvoiceNumber(invoice.discount), pageWidth - margin, y, { align: "right" })
     y += 28
+    if (y + 132 > pageHeight - 58) {
+      doc.addPage()
+      drawPageShell()
+      y = 76
+    }
+    const totalsWidth = 236
+    const totalsX = pageWidth - margin - totalsWidth
+    setFill(colors.card)
+    setDraw(colors.rule)
+    doc.rect(totalsX, y - 18, totalsWidth, 116, "FD")
+    setText(colors.muted)
+    doc.setFont("helvetica", "bold")
+    doc.setFontSize(8)
+    doc.text(`SUMMARY (${invoice.currency})`, totalsX + 14, y)
+    y += 22
+    setText(colors.ink)
+    doc.setFont("helvetica", "normal")
+    doc.setFontSize(10)
+    doc.text("Subtotal", totalsX + 14, y)
+    doc.text(formatInvoiceNumber(invoice.subtotal), totalsX + totalsWidth - 14, y, { align: "right" })
+    y += 20
+    doc.text("Tax", totalsX + 14, y)
+    doc.text(formatInvoiceNumber(invoice.tax), totalsX + totalsWidth - 14, y, { align: "right" })
+    y += 20
+    doc.text("Discount", totalsX + 14, y)
+    doc.text(formatInvoiceNumber(invoice.discount), totalsX + totalsWidth - 14, y, { align: "right" })
+    y += 16
+    setDraw(colors.ink)
+    doc.line(totalsX + 14, y, totalsX + totalsWidth - 14, y)
+    y += 21
     doc.setFont("helvetica", "bold")
     doc.setFontSize(14)
-    doc.text(`Total (${invoice.currency})`, totalsX, y)
-    doc.text(formatInvoiceNumber(invoice.total), pageWidth - margin, y, { align: "right" })
+    doc.text("Total", totalsX + 14, y)
+    doc.text(formatInvoiceNumber(invoice.total), totalsX + totalsWidth - 14, y, { align: "right" })
 
     if (invoice.notes) {
-      y += 44
+      y += 54
+      if (y + 86 > pageHeight - 58) {
+        doc.addPage()
+        drawPageShell()
+        y = 76
+      }
+      const noteLines = doc.splitTextToSize(invoice.notes, contentWidth - 32)
+      const noteHeight = Math.max(72, noteLines.length * 13 + 42)
+      setFill(colors.card)
+      setDraw(colors.rule)
+      doc.rect(margin, y - 18, contentWidth, noteHeight, "FD")
+      setText(colors.muted)
       doc.setFont("helvetica", "bold")
-      doc.setFontSize(11)
-      doc.text("Notes", margin, y)
+      doc.setFontSize(8)
+      doc.text("NOTES", margin + 16, y)
+      setText(colors.ink)
       doc.setFont("helvetica", "normal")
       doc.setFontSize(10)
-      doc.text(invoice.notes, margin, y + 18, { maxWidth: pageWidth - margin * 2 })
+      doc.text(noteLines, margin + 16, y + 22)
     }
+
+    setText(colors.rust)
+    doc.setFont("times", "bold")
+    doc.setFontSize(14)
+    doc.text("Thank you for choosing Ubic.", margin, pageHeight - 66)
 
     doc.save(`${invoice.status === "paid" ? "receipt" : "invoice"}-${invoice.invoice_number}.pdf`)
   }

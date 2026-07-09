@@ -7,6 +7,9 @@ import Script from "next/script"
 import { generateOrganizationSchema, generateLocalBusinessSchema } from "@/lib/schema"
 import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
+import { SmoothScroll } from "@/components/smooth-scroll"
+import { CustomCursor } from "@/components/custom-cursor"
+import { Preloader } from "@/components/preloader"
 
 const archivo = Archivo({
   subsets: ["latin"],
@@ -98,7 +101,11 @@ export default function RootLayout({
   const localBusinessSchema = generateLocalBusinessSchema()
 
   return (
-    <html lang="en" suppressHydrationWarning className={`${archivo.variable} ${fraunces.variable} ${spaceMono.variable}`}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${archivo.variable} ${fraunces.variable} ${spaceMono.variable}`}
+    >
       <head>
         <Script
           id="organization-schema"
@@ -128,7 +135,6 @@ export default function RootLayout({
             </Script>
           </>
         )}
-        {/* Google Ads Conversion Tracking */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-17783739010"
           strategy="afterInteractive"
@@ -144,6 +150,9 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased">
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
+          <Preloader />
+          <SmoothScroll />
+          <CustomCursor />
           {children}
           <Analytics />
         </ThemeProvider>

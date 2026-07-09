@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { Suspense } from "react"
 import PackagesClientPage from "./PackagesClientPage"
 
 export const metadata: Metadata = {
@@ -17,5 +18,15 @@ export const metadata: Metadata = {
 }
 
 export default function PackagesPage() {
-  return <PackagesClientPage />
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-background text-muted-foreground">
+          <p className="font-mono text-xs uppercase tracking-[0.2em]">Loading packages…</p>
+        </div>
+      }
+    >
+      <PackagesClientPage />
+    </Suspense>
+  )
 }

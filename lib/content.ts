@@ -13,6 +13,7 @@ export type Package = {
   features: string[]
   priceGHS: number
   priceUSD: number
+  service?: string
   popular?: boolean
   isHourly?: boolean
 }

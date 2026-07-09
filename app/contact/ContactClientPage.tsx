@@ -10,6 +10,9 @@ import { Header } from "@/components/header"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { siteConfig } from "@/lib/content"
+import { PageIntro } from "@/components/page-intro"
+import { StaggerChildren } from "@/components/animations/stagger-children"
+import { FadeUp } from "@/components/home/text-reveal"
 
 const contactRoutes = [
   {
@@ -79,55 +82,53 @@ export default function ContactPage() {
       <Analytics />
       <Header />
 
-      <main className="bg-background pt-24 text-foreground">
-        <section className="editorial-grid border-b border-border">
-          <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-24">
-            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-4 font-mono text-xs uppercase tracking-[0.22em] text-muted-foreground">
-              <span>Vol. 01 - Start a Brief</span>
-              <span>Reply within one working day</span>
-              <span>Accra, Ghana</span>
-            </div>
-            <div className="grid gap-12 pt-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-end">
-              <div>
-                <p className="issue-label">Contact</p>
-                <h1 className="mt-5 text-5xl font-semibold leading-[0.94] tracking-[-0.04em] md:text-6xl lg:text-[6rem]">
-                  Tell us what is not
-                  <span className="block font-serif italic text-accent">working yet.</span>
-                </h1>
-              </div>
-              <div className="border-t border-border pt-6">
-                <p className="text-lg leading-8 text-muted-foreground">
-                  If you already know what you need, send a quick brief. If scope is still fuzzy, use WhatsApp or book a
-                  short call and we will help you narrow it down.
-                </p>
-                <div className="mt-8 space-y-4">
-                  {[
-                    "Best for launch projects, rebrands, and website upgrades",
-                    "Useful if you need help choosing between strategy, identity, and web design",
-                    "We usually reply within one working day",
-                  ].map((item) => (
-                    <div key={item} className="flex items-start gap-3 text-sm text-muted-foreground">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-                      <span>{item}</span>
-                    </div>
-                  ))}
-                </div>
+      <main className="bg-background text-foreground">
+        <PageIntro
+          eyebrow="Contact"
+          meta={
+            <>
+              <span className="studio-label">Start a project</span>
+              <span className="studio-label">Reply in one day</span>
+              <span className="studio-label">Accra, Ghana</span>
+            </>
+          }
+          title={
+            <h1 className="studio-display text-5xl md:text-6xl lg:text-[6rem]">
+              Tell us what you need.
+            </h1>
+          }
+          aside={
+            <div>
+              <p className="text-lg leading-8 text-muted-foreground">
+                Strategy, identity, websites, social, photo, video, or print. Send a brief, WhatsApp us, or book a call.
+              </p>
+              <div className="mt-8 space-y-4">
+                {[
+                  "Any of our services, or a mix",
+                  "Rough budget and timeline help",
+                  "We reply within one working day",
+                ].map((item) => (
+                  <div key={item} className="flex items-start gap-3 text-sm text-muted-foreground">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                    <span>{item}</span>
+                  </div>
+                ))}
               </div>
             </div>
-          </div>
-        </section>
+          }
+        />
 
-        <section className="border-b border-border py-20">
-          <div className="mx-auto grid max-w-7xl gap-8 px-6 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
+        <section className="border-b border-border px-5 py-20 md:px-8 lg:px-10">
+          <StaggerChildren className="mx-auto grid max-w-[1400px] gap-8 sm:grid-cols-2 lg:grid-cols-4" y={28} stagger={0.08}>
             {contactRoutes.map((route, index) => {
               const Icon = route.icon
               const content = (
                 <>
                   <div className="flex items-center justify-between gap-4">
-                    <span className="font-mono text-xs tracking-[0.18em] text-accent">0{index + 1}</span>
+                    <span className="font-mono text-xs tracking-[0.18em] text-accent">00-{index + 1}</span>
                     <Icon className="h-5 w-5 text-accent" />
                   </div>
-                  <h2 className="mt-6 text-2xl font-serif font-semibold">{route.title}</h2>
+                  <h2 className="mt-6 font-serif text-2xl font-semibold">{route.title}</h2>
                   <p className="mt-3 text-sm leading-7 text-muted-foreground">{route.description}</p>
                 </>
               )
@@ -147,16 +148,18 @@ export default function ContactPage() {
                   target={route.external ? "_blank" : undefined}
                   rel={route.external ? "noopener noreferrer" : undefined}
                   className="border-t border-border pt-6 transition-colors hover:text-accent"
+                  data-cursor="hover"
                 >
                   {content}
                 </a>
               )
             })}
-          </div>
+          </StaggerChildren>
         </section>
 
-        <section className="py-24">
-          <div className="mx-auto max-w-4xl px-6 lg:px-8">
+        <section className="px-5 py-24 md:px-8 lg:px-10">
+          <div className="mx-auto max-w-4xl">
+            <FadeUp>
             <form onSubmit={handleSubmit} className="border border-foreground bg-card p-8 md:p-10">
               <div className="mb-8 border-b border-border pb-6">
                 <p className="issue-label">Project Enquiry</p>
@@ -251,6 +254,7 @@ export default function ContactPage() {
                 </Button>
               </div>
             </form>
+            </FadeUp>
           </div>
         </section>
       </main>

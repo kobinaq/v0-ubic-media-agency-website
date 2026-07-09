@@ -1,109 +1,107 @@
 import Link from "next/link"
-import Image from "next/image"
-import { Instagram, Linkedin, Mail, MessageCircle, Twitter } from "lucide-react"
 import { siteConfig } from "@/lib/content"
 
 export function Footer() {
   return (
-    <footer className="border-t border-foreground/20 bg-foreground text-background">
-      <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
-        <div className="grid gap-12 lg:grid-cols-[1.3fr_0.7fr_0.7fr_0.7fr]">
+    <footer className="border-t border-border bg-foreground pb-[env(safe-area-inset-bottom)] text-background">
+      <div className="mx-auto max-w-[1400px] px-5 py-16 md:px-8 md:py-24 lg:px-10">
+        <div className="flex flex-col gap-10 border-b border-background/15 pb-14 md:flex-row md:items-end md:justify-between">
           <div>
-            <Link href="/" className="inline-flex items-center" aria-label={siteConfig.siteName}>
-              <Image src="/logo.png" alt={siteConfig.siteName} width={80} height={23} className="h-auto w-auto max-h-5" />
+            <p className="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-background/50">
+              Ready when you are
+            </p>
+            <h2 className="mt-4 max-w-3xl font-serif text-3xl font-semibold leading-[0.94] tracking-tight sm:text-5xl md:text-7xl lg:text-8xl">
+              Let&apos;s make
+              <br />
+              it unforgettable.
+            </h2>
+          </div>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <Link
+              href="/contact"
+              className="inline-flex min-h-11 items-center justify-center bg-accent px-8 py-4 font-mono text-xs uppercase tracking-[0.16em] text-accent-foreground transition-opacity hover:opacity-90"
+              data-cursor="hover"
+            >
+              Start a project
             </Link>
-            <p className="mt-5 max-w-md text-sm leading-7 text-background/65">{siteConfig.tagline}</p>
-            <div className="mt-8 flex gap-3">
-              <a
-                href={siteConfig.social.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-11 w-11 items-center justify-center border border-background/20 text-background transition-colors hover:border-accent hover:text-accent"
-                aria-label="Instagram"
-              >
-                <Instagram className="h-5 w-5" />
-              </a>
-              <a
-                href={siteConfig.social.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-11 w-11 items-center justify-center border border-background/20 text-background transition-colors hover:border-accent hover:text-accent"
-                aria-label="LinkedIn"
-              >
-                <Linkedin className="h-5 w-5" />
-              </a>
-              <a
-                href={siteConfig.social.twitter}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-11 w-11 items-center justify-center border border-background/20 text-background transition-colors hover:border-accent hover:text-accent"
-                aria-label="Twitter"
-              >
-                <Twitter className="h-5 w-5" />
-              </a>
-            </div>
+            <a
+              href={siteConfig.contact.whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-11 items-center justify-center border border-background/25 px-8 py-4 font-mono text-xs uppercase tracking-[0.16em] text-background transition-colors hover:border-background"
+              data-cursor="hover"
+            >
+              WhatsApp
+            </a>
+          </div>
+        </div>
+
+        <div className="grid gap-10 pt-12 md:grid-cols-4">
+          <div className="md:col-span-2">
+            <p className="font-serif text-2xl font-semibold tracking-tight">UBIC</p>
+            <p className="mt-4 max-w-sm text-sm leading-7 text-background/60">{siteConfig.tagline}</p>
+            <p className="mt-6 font-mono text-[0.68rem] uppercase tracking-[0.2em] text-background/45">
+              Accra · Ghana · Worldwide
+            </p>
           </div>
 
           <div>
-            <h4 className="mb-6 font-mono text-xs font-medium uppercase tracking-[0.24em] text-accent">Quick Links</h4>
-            <ul className="space-y-3 text-sm">
-              <li>
-                <Link href="/about" className="text-background/70 transition-colors hover:text-accent">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/services" className="text-background/70 transition-colors hover:text-accent">
-                  Services
-                </Link>
-              </li>
-              <li>
-                <Link href="/case-studies" className="text-background/70 transition-colors hover:text-accent">
-                  Case Studies
-                </Link>
-              </li>
+            <p className="mb-5 font-mono text-[0.68rem] uppercase tracking-[0.2em] text-background/45">Navigate</p>
+            <ul className="space-y-3 text-sm text-background/65">
+              {[
+                { href: "/case-studies", label: "Work" },
+                { href: "/services", label: "Services" },
+                { href: "/packages", label: "Packages" },
+                { href: "/about", label: "About" },
+                { href: "/contact", label: "Contact" },
+              ].map((l) => (
+                <li key={l.href}>
+                  <Link href={l.href} className="transition-colors hover:text-background">
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           <div>
-            <h4 className="mb-6 font-mono text-xs font-medium uppercase tracking-[0.24em] text-accent">Get in Touch</h4>
-            <ul className="space-y-4 text-sm">
-              <li className="flex items-center gap-3 text-background/70 transition-colors hover:text-accent">
-                <MessageCircle className="h-4 w-4 shrink-0" />
-                <a href={siteConfig.contact.whatsapp} target="_blank" rel="noopener noreferrer">
-                  WhatsApp
+            <p className="mb-5 font-mono text-[0.68rem] uppercase tracking-[0.2em] text-background/45">Connect</p>
+            <ul className="space-y-3 text-sm text-background/65">
+              <li>
+                <a href={siteConfig.social.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-background">
+                  Instagram
                 </a>
               </li>
-              <li className="flex items-center gap-3 text-background/70 transition-colors hover:text-accent">
-                <Mail className="h-4 w-4 shrink-0" />
-                <a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="mb-6 font-mono text-xs font-medium uppercase tracking-[0.24em] text-accent">Legal</h4>
-            <ul className="space-y-3 text-sm">
               <li>
-                <Link href="/legal/privacy" className="text-background/70 transition-colors hover:text-accent">
-                  Privacy Policy
-                </Link>
+                <a href={siteConfig.social.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-background">
+                  LinkedIn
+                </a>
               </li>
               <li>
-                <Link href="/legal/terms" className="text-background/70 transition-colors hover:text-accent">
-                  Terms of Service
-                </Link>
+                <a href={siteConfig.social.twitter} target="_blank" rel="noopener noreferrer" className="hover:text-background">
+                  X / Twitter
+                </a>
+              </li>
+              <li>
+                <a href={`mailto:${siteConfig.contact.email}`} className="hover:text-background">
+                  {siteConfig.contact.email}
+                </a>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-16 flex flex-col gap-4 border-t border-background/20 pt-8 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm text-background/55">
-            &copy; {new Date().getFullYear()} {siteConfig.siteName}. All rights reserved.
+        <div className="mt-14 flex flex-col gap-3 border-t border-background/15 pt-6 text-xs text-background/45 sm:flex-row sm:items-center sm:justify-between">
+          <p>
+            © {new Date().getFullYear()} {siteConfig.siteName}
           </p>
-          <div className="font-mono text-xs uppercase tracking-[0.24em] text-background/55">
-            Printed digitally in Accra
+          <div className="flex gap-6">
+            <Link href="/legal/privacy" className="hover:text-background">
+              Privacy
+            </Link>
+            <Link href="/legal/terms" className="hover:text-background">
+              Terms
+            </Link>
           </div>
         </div>
       </div>

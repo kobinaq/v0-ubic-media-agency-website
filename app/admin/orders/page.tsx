@@ -512,10 +512,6 @@ export default function AdminOrdersPage() {
 
     drawPageShell()
 
-    doc.setFont("helvetica", "bold")
-    doc.setFontSize(8)
-    setText(colors.rust)
-    doc.text("ISSUE 01 / FINANCE DESK", margin, 58)
     setText(colors.ink)
     doc.setFont("times", "bold")
     doc.setFontSize(45)

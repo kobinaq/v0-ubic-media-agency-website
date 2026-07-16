@@ -34,6 +34,15 @@ export function Header() {
     }
   }, [mobileMenuOpen])
 
+  useEffect(() => {
+    if (!mobileMenuOpen) return
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMobileMenuOpen(false)
+    }
+    window.addEventListener("keydown", onKeyDown)
+    return () => window.removeEventListener("keydown", onKeyDown)
+  }, [mobileMenuOpen])
+
   return (
     <header
       className={cn(
@@ -102,6 +111,7 @@ export function Header() {
           className="fixed inset-0 z-40 bg-background md:hidden"
           role="dialog"
           aria-modal="true"
+          aria-label="Mobile navigation"
           style={{ paddingTop: "env(safe-area-inset-top)" }}
         >
           <div className="flex h-full flex-col px-5 pb-[max(2.5rem,env(safe-area-inset-bottom))] pt-24">

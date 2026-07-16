@@ -50,6 +50,22 @@ export default function PackagesClientPage({ initialPath = null }: PackagesClien
     if (path) setSelectedPath(path.id)
   }, [initialPath])
 
+  useEffect(() => {
+    if (!selectedPackage) return
+
+    document.body.style.overflow = "hidden"
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && !isProcessing) {
+        setSelectedPackage(null)
+      }
+    }
+    window.addEventListener("keydown", onKeyDown)
+    return () => {
+      document.body.style.overflow = ""
+      window.removeEventListener("keydown", onKeyDown)
+    }
+  }, [selectedPackage, isProcessing])
+
   const activePath = useMemo(
     () => (selectedPath ? getPathById(selectedPath) : undefined),
     [selectedPath],
@@ -409,11 +425,24 @@ export default function PackagesClientPage({ initialPath = null }: PackagesClien
       )}
 
       {selectedPackage && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/45 p-0 backdrop-blur-sm sm:items-center sm:p-6">
-          <Card className="max-h-[90dvh] w-full max-w-md overflow-y-auto rounded-none border border-border bg-card sm:rounded-none">
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center bg-black/45 p-0 backdrop-blur-sm sm:items-center sm:p-6"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="checkout-title"
+          onClick={() => {
+            if (!isProcessing) setSelectedPackage(null)
+          }}
+        >
+          <Card
+            className="max-h-[90dvh] w-full max-w-md overflow-y-auto rounded-none border border-border bg-card sm:rounded-none"
+            onClick={(event) => event.stopPropagation()}
+          >
             <CardHeader className="p-5 sm:p-6">
               <p className="studio-label-accent">Secure checkout</p>
-              <h3 className="mt-3 font-serif text-2xl font-semibold sm:text-3xl">{selectedPackage.name}</h3>
+              <h3 id="checkout-title" className="mt-3 font-serif text-2xl font-semibold sm:text-3xl">
+                {selectedPackage.name}
+              </h3>
               <p className="text-sm text-muted-foreground">
                 {formatPrice(
                   currency === "GHS" ? selectedPackage.priceGHS : selectedPackage.priceUSD,

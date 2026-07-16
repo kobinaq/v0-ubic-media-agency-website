@@ -371,8 +371,8 @@ export default function AdminOrdersPage() {
         }
 
         setInvoiceLogo(logo)
-      } catch (error: any) {
-        alert(error.message || "Failed to save logo")
+      } catch (error: unknown) {
+        alert(error instanceof Error ? error.message : "Failed to save logo")
       } finally {
         setIsSavingLogo(false)
       }
@@ -415,8 +415,8 @@ export default function AdminOrdersPage() {
           : [savedInvoice, ...current],
       )
       resetInvoiceForm()
-    } catch (error: any) {
-      alert(error.message || "Failed to save invoice")
+    } catch (error: unknown) {
+      alert(error instanceof Error ? error.message : "Failed to save invoice")
     } finally {
       setIsSavingInvoice(false)
     }
@@ -438,8 +438,8 @@ export default function AdminOrdersPage() {
       if (editingInvoiceId === invoice.id) {
         resetInvoiceForm()
       }
-    } catch (error: any) {
-      alert(error.message || "Failed to delete invoice")
+    } catch (error: unknown) {
+      alert(error instanceof Error ? error.message : "Failed to delete invoice")
     }
   }
 

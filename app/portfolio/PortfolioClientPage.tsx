@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { ChevronLeft, ChevronRight, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Footer } from "@/components/footer"
@@ -15,6 +15,8 @@ export default function PortfolioPage() {
   const [activeCategory, setActiveCategory] = useState("All")
   const [selectedProject, setSelectedProject] = useState<(typeof portfolio.projects)[number] | null>(null)
   const gridRef = useRef<HTMLDivElement>(null)
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
+  const lastFocusedRef = useRef<HTMLElement | null>(null)
 
   const filteredProjects =
     activeCategory === "All"
@@ -22,6 +24,7 @@ export default function PortfolioPage() {
       : portfolio.projects.filter((project) => project.category === activeCategory)
 
   const handleProjectClick = (project: (typeof portfolio.projects)[number]) => {
+    lastFocusedRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
     setSelectedProject(project)
     document.body.style.overflow = "hidden"
   }
@@ -29,7 +32,31 @@ export default function PortfolioPage() {
   const closeModal = () => {
     setSelectedProject(null)
     document.body.style.overflow = "unset"
+    lastFocusedRef.current?.focus()
   }
+
+  useEffect(() => {
+    if (!selectedProject) return
+
+    closeButtonRef.current?.focus()
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault()
+        closeModal()
+      }
+    }
+
+    window.addEventListener("keydown", onKeyDown)
+    return () => window.removeEventListener("keydown", onKeyDown)
+  }, [selectedProject])
+
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = "unset"
+    }
+  }, [])
+
 
   const navigateProject = (direction: "prev" | "next") => {
     if (!selectedProject) return
@@ -111,7 +138,16 @@ export default function PortfolioPage() {
                 return (
                   <FadeUp key={project.id} delay={index * 0.04} y={48}>
                     <article
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`Open case study: ${project.title}`}
                       onClick={() => handleProjectClick(project)}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault()
+                          handleProjectClick(project)
+                        }
+                      }}
                       className={`group grid cursor-pointer gap-8 border-b border-border pb-16 last:border-b-0 last:pb-0 lg:grid-cols-2 lg:items-center ${
                         isReverse ? "lg:[&>*:first-child]:order-2" : ""
                       }`}
@@ -185,9 +221,17 @@ export default function PortfolioPage() {
         )}
 
         {selectedProject && (
-          <div className="fixed inset-0 z-50 animate-fadeIn bg-background/95 backdrop-blur-sm" onClick={closeModal}>
+          <div
+            className="fixed inset-0 z-50 animate-fadeIn bg-background/95 backdrop-blur-sm"
+            onClick={closeModal}
+            role="dialog"
+            aria-modal="true"
+            aria-label={selectedProject.title}
+          >
             <div className="absolute inset-0 flex items-center justify-center p-6">
               <button
+                ref={closeButtonRef}
+                type="button"
                 onClick={closeModal}
                 className="absolute right-6 top-6 z-10 border border-border bg-background p-2 text-foreground transition-colors hover:text-accent"
               >

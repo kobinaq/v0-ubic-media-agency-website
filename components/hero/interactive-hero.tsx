@@ -21,7 +21,7 @@ const FLOATERS = [
     rot: -7,
   },
   {
-    src: "/victory foods.jpg",
+    src: "/victory-foods.jpg",
     alt: "Social media design work",
     label: "Social",
     className: "left-[68%] top-[32%] w-[min(180px,20vw)] xl:left-[70%] xl:w-[200px]",
@@ -29,7 +29,7 @@ const FLOATERS = [
     rot: 6,
   },
   {
-    src: "/Richkev.jpg",
+    src: "/richkev.jpg",
     alt: "Social media campaign work",
     label: "Social",
     className: "left-[58%] top-[56%] w-[min(190px,21vw)] xl:left-[60%] xl:w-[210px]",

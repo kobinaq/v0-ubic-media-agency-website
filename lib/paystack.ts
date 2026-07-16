@@ -28,7 +28,7 @@ export async function initializePaystackTransaction(
   email: string,
   amount: number,
   currency: string,
-  metadata: Record<string, any>,
+  metadata: Record<string, unknown>,
 ) {
   const response = await fetch("https://api.paystack.co/transaction/initialize", {
     method: "POST",
@@ -68,6 +68,13 @@ export async function verifyPaystackTransaction(reference: string) {
 }
 
 export function verifyPaystackWebhookSignature(payload: string, signature: string): boolean {
-  const hash = crypto.createHmac("sha512", process.env.PAYSTACK_WEBHOOK_SECRET!).update(payload).digest("hex")
-  return hash === signature
+  const secret = process.env.PAYSTACK_WEBHOOK_SECRET || process.env.PAYSTACK_SECRET_KEY
+  if (!secret || !signature) return false
+
+  const hash = crypto.createHmac("sha512", secret).update(payload).digest("hex")
+  const hashBuf = Buffer.from(hash)
+  const signatureBuf = Buffer.from(signature)
+
+  if (hashBuf.length !== signatureBuf.length) return false
+  return crypto.timingSafeEqual(hashBuf, signatureBuf)
 }

@@ -114,9 +114,9 @@ export async function POST(request: Request) {
     )
 
     return NextResponse.json({ invoice: result.rows[0] }, { status: 201 })
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("[invoice] Error creating invoice:", error)
-    if (error?.code === "23505") {
+    if (typeof error === "object" && error && "code" in error && error.code === "23505") {
       return NextResponse.json({ error: "Invoice number already exists" }, { status: 409 })
     }
     return NextResponse.json({ error: "Failed to create invoice" }, { status: 500 })

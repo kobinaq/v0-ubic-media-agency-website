@@ -47,7 +47,7 @@ export function generateLocalBusinessSchema() {
   }
 }
 
-export function generateServiceSchema(service: any) {
+export function generateServiceSchema(service: { title: string; description: string; startingPrice?: number }) {
   return {
     "@context": "https://schema.org",
     "@type": "Service",

@@ -15,29 +15,55 @@ export async function POST(request: Request) {
 
     const event = JSON.parse(body)
 
-    // Handle successful payment
     if (event.event === "charge.success") {
-      const { reference, amount, currency, customer, metadata } = event.data
+      const { reference, amount, currency } = event.data
 
-      // Update order status
-      await query(
-        `UPDATE orders 
-         SET payment_status = $1, updated_at = CURRENT_TIMESTAMP 
-         WHERE paystack_reference = $2`,
+      const orderLookup = await query("SELECT * FROM orders WHERE paystack_reference = $1 LIMIT 1", [reference])
+      const existing = orderLookup.rows[0]
+
+      if (!existing) {
+        console.error("[v0] Webhook order not found for reference:", reference)
+        return NextResponse.json({ received: true })
+      }
+
+      if (existing.payment_status === "paid") {
+        return NextResponse.json({ received: true })
+      }
+
+      const paidAmountMajor = Number(amount) / 100
+      const expectedAmount = Number(existing.amount)
+      const paidCurrency = String(currency || "").toUpperCase()
+
+      if (
+        !Number.isFinite(paidAmountMajor) ||
+        paidAmountMajor !== expectedAmount ||
+        paidCurrency !== String(existing.currency).toUpperCase()
+      ) {
+        console.error("[v0] Webhook amount/currency mismatch", {
+          reference,
+          paidAmountMajor,
+          expectedAmount,
+          paidCurrency,
+          expectedCurrency: existing.currency,
+        })
+        return NextResponse.json({ error: "Payment amount mismatch" }, { status: 400 })
+      }
+
+      const updateResult = await query(
+        `UPDATE orders
+         SET payment_status = $1, updated_at = CURRENT_TIMESTAMP
+         WHERE paystack_reference = $2 AND payment_status = 'pending'
+         RETURNING *`,
         ["paid", reference],
       )
 
-      // Get order details
-      const orderResult = await query("SELECT * FROM orders WHERE paystack_reference = $1", [reference])
-
-      if (orderResult.rows.length > 0) {
-        const order = orderResult.rows[0]
-
+      const order = updateResult.rows[0]
+      if (order) {
         try {
           await sendOrderConfirmationEmail(order.customer_email, order.customer_name, {
             orderReference: order.order_reference,
             packageName: order.package_name,
-            amount: order.amount,
+            amount: Number(order.amount),
             currency: order.currency,
           })
 
@@ -46,7 +72,7 @@ export async function POST(request: Request) {
             customerName: order.customer_name,
             customerEmail: order.customer_email,
             packageName: order.package_name,
-            amount: order.amount,
+            amount: Number(order.amount),
             currency: order.currency,
           })
 

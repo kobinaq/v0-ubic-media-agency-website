@@ -69,7 +69,7 @@ export default function ContactPage() {
       } else {
         setSubmitStatus("error")
       }
-    } catch (error) {
+    } catch {
       setSubmitStatus("error")
     } finally {
       setIsSubmitting(false)
@@ -262,7 +262,7 @@ export default function ContactPage() {
                 </div>
 
                 {submitStatus === "success" && (
-                  <div className="border border-green-500/30 bg-green-500/10 p-4">
+                  <div className="border border-green-500/30 bg-green-500/10 p-4" role="status" aria-live="polite">
                     <p className="flex items-center gap-2 text-sm text-green-700 dark:text-green-300">
                       <Check className="h-4 w-4" />
                       Thanks. Your message is in and we will get back to you soon.
@@ -271,7 +271,7 @@ export default function ContactPage() {
                 )}
 
                 {submitStatus === "error" && (
-                  <div className="border border-red-500/30 bg-red-500/10 p-4">
+                  <div className="border border-red-500/30 bg-red-500/10 p-4" role="alert" aria-live="assertive">
                     <p className="text-sm text-red-700 dark:text-red-300">
                       Something went wrong. Please try again or contact us directly.
                     </p>

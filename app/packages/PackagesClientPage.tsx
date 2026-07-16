@@ -10,7 +10,7 @@ import { packages, siteConfig } from "@/lib/content"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { formatPrice, detectCurrency, type Currency } from "@/lib/currency"
+import { formatPrice, useCurrency, type Currency } from "@/lib/currency"
 import type { Package } from "@/lib/content"
 import { PageIntro } from "@/components/page-intro"
 import { FadeUp } from "@/components/home/text-reveal"
@@ -27,28 +27,34 @@ type PackagesClientPageProps = {
 
 export default function PackagesClientPage({ initialPath = null }: PackagesClientPageProps) {
   const initial = getPathById(initialPath)?.id ?? null
+  const { currency, setCurrency, toAmount, quote, isLoading: fxLoading } = useCurrency()
 
-  const [currency, setCurrency] = useState<Currency>("USD")
   const [selectedPath, setSelectedPath] = useState<PackagePathId | null>(initial)
   const [selectedPackage, setSelectedPackage] = useState<Package | null>(null)
   const [customerInfo, setCustomerInfo] = useState({ name: "", email: "", phone: "" })
   const [isProcessing, setIsProcessing] = useState(false)
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    const run = async () => {
-      const detected = await detectCurrency(navigator.language)
-      setCurrency(detected)
-      setMounted(true)
-    }
-    run()
-  }, [])
 
   // Deep-link from Services outcome map: /packages?path=website
   useEffect(() => {
     const path = getPathById(initialPath)
     if (path) setSelectedPath(path.id)
   }, [initialPath])
+
+  useEffect(() => {
+    if (!selectedPackage) return
+
+    document.body.style.overflow = "hidden"
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && !isProcessing) {
+        setSelectedPackage(null)
+      }
+    }
+    window.addEventListener("keydown", onKeyDown)
+    return () => {
+      document.body.style.overflow = ""
+      window.removeEventListener("keydown", onKeyDown)
+    }
+  }, [selectedPackage, isProcessing])
 
   const activePath = useMemo(
     () => (selectedPath ? getPathById(selectedPath) : undefined),
@@ -73,7 +79,7 @@ export default function PackagesClientPage({ initialPath = null }: PackagesClien
   }, [filteredPackages])
 
   const handlePurchase = (pkg: Package) => {
-    const amount = currency === "GHS" ? pkg.priceGHS : pkg.priceUSD
+    const amount = toAmount(pkg.priceGHS)
     if (amount <= 0 || pkg.isHourly) {
       window.open(siteConfig.contact.whatsapp, "_blank", "noopener,noreferrer")
       return
@@ -86,7 +92,6 @@ export default function PackagesClientPage({ initialPath = null }: PackagesClien
     if (!selectedPackage) return
     setIsProcessing(true)
     try {
-      const amount = currency === "GHS" ? selectedPackage.priceGHS : selectedPackage.priceUSD
       const response = await fetch("/api/paystack/initialize", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -96,7 +101,6 @@ export default function PackagesClientPage({ initialPath = null }: PackagesClien
           phone: customerInfo.phone,
           packageId: selectedPackage.id,
           packageName: selectedPackage.name,
-          amount,
           currency,
         }),
       })
@@ -104,7 +108,7 @@ export default function PackagesClientPage({ initialPath = null }: PackagesClien
       if (data.authorization_url) {
         window.location.href = data.authorization_url
       } else {
-        alert("Failed to initialize payment. Please try again.")
+        alert(data.error || "Failed to initialize payment. Please try again.")
       }
     } catch {
       alert("An error occurred. Please try again.")
@@ -126,7 +130,7 @@ export default function PackagesClientPage({ initialPath = null }: PackagesClien
             <>
               <span className="studio-label">Pricing</span>
               <span className="studio-label">Step {step} of 2</span>
-              <span className="studio-label">{mounted ? currency : "…"}</span>
+              <span className="studio-label">{fxLoading ? "…" : currency}</span>
             </>
           }
           title={
@@ -151,24 +155,31 @@ export default function PackagesClientPage({ initialPath = null }: PackagesClien
           }
           aside={
             <div className="space-y-6">
-              <div className="flex items-center justify-between gap-4 border-b border-border pb-4">
-                <p className="studio-label">Currency</p>
-                <div className="inline-flex items-center border border-border bg-background p-1">
-                  {(["GHS", "USD"] as Currency[]).map((c) => (
-                    <button
-                      key={c}
-                      type="button"
-                      onClick={() => setCurrency(c)}
-                      data-cursor="hover"
-                      className={cn(
-                        "px-4 py-2 font-mono text-xs font-medium uppercase tracking-[0.12em] transition-colors",
-                        currency === c ? "bg-accent text-accent-foreground" : "text-muted-foreground",
-                      )}
-                    >
-                      {c}
-                    </button>
-                  ))}
+              <div className="space-y-3 border-b border-border pb-4">
+                <div className="flex items-center justify-between gap-4">
+                  <p className="studio-label">Currency</p>
+                  <div className="inline-flex items-center border border-border bg-background p-1">
+                    {(["GHS", "USD"] as Currency[]).map((c) => (
+                      <button
+                        key={c}
+                        type="button"
+                        onClick={() => setCurrency(c)}
+                        data-cursor="hover"
+                        className={cn(
+                          "px-4 py-2 font-mono text-xs font-medium uppercase tracking-[0.12em] transition-colors",
+                          currency === c ? "bg-accent text-accent-foreground" : "text-muted-foreground",
+                        )}
+                      >
+                        {c}
+                      </button>
+                    ))}
+                  </div>
                 </div>
+                {currency === "USD" && (
+                  <p className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-muted-foreground">
+                    Live FX · 1 USD = {quote.ghsPerUsd.toFixed(2)} GHS · +{Math.round((quote.markup - 1) * 100)}%
+                  </p>
+                )}
               </div>
               {step === 2 && (
                 <button
@@ -274,7 +285,7 @@ export default function PackagesClientPage({ initialPath = null }: PackagesClien
 
                     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                       {servicePackages.map((pkg) => {
-                        const amount = currency === "GHS" ? pkg.priceGHS : pkg.priceUSD
+                        const amount = toAmount(pkg.priceGHS)
                         const needsQuote = amount <= 0 || Boolean(pkg.isHourly)
 
                         return (
@@ -409,16 +420,26 @@ export default function PackagesClientPage({ initialPath = null }: PackagesClien
       )}
 
       {selectedPackage && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/45 p-0 backdrop-blur-sm sm:items-center sm:p-6">
-          <Card className="max-h-[90dvh] w-full max-w-md overflow-y-auto rounded-none border border-border bg-card sm:rounded-none">
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center bg-black/45 p-0 backdrop-blur-sm sm:items-center sm:p-6"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="checkout-title"
+          onClick={() => {
+            if (!isProcessing) setSelectedPackage(null)
+          }}
+        >
+          <Card
+            className="max-h-[90dvh] w-full max-w-md overflow-y-auto rounded-none border border-border bg-card sm:rounded-none"
+            onClick={(event) => event.stopPropagation()}
+          >
             <CardHeader className="p-5 sm:p-6">
               <p className="studio-label-accent">Secure checkout</p>
-              <h3 className="mt-3 font-serif text-2xl font-semibold sm:text-3xl">{selectedPackage.name}</h3>
+              <h3 id="checkout-title" className="mt-3 font-serif text-2xl font-semibold sm:text-3xl">
+                {selectedPackage.name}
+              </h3>
               <p className="text-sm text-muted-foreground">
-                {formatPrice(
-                  currency === "GHS" ? selectedPackage.priceGHS : selectedPackage.priceUSD,
-                  currency,
-                )}
+                {formatPrice(toAmount(selectedPackage.priceGHS), currency)}
               </p>
             </CardHeader>
             <CardContent className="p-5 pt-0 sm:p-6 sm:pt-0">

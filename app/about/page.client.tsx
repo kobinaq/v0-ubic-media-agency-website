@@ -3,7 +3,6 @@
 import Link from "next/link"
 import Script from "next/script"
 import { ArrowRight } from "lucide-react"
-import { Analytics } from "@/components/analytics"
 import { Button } from "@/components/ui/button"
 import { Footer } from "@/components/footer"
 import { Header } from "@/components/header"
@@ -62,7 +61,6 @@ export function AboutClientPage() {
 
   return (
     <>
-      <Analytics />
       <Script
         id="about-faq-schema"
         type="application/ld+json"

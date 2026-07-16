@@ -1,10 +1,14 @@
 import type { Metadata } from "next"
 import { AboutClientPage } from "./page.client"
+import { createPageMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
-  title: "About Ubic Media Agency - Our Story, Mission & Values",
+export const metadata: Metadata = createPageMetadata({
+  title: "About Ubic Media Agency | Our Story & Mission",
   description:
     "Learn about Ubic Media Agency's mission to empower businesses through strategic brand development, creative storytelling, and digital innovation across Africa and globally.",
+  path: "/about",
+  ogTitle: "About Ubic Media Agency",
+  ogDescription: "We build brands that matter through strategy, creativity, and excellence.",
   keywords: [
     "about us",
     "creative agency",
@@ -16,12 +20,7 @@ export const metadata: Metadata = {
     "Ghana",
     "Africa",
   ],
-  openGraph: {
-    title: "About Ubic Media Agency",
-    description: "We build brands that matter through strategy, creativity, and excellence.",
-    type: "website",
-  },
-}
+})
 
 export default function AboutPage() {
   return <AboutClientPage />

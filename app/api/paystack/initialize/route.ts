@@ -6,17 +6,12 @@ import { sendAdminOrderStartedNotification } from "@/lib/email"
 import { sendAdminSms } from "@/lib/sms"
 import { packages, type Package } from "@/lib/content"
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit"
+import { convertGhsToUsd, getFxQuote } from "@/lib/exchange-rate"
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 function resolveCatalogPackage(packageId: string): Package | undefined {
   return packages.packages.find((pkg) => pkg.id === packageId)
-}
-
-function expectedAmount(pkg: Package, currency: string): number | null {
-  if (currency === "GHS") return pkg.priceGHS
-  if (currency === "USD") return pkg.priceUSD
-  return null
 }
 
 export async function POST(request: Request) {
@@ -62,21 +57,28 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unknown package" }, { status: 400 })
     }
 
-    if (catalogPackage.isHourly || catalogPackage.priceGHS <= 0 || catalogPackage.priceUSD <= 0) {
+    if (catalogPackage.isHourly || catalogPackage.priceGHS <= 0) {
       return NextResponse.json(
         { error: "This package requires a custom quote. Contact us on WhatsApp." },
         { status: 400 },
       )
     }
 
-    const amount = expectedAmount(catalogPackage, currency)
-    if (amount === null || amount <= 0) {
-      return NextResponse.json({ error: "Invalid package pricing" }, { status: 400 })
+    let amount = catalogPackage.priceGHS
+    let fxMeta: { ghsPerUsd?: number; markup?: number; source?: string } = {}
+
+    if (currency === "USD") {
+      const quote = await getFxQuote()
+      amount = convertGhsToUsd(catalogPackage.priceGHS, quote.ghsPerUsd, quote.markup)
+      fxMeta = {
+        ghsPerUsd: quote.ghsPerUsd,
+        markup: quote.markup,
+        source: quote.source,
+      }
     }
 
-    // Reject client-tampered amounts when a client still sends one.
-    if (body.amount != null && Number(body.amount) !== amount) {
-      return NextResponse.json({ error: "Amount mismatch" }, { status: 400 })
+    if (amount <= 0) {
+      return NextResponse.json({ error: "Invalid package pricing" }, { status: 400 })
     }
 
     const packageName = `${catalogPackage.service ? `${catalogPackage.service} — ` : ""}${catalogPackage.name}`
@@ -114,6 +116,7 @@ export async function POST(request: Request) {
       package_id: packageId,
       package_name: packageName,
       customer_name: name,
+      ...fxMeta,
     })
 
     if (paystackResponse.status) {
@@ -125,6 +128,9 @@ export async function POST(request: Request) {
       return NextResponse.json({
         authorization_url: paystackResponse.data.authorization_url,
         reference: paystackResponse.data.reference,
+        amount,
+        currency,
+        fx: currency === "USD" ? fxMeta : undefined,
       })
     }
 

@@ -3,7 +3,6 @@
 import Image from "next/image"
 import { useRef, useState } from "react"
 import { ChevronLeft, ChevronRight, X } from "lucide-react"
-import { Analytics } from "@/components/analytics"
 import { Button } from "@/components/ui/button"
 import { Footer } from "@/components/footer"
 import { Header } from "@/components/header"
@@ -61,7 +60,6 @@ export default function PortfolioPage() {
 
   return (
     <>
-      <Analytics />
       <Header />
 
       <main className="bg-background text-foreground">

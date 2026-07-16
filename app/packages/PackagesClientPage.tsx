@@ -3,7 +3,6 @@
 import type React from "react"
 import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
-import { useSearchParams } from "next/navigation"
 import { ArrowLeft, ArrowRight, CheckCircle2, Loader2, MessageCircle } from "lucide-react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
@@ -13,7 +12,6 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { formatPrice, detectCurrency, type Currency } from "@/lib/currency"
 import type { Package } from "@/lib/content"
-import { Analytics } from "@/components/analytics"
 import { PageIntro } from "@/components/page-intro"
 import { FadeUp } from "@/components/home/text-reveal"
 import {
@@ -23,12 +21,15 @@ import {
 } from "@/lib/outcomes"
 import { cn } from "@/lib/utils"
 
-export default function PackagesPage() {
-  const searchParams = useSearchParams()
-  const pathFromUrl = searchParams.get("path")
+type PackagesClientPageProps = {
+  initialPath?: string | null
+}
+
+export default function PackagesClientPage({ initialPath = null }: PackagesClientPageProps) {
+  const initial = getPathById(initialPath)?.id ?? null
 
   const [currency, setCurrency] = useState<Currency>("USD")
-  const [selectedPath, setSelectedPath] = useState<PackagePathId | null>(null)
+  const [selectedPath, setSelectedPath] = useState<PackagePathId | null>(initial)
   const [selectedPackage, setSelectedPackage] = useState<Package | null>(null)
   const [customerInfo, setCustomerInfo] = useState({ name: "", email: "", phone: "" })
   const [isProcessing, setIsProcessing] = useState(false)
@@ -45,9 +46,9 @@ export default function PackagesPage() {
 
   // Deep-link from Services outcome map: /packages?path=website
   useEffect(() => {
-    const path = getPathById(pathFromUrl)
+    const path = getPathById(initialPath)
     if (path) setSelectedPath(path.id)
-  }, [pathFromUrl])
+  }, [initialPath])
 
   const activePath = useMemo(
     () => (selectedPath ? getPathById(selectedPath) : undefined),
@@ -116,7 +117,6 @@ export default function PackagesPage() {
 
   return (
     <>
-      <Analytics />
       <Header />
 
       <main className="bg-background text-foreground">

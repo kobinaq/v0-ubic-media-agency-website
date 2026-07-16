@@ -1,10 +1,14 @@
 import type { Metadata } from "next"
 import { ServicesClientPage } from "./ServicesClientPage"
+import { createPageMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
-  title: "Services - Ubic Media Agency | Brand Identity, Websites & Creative Support",
+export const metadata: Metadata = createPageMetadata({
+  title: "Services | Ubic Media Agency",
   description:
     "Explore Ubic Media Agency services across brand identity, website design and development, social media support, strategy, and creative production.",
+  path: "/services",
+  ogTitle: "Services | Ubic Media Agency",
+  ogDescription: "Brand identity, websites, and creative support structured around clarity, credibility, and growth.",
   keywords: [
     "creative services",
     "brand identity agency",
@@ -15,12 +19,7 @@ export const metadata: Metadata = {
     "brand strategy",
     "content creation",
   ],
-  openGraph: {
-    title: "Services - Ubic Media Agency",
-    description: "Brand identity, websites, and creative support structured around clarity, credibility, and growth.",
-    type: "website",
-  },
-}
+})
 
 export default function ServicesPage() {
   return <ServicesClientPage />

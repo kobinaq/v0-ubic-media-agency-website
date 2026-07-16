@@ -5,7 +5,6 @@ import Image from "next/image"
 import Script from "next/script"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { Analytics } from "@/components/analytics"
 import { InteractiveHero } from "@/components/hero/interactive-hero"
 import { WorkHoverList } from "@/components/home/work-hover-list"
 import { ServicesPanel } from "@/components/home/services-panel"
@@ -81,7 +80,6 @@ const breadcrumbSchema = generateBreadcrumbSchema([{ name: "Home", url: process.
 export default function HomePageClient() {
   return (
     <>
-      <Analytics />
       <Script
         id="faq-schema"
         type="application/ld+json"

@@ -1,19 +1,20 @@
 "use client"
 
 import { useEffect } from "react"
-import { usePathname, useSearchParams } from "next/navigation"
+import { usePathname } from "next/navigation"
 
 export function Analytics() {
   const pathname = usePathname()
-  const searchParams = useSearchParams()
 
   useEffect(() => {
-    if (typeof window !== "undefined" && window.gtag) {
-      window.gtag("config", process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID!, {
-        page_path: pathname + searchParams.toString(),
-      })
-    }
-  }, [pathname, searchParams])
+    if (typeof window === "undefined" || !window.gtag) return
+    if (!process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID) return
+
+    const pagePath = pathname + window.location.search
+    window.gtag("config", process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID, {
+      page_path: pagePath,
+    })
+  }, [pathname])
 
   return null
 }

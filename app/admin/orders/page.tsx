@@ -611,7 +611,9 @@ export default function AdminOrdersPage() {
     y += 35
     lineItems.forEach((item, index) => {
       const itemTotal = parseAmount(item.quantity) * parseAmount(item.unitPrice)
-      const descriptionLines = doc.splitTextToSize(item.description, descriptionWidth)
+      const descriptionLines = String(item.description || "")
+        .split("\n")
+        .flatMap((line) => doc.splitTextToSize(line || " ", descriptionWidth))
       const rowHeight = Math.max(34, descriptionLines.length * 13 + 14)
 
       if (y + rowHeight > pageHeight - 126) {
@@ -1050,37 +1052,40 @@ export default function AdminOrdersPage() {
                       </div>
                       <div className="space-y-4">
                         {invoiceForm.lineItems.map((item, index) => (
-                          <div key={index} className="grid gap-3 border border-border bg-background p-4 md:grid-cols-[1fr_100px_140px_auto]">
-                            <Input
-                              placeholder="Description"
+                          <div key={index} className="space-y-3 border border-border bg-background p-4">
+                            <Textarea
+                              placeholder={"Description\n• Addition one\n• Addition two"}
+                              rows={3}
                               value={item.description}
                               onChange={(event) => updateLineItem(index, "description", event.target.value)}
                             />
-                            <Input
-                              type="number"
-                              min="0"
-                              step="0.01"
-                              placeholder="Qty"
-                              value={item.quantity}
-                              onChange={(event) => updateLineItem(index, "quantity", event.target.value)}
-                            />
-                            <Input
-                              type="number"
-                              min="0"
-                              step="0.01"
-                              placeholder="Unit price"
-                              value={item.unitPrice}
-                              onChange={(event) => updateLineItem(index, "unitPrice", event.target.value)}
-                            />
-                            <Button
-                              type="button"
-                              variant="outline"
-                              className="border-border bg-transparent"
-                              onClick={() => removeLineItem(index)}
-                              disabled={invoiceForm.lineItems.length === 1}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
+                            <div className="grid gap-3 md:grid-cols-[100px_140px_auto] md:items-start">
+                              <Input
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                placeholder="Qty"
+                                value={item.quantity}
+                                onChange={(event) => updateLineItem(index, "quantity", event.target.value)}
+                              />
+                              <Input
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                placeholder="Unit price"
+                                value={item.unitPrice}
+                                onChange={(event) => updateLineItem(index, "unitPrice", event.target.value)}
+                              />
+                              <Button
+                                type="button"
+                                variant="outline"
+                                className="border-border bg-transparent"
+                                onClick={() => removeLineItem(index)}
+                                disabled={invoiceForm.lineItems.length === 1}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
                           </div>
                         ))}
                       </div>

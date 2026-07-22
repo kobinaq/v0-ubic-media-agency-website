@@ -24,28 +24,43 @@ export interface PaystackVerifyResponse {
   }
 }
 
+type InitializeOptions = {
+  reference?: string
+  callbackUrl?: string
+}
+
 export async function initializePaystackTransaction(
   email: string,
   amount: number,
   currency: string,
   metadata: Record<string, unknown>,
+  options: InitializeOptions = {},
 ) {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || ""
+  const payload: Record<string, unknown> = {
+    email,
+    amount: Math.round(amount * 100), // Paystack expects amount in kobo/cents
+    currency,
+    metadata,
+    callback_url: options.callbackUrl || `${siteUrl}/payment/callback`,
+  }
+
+  if (options.reference) {
+    payload.reference = options.reference
+  }
+
   const response = await fetch("https://api.paystack.co/transaction/initialize", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      email,
-      amount: amount * 100, // Paystack expects amount in kobo/cents
-      currency,
-      metadata,
-      callback_url: `${process.env.NEXT_PUBLIC_SITE_URL}/payment/callback`,
-    }),
+    body: JSON.stringify(payload),
   })
 
   if (!response.ok) {
+    const errorBody = await response.text().catch(() => "")
+    console.error("[paystack] initialize failed:", response.status, errorBody)
     throw new Error("Failed to initialize Paystack transaction")
   }
 

@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-import { Download, FileText, Plus, ReceiptText, Save, Search, Trash2, Upload } from "lucide-react"
+import { Download, ExternalLink, FileText, Plus, ReceiptText, Save, Search, Trash2, Upload } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -49,6 +49,8 @@ interface Invoice {
   discount: number
   total: number
   notes: string
+  payment_url?: string | null
+  paystack_reference?: string | null
   created_at: string
 }
 
@@ -409,6 +411,12 @@ export default function AdminOrdersPage() {
       return
     }
 
+    const totals = calculateTotals(usableLineItems, invoiceForm.tax, invoiceForm.discount)
+    if (totals.total > 0 && invoiceForm.status !== "paid" && !invoiceForm.customerEmail.trim()) {
+      alert("Add a customer email so we can create a Paystack payment link on the invoice.")
+      return
+    }
+
     setIsSavingInvoice(true)
     try {
       const endpoint = editingInvoiceId ? `/api/admin/invoices/${editingInvoiceId}` : "/api/admin/invoices"
@@ -717,6 +725,40 @@ export default function AdminOrdersPage() {
       doc.setFontSize(10)
       noteLines.forEach((line, lineIndex) => {
         doc.text(line, margin + 16, y + 22 + lineIndex * 13, { charSpace: 0 })
+      })
+      y += noteHeight
+    }
+
+    if (invoice.payment_url && invoice.status !== "paid") {
+      y += 36
+      if (y + 92 > pageHeight - 58) {
+        doc.addPage()
+        drawPageShell()
+        y = 76
+      }
+
+      setFill(colors.teal)
+      doc.rect(margin, y - 18, contentWidth, 88, "F")
+      setFill(colors.gold)
+      doc.rect(margin, y - 18, 6, 88, "F")
+      setText(colors.paper)
+      doc.setFont("helvetica", "bold")
+      doc.setFontSize(8)
+      doc.text("PAY ONLINE", margin + 18, y, { charSpace: 0 })
+      doc.setFont("helvetica", "normal")
+      doc.setFontSize(11)
+      doc.text("Click the link below to pay this invoice securely with Paystack.", margin + 18, y + 22, {
+        charSpace: 0,
+      })
+      doc.setFont("helvetica", "bold")
+      doc.setFontSize(10)
+      const payLabel = "Pay now with Paystack"
+      doc.textWithLink(payLabel, margin + 18, y + 44, { url: invoice.payment_url })
+      doc.setFont("helvetica", "normal")
+      doc.setFontSize(8)
+      const urlLines = wrapPdfLines(doc, invoice.payment_url, contentWidth - 40)
+      urlLines.slice(0, 2).forEach((line, lineIndex) => {
+        doc.textWithLink(line, margin + 18, y + 62 + lineIndex * 11, { url: invoice.payment_url! })
       })
     }
 
@@ -1035,7 +1077,7 @@ export default function AdminOrdersPage() {
                       </div>
                       <div>
                         <label className="mb-2 block text-sm font-medium" htmlFor="customerEmail">
-                          Client Email
+                          Client Email (required for Paystack link)
                         </label>
                         <Input
                           id="customerEmail"
@@ -1242,6 +1284,17 @@ export default function AdminOrdersPage() {
                               <p className="mt-1 text-sm text-muted-foreground">
                                 {new Date(invoice.issue_date).toLocaleDateString()} - {formatMoney(invoice.total, invoice.currency)}
                               </p>
+                              {invoice.payment_url && invoice.status !== "paid" ? (
+                                <a
+                                  href={invoice.payment_url}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="mt-3 inline-flex items-center gap-2 text-sm text-foreground underline underline-offset-4"
+                                >
+                                  <ExternalLink className="h-4 w-4" />
+                                  Open Paystack payment link
+                                </a>
+                              ) : null}
                             </div>
                             <div className="flex flex-wrap gap-2">
                               <Button
@@ -1253,6 +1306,17 @@ export default function AdminOrdersPage() {
                                 <FileText className="h-4 w-4" />
                                 Edit
                               </Button>
+                              {invoice.payment_url && invoice.status !== "paid" ? (
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  className="editorial-button border-border bg-transparent"
+                                  onClick={() => window.open(invoice.payment_url!, "_blank", "noopener,noreferrer")}
+                                >
+                                  <ExternalLink className="h-4 w-4" />
+                                  Pay Link
+                                </Button>
+                              ) : null}
                               <Button
                                 type="button"
                                 className="editorial-button bg-foreground text-background hover:bg-accent"

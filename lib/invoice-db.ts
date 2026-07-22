@@ -23,6 +23,8 @@ export async function ensureInvoiceTables() {
       discount DECIMAL(12, 2) NOT NULL DEFAULT 0,
       total DECIMAL(12, 2) NOT NULL DEFAULT 0,
       notes TEXT,
+      payment_url TEXT,
+      paystack_reference VARCHAR(100),
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
@@ -33,9 +35,13 @@ export async function ensureInvoiceTables() {
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 
+    ALTER TABLE invoices ADD COLUMN IF NOT EXISTS payment_url TEXT;
+    ALTER TABLE invoices ADD COLUMN IF NOT EXISTS paystack_reference VARCHAR(100);
+
     CREATE INDEX IF NOT EXISTS idx_invoices_status ON invoices(status);
     CREATE INDEX IF NOT EXISTS idx_invoices_created_at ON invoices(created_at);
     CREATE INDEX IF NOT EXISTS idx_invoices_invoice_number ON invoices(invoice_number);
+    CREATE INDEX IF NOT EXISTS idx_invoices_paystack_reference ON invoices(paystack_reference);
   `)
 
   ensured = true

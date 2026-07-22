@@ -1,12 +1,15 @@
 import { NextResponse } from "next/server"
 import { query } from "@/lib/db"
 import { ensureInvoiceTables } from "@/lib/invoice-db"
+import { canCreateInvoicePaymentLink, createInvoicePaystackLink } from "@/lib/invoice-payment"
 
 type InvoiceLineItem = {
   description: string
   quantity: number
   unitPrice: number
 }
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const parseAmount = (value: unknown) => {
   const amount = Number(value)
@@ -46,6 +49,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     const body = await request.json()
     const invoiceNumber = String(body.invoiceNumber ?? "").trim()
     const customerName = String(body.customerName ?? "").trim()
+    const customerEmail = String(body.customerEmail ?? "").trim()
     const currency = String(body.currency ?? "GHS").trim()
     const status = String(body.status ?? "draft").trim()
     const issueDate = String(body.issueDate ?? "").trim()
@@ -62,6 +66,21 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 
     if (!["draft", "sent", "paid"].includes(status)) {
       return NextResponse.json({ error: "Invalid status" }, { status: 400 })
+    }
+
+    if (totals.total > 0 && status !== "paid") {
+      if (!customerEmail || !EMAIL_RE.test(customerEmail)) {
+        return NextResponse.json(
+          { error: "Customer email is required so we can create a Paystack payment link" },
+          { status: 400 },
+        )
+      }
+    }
+
+    const existingResult = await query("SELECT * FROM invoices WHERE id = $1 LIMIT 1", [id])
+    const existing = existingResult.rows[0]
+    if (!existing) {
+      return NextResponse.json({ error: "Invoice not found" }, { status: 404 })
     }
 
     const result = await query(
@@ -87,7 +106,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
       [
         invoiceNumber,
         customerName,
-        String(body.customerEmail ?? "").trim(),
+        customerEmail,
         String(body.customerPhone ?? "").trim(),
         String(body.customerCompany ?? "").trim(),
         issueDate,
@@ -104,11 +123,48 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
       ],
     )
 
-    if (!result.rows[0]) {
-      return NextResponse.json({ error: "Invoice not found" }, { status: 404 })
+    let invoice = result.rows[0]
+
+    const paymentDetailsChanged =
+      Number(existing.total) !== totals.total ||
+      String(existing.customer_email || "").trim() !== customerEmail ||
+      String(existing.currency) !== currency
+
+    const needsPaymentLink =
+      canCreateInvoicePaymentLink({
+        customer_email: customerEmail,
+        total: totals.total,
+        status,
+      }) &&
+      (!invoice.payment_url || paymentDetailsChanged)
+
+    if (needsPaymentLink) {
+      try {
+        invoice = await createInvoicePaystackLink({
+          id: invoice.id,
+          invoice_number: invoice.invoice_number,
+          customer_name: invoice.customer_name,
+          customer_email: invoice.customer_email,
+          total: Number(invoice.total),
+          currency: invoice.currency,
+        })
+      } catch (paystackError) {
+        console.error("[invoice] Paystack link refresh failed:", paystackError)
+        return NextResponse.json(
+          {
+            error: "Invoice saved, but Paystack payment link could not be created. Try saving again.",
+            invoice,
+          },
+          { status: 502 },
+        )
+      }
     }
 
-    return NextResponse.json({ invoice: result.rows[0] })
+    if (status === "paid" || totals.total <= 0) {
+      // Keep historical payment_url for reference; no new link needed.
+    }
+
+    return NextResponse.json({ invoice })
   } catch (error: unknown) {
     console.error("[invoice] Error updating invoice:", error)
     if (typeof error === "object" && error && "code" in error && error.code === "23505") {

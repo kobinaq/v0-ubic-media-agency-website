@@ -4,6 +4,8 @@ import { query } from "@/lib/db"
 import { sendAdminOrderNotification, sendOrderConfirmationEmail } from "@/lib/email"
 import { sendAdminSms, sendClientSms } from "@/lib/sms"
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit"
+import { ensureInvoiceTables } from "@/lib/invoice-db"
+import { markInvoicePaidByPaystackReference } from "@/lib/invoice-payment"
 
 async function notifyPaidOrder(order: {
   order_reference: string
@@ -83,47 +85,80 @@ export async function GET(request: Request) {
     const orderLookup = await query("SELECT * FROM orders WHERE paystack_reference = $1 LIMIT 1", [reference])
     const existing = orderLookup.rows[0]
 
-    if (!existing) {
-      return NextResponse.json({ success: false, message: "Order not found" }, { status: 404 })
+    if (existing) {
+      if (existing.payment_status === "paid") {
+        return NextResponse.json({ success: true, message: "Payment already verified" })
+      }
+
+      const paidAmountMajor = Number(verification.data.amount) / 100
+      const expectedAmount = Number(existing.amount)
+      const paidCurrency = String(verification.data.currency || "").toUpperCase()
+
+      if (
+        !Number.isFinite(paidAmountMajor) ||
+        paidAmountMajor !== expectedAmount ||
+        paidCurrency !== String(existing.currency).toUpperCase()
+      ) {
+        console.error("[v0] Payment amount/currency mismatch", {
+          reference,
+          paidAmountMajor,
+          expectedAmount,
+          paidCurrency,
+          expectedCurrency: existing.currency,
+        })
+        return NextResponse.json({ success: false, message: "Payment amount mismatch" }, { status: 400 })
+      }
+
+      const updateResult = await query(
+        `UPDATE orders
+         SET payment_status = $1, updated_at = CURRENT_TIMESTAMP
+         WHERE paystack_reference = $2 AND payment_status = 'pending'
+         RETURNING *`,
+        ["paid", reference],
+      )
+
+      const order = updateResult.rows[0]
+      if (order) {
+        await notifyPaidOrder(order)
+      }
+
+      return NextResponse.json({ success: true, message: "Payment verified successfully" })
     }
 
-    if (existing.payment_status === "paid") {
-      return NextResponse.json({ success: true, message: "Payment already verified" })
-    }
-
-    const paidAmountMajor = Number(verification.data.amount) / 100
-    const expectedAmount = Number(existing.amount)
-    const paidCurrency = String(verification.data.currency || "").toUpperCase()
-
-    if (
-      !Number.isFinite(paidAmountMajor) ||
-      paidAmountMajor !== expectedAmount ||
-      paidCurrency !== String(existing.currency).toUpperCase()
-    ) {
-      console.error("[v0] Payment amount/currency mismatch", {
+    await ensureInvoiceTables()
+    try {
+      const invoice = await markInvoicePaidByPaystackReference(
         reference,
-        paidAmountMajor,
-        expectedAmount,
-        paidCurrency,
-        expectedCurrency: existing.currency,
+        verification.data.amount,
+        verification.data.currency,
+      )
+
+      if (!invoice) {
+        return NextResponse.json({ success: false, message: "Order not found" }, { status: 404 })
+      }
+
+      await Promise.allSettled([
+        sendAdminSms({
+          message: `UBIC alert: invoice ${invoice.invoice_number} has been paid.`,
+        }),
+        invoice.customer_phone
+          ? sendClientSms({
+              recipients: [invoice.customer_phone],
+              message: `Payment received. Thanks ${invoice.customer_name}, invoice ${invoice.invoice_number} with Ubic Media Agency is marked paid.`,
+            })
+          : Promise.resolve(),
+      ])
+
+      return NextResponse.json({
+        success: true,
+        message: "Invoice payment verified successfully",
+        type: "invoice",
+        invoiceNumber: invoice.invoice_number,
       })
-      return NextResponse.json({ success: false, message: "Payment amount mismatch" }, { status: 400 })
+    } catch (invoiceError) {
+      console.error("[invoice] Payment verification failed:", invoiceError)
+      return NextResponse.json({ success: false, message: "Invoice payment amount mismatch" }, { status: 400 })
     }
-
-    const updateResult = await query(
-      `UPDATE orders
-       SET payment_status = $1, updated_at = CURRENT_TIMESTAMP
-       WHERE paystack_reference = $2 AND payment_status = 'pending'
-       RETURNING *`,
-      ["paid", reference],
-    )
-
-    const order = updateResult.rows[0]
-    if (order) {
-      await notifyPaidOrder(order)
-    }
-
-    return NextResponse.json({ success: true, message: "Payment verified successfully" })
   } catch (error) {
     console.error("[v0] Payment verification error:", error)
     return NextResponse.json({ success: false, message: "Verification error" }, { status: 500 })

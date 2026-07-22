@@ -1,12 +1,15 @@
 import { NextResponse } from "next/server"
 import { query } from "@/lib/db"
 import { ensureInvoiceTables } from "@/lib/invoice-db"
+import { canCreateInvoicePaymentLink, createInvoicePaystackLink } from "@/lib/invoice-payment"
 
 type InvoiceLineItem = {
   description: string
   quantity: number
   unitPrice: number
 }
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const parseAmount = (value: unknown) => {
   const amount = Number(value)
@@ -56,6 +59,7 @@ export async function POST(request: Request) {
     const body = await request.json()
     const invoiceNumber = String(body.invoiceNumber ?? "").trim()
     const customerName = String(body.customerName ?? "").trim()
+    const customerEmail = String(body.customerEmail ?? "").trim()
     const currency = String(body.currency ?? "GHS").trim()
     const status = String(body.status ?? "draft").trim()
     const issueDate = String(body.issueDate ?? "").trim()
@@ -72,6 +76,21 @@ export async function POST(request: Request) {
 
     if (!["draft", "sent", "paid"].includes(status)) {
       return NextResponse.json({ error: "Invalid status" }, { status: 400 })
+    }
+
+    const needsPaymentLink = canCreateInvoicePaymentLink({
+      customer_email: customerEmail,
+      total: totals.total,
+      status,
+    })
+
+    if (totals.total > 0 && status !== "paid") {
+      if (!customerEmail || !EMAIL_RE.test(customerEmail)) {
+        return NextResponse.json(
+          { error: "Customer email is required so we can create a Paystack payment link" },
+          { status: 400 },
+        )
+      }
     }
 
     const result = await query(
@@ -97,7 +116,7 @@ export async function POST(request: Request) {
       [
         invoiceNumber,
         customerName,
-        String(body.customerEmail ?? "").trim(),
+        customerEmail,
         String(body.customerPhone ?? "").trim(),
         String(body.customerCompany ?? "").trim(),
         issueDate,
@@ -113,7 +132,29 @@ export async function POST(request: Request) {
       ],
     )
 
-    return NextResponse.json({ invoice: result.rows[0] }, { status: 201 })
+    let invoice = result.rows[0]
+
+    if (needsPaymentLink) {
+      try {
+        invoice = await createInvoicePaystackLink({
+          id: invoice.id,
+          invoice_number: invoice.invoice_number,
+          customer_name: invoice.customer_name,
+          customer_email: invoice.customer_email,
+          total: Number(invoice.total),
+          currency: invoice.currency,
+        })
+      } catch (paystackError) {
+        console.error("[invoice] Paystack link creation failed:", paystackError)
+        await query("DELETE FROM invoices WHERE id = $1", [invoice.id])
+        return NextResponse.json(
+          { error: "Failed to create Paystack payment link. Check your Paystack keys and try again." },
+          { status: 502 },
+        )
+      }
+    }
+
+    return NextResponse.json({ invoice }, { status: 201 })
   } catch (error: unknown) {
     console.error("[invoice] Error creating invoice:", error)
     if (typeof error === "object" && error && "code" in error && error.code === "23505") {

@@ -1,20 +1,15 @@
 import type { Metadata } from "next"
 import PortfolioClientPage from "../portfolio/PortfolioClientPage"
+import { createPageMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
-  title: "Case Studies - Ubic Media Agency | Creative Work & Project Outcomes",
+export const metadata: Metadata = createPageMetadata({
+  title: "Case Studies | Ubic Media Agency",
   description:
     "Explore Ubic Media Agency case studies across branding, social media, web design, photography, and videography projects.",
-  openGraph: {
-    title: "Case Studies - Ubic Media Agency",
-    description: "Explore recent brand, content, and digital project outcomes from Ubic Media Agency.",
-    type: "website",
-    url: "/case-studies",
-  },
-  alternates: {
-    canonical: "/case-studies",
-  },
-}
+  path: "/case-studies",
+  ogTitle: "Case Studies | Ubic Media Agency",
+  ogDescription: "Explore recent brand, content, and digital project outcomes from Ubic Media Agency.",
+})
 
 export default function CaseStudiesPage() {
   return <PortfolioClientPage />

@@ -109,9 +109,9 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     }
 
     return NextResponse.json({ invoice: result.rows[0] })
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("[invoice] Error updating invoice:", error)
-    if (error?.code === "23505") {
+    if (typeof error === "object" && error && "code" in error && error.code === "23505") {
       return NextResponse.json({ error: "Invoice number already exists" }, { status: 409 })
     }
     return NextResponse.json({ error: "Failed to update invoice" }, { status: 500 })

@@ -2,17 +2,48 @@ import { NextResponse } from "next/server"
 import { query } from "@/lib/db"
 import { sendLeadConfirmationEmail, sendAdminLeadNotification } from "@/lib/email"
 import { sendAdminSms, sendClientSms } from "@/lib/sms"
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit"
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const MAX_MESSAGE_LENGTH = 5000
 
 export async function POST(request: Request) {
   try {
-    const { name, email, phone, message } = await request.json()
+    const ip = getClientIp(request)
+    const limit = checkRateLimit({
+      key: `leads:${ip}`,
+      limit: 5,
+      windowMs: 60_000,
+    })
 
-    // Validate input
+    if (!limit.ok) {
+      return NextResponse.json(
+        { error: "Too many requests. Please try again shortly." },
+        {
+          status: 429,
+          headers: { "Retry-After": String(limit.retryAfterSec) },
+        },
+      )
+    }
+
+    const body = await request.json()
+    const name = typeof body.name === "string" ? body.name.trim() : ""
+    const email = typeof body.email === "string" ? body.email.trim() : ""
+    const phone = typeof body.phone === "string" ? body.phone.trim() : ""
+    const message = typeof body.message === "string" ? body.message.trim() : ""
+
     if (!name || !email || !message) {
       return NextResponse.json({ error: "Name, email, and message are required" }, { status: 400 })
     }
 
-    // Insert lead into database
+    if (!EMAIL_RE.test(email) || name.length > 120 || (phone && phone.length > 40)) {
+      return NextResponse.json({ error: "Invalid contact details" }, { status: 400 })
+    }
+
+    if (message.length > MAX_MESSAGE_LENGTH) {
+      return NextResponse.json({ error: "Message is too long" }, { status: 400 })
+    }
+
     await query("INSERT INTO leads (name, email, phone, message) VALUES ($1, $2, $3, $4)", [
       name,
       email,
@@ -26,7 +57,8 @@ export async function POST(request: Request) {
       phone
         ? sendClientSms({
             recipients: [phone],
-            message: "Thanks for contacting Ubic Media Agency. We've received your brief and will get back to you shortly.",
+            message:
+              "Thanks for contacting Ubic Media Agency. We've received your brief and will get back to you shortly.",
           })
         : Promise.resolve(),
       sendAdminSms({

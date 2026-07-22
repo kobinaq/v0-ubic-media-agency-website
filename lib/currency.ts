@@ -1,23 +1,31 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
+import { useCallback, useEffect, useState } from "react"
+import {
+  amountFromGhs,
+  DEFAULT_GHS_PER_USD,
+  DEFAULT_USD_MARKUP,
+  type PricingQuote,
+} from "@/lib/pricing"
 
 export type Currency = "GHS" | "USD"
 
+const DEFAULT_QUOTE: PricingQuote = {
+  ghsPerUsd: DEFAULT_GHS_PER_USD,
+  markup: DEFAULT_USD_MARKUP,
+}
+
 export async function detectCurrency(locale?: string): Promise<Currency> {
   try {
-    // First check locale
     if (locale?.includes("GH") || locale?.includes("gh")) {
       return "GHS"
     }
 
-    // Try to detect from timezone
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
     if (timezone?.includes("Africa/Accra")) {
       return "GHS"
     }
 
-    // Default to USD for international users
     return "USD"
   } catch {
     return "USD"
@@ -39,24 +47,61 @@ export const formatPrice = formatPriceWithCurrency
 export function useCurrency() {
   const [currency, setCurrencyState] = useState<Currency>("USD")
   const [isLoading, setIsLoading] = useState(true)
+  const [quote, setQuote] = useState<PricingQuote>(DEFAULT_QUOTE)
 
   useEffect(() => {
-    const detectAndSetCurrency = async () => {
-      const detected = await detectCurrency()
-      setCurrencyState(detected)
-      setIsLoading(false)
+    let cancelled = false
+
+    const boot = async () => {
+      try {
+        const [detected, fxResponse] = await Promise.all([
+          detectCurrency(),
+          fetch("/api/fx").then((res) => (res.ok ? res.json() : null)),
+        ])
+
+        if (cancelled) return
+
+        setCurrencyState(detected)
+        if (fxResponse && Number.isFinite(Number(fxResponse.ghsPerUsd)) && Number(fxResponse.ghsPerUsd) > 0) {
+          setQuote({
+            ghsPerUsd: Number(fxResponse.ghsPerUsd),
+            markup: Number(fxResponse.markup) > 0 ? Number(fxResponse.markup) : DEFAULT_USD_MARKUP,
+          })
+        }
+      } finally {
+        if (!cancelled) setIsLoading(false)
+      }
     }
 
-    detectAndSetCurrency()
+    void boot()
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   const setCurrency = useCallback((newCurrency: Currency) => {
     setCurrencyState(newCurrency)
   }, [])
 
-  const formatPriceFunc = (amount: number): string => {
-    return formatPriceWithCurrency(amount, currency)
-  }
+  const formatPriceFunc = useCallback(
+    (priceGhs: number): string => {
+      const amount = amountFromGhs(priceGhs, currency, quote)
+      return formatPriceWithCurrency(amount, currency)
+    },
+    [currency, quote],
+  )
 
-  return { currency, setCurrency, formatPrice: formatPriceFunc, isLoading }
+  const toAmount = useCallback(
+    (priceGhs: number): number => amountFromGhs(priceGhs, currency, quote),
+    [currency, quote],
+  )
+
+  return {
+    currency,
+    setCurrency,
+    formatPrice: formatPriceFunc,
+    toAmount,
+    quote,
+    isLoading,
+  }
 }

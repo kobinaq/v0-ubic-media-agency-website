@@ -13,7 +13,7 @@
         "1 month support"
       ],
       "priceGHS": 3000,
-      "priceUSD": 180,
+      "priceUSD": 270,
       "popular": false
     },
     {
@@ -30,7 +30,7 @@
         "3 months support"
       ],
       "priceGHS": 5500,
-      "priceUSD": 330,
+      "priceUSD": 495,
       "popular": true
     },
     {
@@ -47,7 +47,7 @@
         "6 months support"
       ],
       "priceGHS": 10000,
-      "priceUSD": 600,
+      "priceUSD": 900,
       "popular": false
     },
     {
@@ -63,7 +63,7 @@
         "Social media templates"
       ],
       "priceGHS": 1000,
-      "priceUSD": 60,
+      "priceUSD": 90,
       "popular": false
     },
     {
@@ -80,7 +80,7 @@
         "Social media kit"
       ],
       "priceGHS": 3000,
-      "priceUSD": 180,
+      "priceUSD": 270,
       "popular": true
     },
     {
@@ -98,7 +98,7 @@
         "Brand voice & messaging guide"
       ],
       "priceGHS": 8500,
-      "priceUSD": 510,
+      "priceUSD": 765,
       "popular": false
     },
     {
@@ -114,7 +114,7 @@
         "1 month commitment"
       ],
       "priceGHS": 1500,
-      "priceUSD": 90,
+      "priceUSD": 135,
       "popular": false
     },
     {
@@ -131,7 +131,7 @@
         "3 months commitment"
       ],
       "priceGHS": 3500,
-      "priceUSD": 210,
+      "priceUSD": 315,
       "popular": true
     },
     {
@@ -149,7 +149,7 @@
         "6 months commitment"
       ],
       "priceGHS": 7500,
-      "priceUSD": 450,
+      "priceUSD": 675,
       "popular": false
     },
     {
@@ -165,7 +165,7 @@
         "1 consultation session"
       ],
       "priceGHS": 2000,
-      "priceUSD": 120,
+      "priceUSD": 180,
       "popular": false
     },
     {
@@ -182,7 +182,7 @@
         "3 consultation sessions"
       ],
       "priceGHS": 4500,
-      "priceUSD": 270,
+      "priceUSD": 405,
       "popular": true
     },
     {
@@ -200,7 +200,7 @@
         "Ongoing strategic guidance"
       ],
       "priceGHS": 9000,
-      "priceUSD": 540,
+      "priceUSD": 810,
       "popular": false
     },
     {
@@ -261,7 +261,7 @@
         "1 revision round"
       ],
       "priceGHS": 800,
-      "priceUSD": 48,
+      "priceUSD": 72,
       "popular": false
     },
     {
@@ -277,7 +277,7 @@
         "3 revision rounds"
       ],
       "priceGHS": 2000,
-      "priceUSD": 120,
+      "priceUSD": 180,
       "popular": true
     },
     {
@@ -294,7 +294,7 @@
         "Print vendor coordination"
       ],
       "priceGHS": 5000,
-      "priceUSD": 300,
+      "priceUSD": 450,
       "popular": false
     }
   ]

@@ -9,7 +9,7 @@ export function getPool() {
   return pool
 }
 
-export async function query(text: string, params?: any[]) {
+export async function query(text: string, params?: unknown[]) {
   const pool = getPool()
   return pool.query(text, params)
 }

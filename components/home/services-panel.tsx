@@ -3,7 +3,7 @@
 import { useRef } from "react"
 import Link from "next/link"
 import { useGSAP } from "@gsap/react"
-import { gsap, registerGsap, ScrollTrigger } from "@/lib/gsap"
+import { gsap, registerGsap } from "@/lib/gsap"
 import { prefersReducedMotion } from "@/lib/gsap/prefers-reduced-motion"
 
 export type ServiceItem = {

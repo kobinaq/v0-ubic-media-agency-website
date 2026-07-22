@@ -3,7 +3,6 @@
 import type React from "react"
 import { useState } from "react"
 import { CalendarDays, Check, Mail, MapPin, MessageCircle } from "lucide-react"
-import { Analytics } from "@/components/analytics"
 import { Button } from "@/components/ui/button"
 import { Footer } from "@/components/footer"
 import { Header } from "@/components/header"
@@ -70,7 +69,7 @@ export default function ContactPage() {
       } else {
         setSubmitStatus("error")
       }
-    } catch (error) {
+    } catch {
       setSubmitStatus("error")
     } finally {
       setIsSubmitting(false)
@@ -79,7 +78,6 @@ export default function ContactPage() {
 
   return (
     <>
-      <Analytics />
       <Header />
 
       <main className="bg-background text-foreground">
@@ -117,6 +115,37 @@ export default function ContactPage() {
             </div>
           }
         />
+
+        <section className="border-b border-border px-5 py-16 md:px-8 lg:px-10">
+          <div className="mx-auto grid max-w-[1400px] gap-10 md:grid-cols-[1.1fr_0.9fr]">
+            <div>
+              <p className="issue-label">How we work</p>
+              <h2 className="mt-4 font-serif text-3xl font-semibold tracking-tight md:text-4xl">
+                A clear next step for your brand.
+              </h2>
+              <p className="mt-5 max-w-2xl text-base leading-8 text-muted-foreground">
+                Ubic Media Agency helps businesses in Accra and worldwide sharpen brand identity, launch clearer
+                websites, and build content systems that support growth. Whether you need a full rebrand, a focused
+                website rebuild, or ongoing creative support, tell us what you are trying to achieve and we will
+                recommend the right path.
+              </p>
+            </div>
+            <div className="space-y-5 border-t border-border pt-6 text-sm leading-7 text-muted-foreground md:border-t-0 md:border-l md:pl-10 md:pt-0">
+              <p>
+                Share your goals, timeline, and budget range so we can respond with a practical recommendation instead
+                of a generic sales pitch.
+              </p>
+              <p>
+                Based opposite Shooting Stars Community School in Adenta, Accra, we work remotely with clients across
+                Ghana and international markets.
+              </p>
+              <p>
+                Prefer messaging? Reach us on WhatsApp, email {siteConfig.contact.email}, or book a strategy call when
+                you want a deeper walkthrough.
+              </p>
+            </div>
+          </div>
+        </section>
 
         <section className="border-b border-border px-5 py-20 md:px-8 lg:px-10">
           <StaggerChildren className="mx-auto grid max-w-[1400px] gap-8 sm:grid-cols-2 lg:grid-cols-4" y={28} stagger={0.08}>
@@ -233,7 +262,7 @@ export default function ContactPage() {
                 </div>
 
                 {submitStatus === "success" && (
-                  <div className="border border-green-500/30 bg-green-500/10 p-4">
+                  <div className="border border-green-500/30 bg-green-500/10 p-4" role="status" aria-live="polite">
                     <p className="flex items-center gap-2 text-sm text-green-700 dark:text-green-300">
                       <Check className="h-4 w-4" />
                       Thanks. Your message is in and we will get back to you soon.
@@ -242,7 +271,7 @@ export default function ContactPage() {
                 )}
 
                 {submitStatus === "error" && (
-                  <div className="border border-red-500/30 bg-red-500/10 p-4">
+                  <div className="border border-red-500/30 bg-red-500/10 p-4" role="alert" aria-live="assertive">
                     <p className="text-sm text-red-700 dark:text-red-300">
                       Something went wrong. Please try again or contact us directly.
                     </p>

@@ -1,15 +1,18 @@
 import type React from "react"
 import type { Metadata } from "next"
+import { Suspense } from "react"
 import { Archivo, Fraunces, Space_Mono } from "next/font/google"
 import "./globals.css"
 import { siteConfig } from "@/lib/content"
 import Script from "next/script"
 import { generateOrganizationSchema, generateLocalBusinessSchema } from "@/lib/schema"
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics as VercelAnalytics } from "@vercel/analytics/next"
+import { Analytics } from "@/components/analytics"
 import { ThemeProvider } from "@/components/theme-provider"
 import { SmoothScroll } from "@/components/smooth-scroll"
 import { CustomCursor } from "@/components/custom-cursor"
 import { Preloader } from "@/components/preloader"
+import { createPageMetadata } from "@/lib/seo"
 
 const archivo = Archivo({
   subsets: ["latin"],
@@ -30,15 +33,13 @@ const spaceMono = Space_Mono({
   display: "swap",
 })
 
-export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://weareubic.com"),
-  title: `${siteConfig.siteName} - ${siteConfig.tagline}`,
+const rootPageMetadata = createPageMetadata({
+  title: `${siteConfig.siteName} | Brand Identity, Websites & Creative Systems`,
   description: siteConfig.description,
-  icons: {
-    icon: "/favicon.png",
-    shortcut: "/favicon.png",
-    apple: "/favicon.png",
-  },
+  path: "/",
+  ogTitle: `${siteConfig.siteName} | Build a Brand People Trust`,
+  ogDescription:
+    "Brand identity, websites, and content systems for ambitious businesses that need to look sharper and convert better.",
   keywords: [
     "brand development",
     "brand agency Ghana",
@@ -51,30 +52,18 @@ export const metadata: Metadata = {
     "digital marketing",
     "Accra",
   ],
+})
+
+export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://weareubic.com"),
+  ...rootPageMetadata,
+  icons: {
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
+  },
+  manifest: "/manifest.json",
   authors: [{ name: siteConfig.siteName }],
-  openGraph: {
-    title: siteConfig.siteName,
-    description: siteConfig.description,
-    type: "website",
-    locale: "en_US",
-    siteName: siteConfig.siteName,
-    url: process.env.NEXT_PUBLIC_SITE_URL,
-    images: [
-      {
-        url: "/logo.png",
-        width: 1200,
-        height: 630,
-        alt: `${siteConfig.siteName} logo`,
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: siteConfig.siteName,
-    description: siteConfig.description,
-    creator: "@ubicmediaagency",
-    images: ["/logo.png"],
-  },
   robots: {
     index: true,
     follow: true,
@@ -85,9 +74,6 @@ export const metadata: Metadata = {
       "max-image-preview": "large",
       "max-video-preview": -1,
     },
-  },
-  alternates: {
-    canonical: process.env.NEXT_PUBLIC_SITE_URL || "https://weareubic.com",
   },
   generator: "v0.app",
 }
@@ -159,7 +145,10 @@ export default function RootLayout({
           <SmoothScroll />
           <CustomCursor />
           {children}
-          <Analytics />
+          <Suspense fallback={null}>
+            <Analytics />
+          </Suspense>
+          <VercelAnalytics />
         </ThemeProvider>
       </body>
     </html>

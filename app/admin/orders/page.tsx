@@ -133,6 +133,26 @@ const formatInvoiceNumber = (amount: number) =>
     maximumFractionDigits: 2,
   })
 
+/** Keep invoice PDF text literal — Helvetica can't render many Unicode glyphs cleanly. */
+const toPdfSafeText = (value: string) =>
+  String(value || "")
+    .replace(/\r\n/g, "\n")
+    .replace(/\r/g, "\n")
+    .replace(/[\u2022\u25CF\u25E6\u2043\u2219\u00B7]/g, "*")
+    .replace(/[\u2018\u2019\u201A\u201B]/g, "'")
+    .replace(/[\u201C\u201D\u201E\u201F]/g, '"')
+    .replace(/[\u2013\u2014]/g, "-")
+    .replace(/\u00A0/g, " ")
+    .replace(/[^\n\x20-\x7E]/g, "")
+
+const wrapPdfLines = (doc: { splitTextToSize: (text: string, width: number) => string[] }, text: string, width: number) =>
+  toPdfSafeText(text)
+    .split("\n")
+    .flatMap((line) => {
+      const wrapped = doc.splitTextToSize(line.length > 0 ? line : " ", width)
+      return (Array.isArray(wrapped) ? wrapped : [String(wrapped)]).map((entry) => String(entry))
+    })
+
 const normalizeInvoiceFromApi = (invoice: Invoice): Invoice => ({
   ...invoice,
   line_items: normalizeLineItems(invoice.line_items),
@@ -446,6 +466,7 @@ export default function AdminOrdersPage() {
   const downloadInvoicePdf = async (invoice: Invoice) => {
     const { jsPDF } = await import("jspdf")
     const doc = new jsPDF({ unit: "pt", format: "a4" })
+    doc.setCharSpace(0)
     const pageWidth = doc.internal.pageSize.getWidth()
     const pageHeight = doc.internal.pageSize.getHeight()
     const margin = 48
@@ -611,10 +632,9 @@ export default function AdminOrdersPage() {
     y += 35
     lineItems.forEach((item, index) => {
       const itemTotal = parseAmount(item.quantity) * parseAmount(item.unitPrice)
-      const descriptionLines = String(item.description || "")
-        .split("\n")
-        .flatMap((line) => doc.splitTextToSize(line || " ", descriptionWidth))
-      const rowHeight = Math.max(34, descriptionLines.length * 13 + 14)
+      const descriptionLines = wrapPdfLines(doc, item.description, descriptionWidth)
+      const lineHeight = 13
+      const rowHeight = Math.max(34, descriptionLines.length * lineHeight + 14)
 
       if (y + rowHeight > pageHeight - 126) {
         y = addContentPage()
@@ -630,11 +650,13 @@ export default function AdminOrdersPage() {
       setText(colors.ink)
       doc.setFont("helvetica", "normal")
       doc.setFontSize(9)
-      doc.text(descriptionLines, descriptionX, y)
-      doc.text(String(item.quantity), qtyX, y)
-      doc.text(formatInvoiceNumber(item.unitPrice), unitX, y)
+      descriptionLines.forEach((line, lineIndex) => {
+        doc.text(line, descriptionX, y + lineIndex * lineHeight, { charSpace: 0 })
+      })
+      doc.text(String(item.quantity), qtyX, y, { charSpace: 0 })
+      doc.text(formatInvoiceNumber(item.unitPrice), unitX, y, { charSpace: 0 })
       doc.setFont("helvetica", "bold")
-      doc.text(formatInvoiceNumber(itemTotal), totalX, y, { align: "right" })
+      doc.text(formatInvoiceNumber(itemTotal), totalX, y, { align: "right", charSpace: 0 })
       y += rowHeight
     })
 
@@ -681,7 +703,7 @@ export default function AdminOrdersPage() {
         drawPageShell()
         y = 76
       }
-      const noteLines = doc.splitTextToSize(invoice.notes, contentWidth - 32)
+      const noteLines = wrapPdfLines(doc, invoice.notes, contentWidth - 32)
       const noteHeight = Math.max(72, noteLines.length * 13 + 42)
       setFill(colors.card)
       setDraw(colors.rule)
@@ -689,11 +711,13 @@ export default function AdminOrdersPage() {
       setText(colors.muted)
       doc.setFont("helvetica", "bold")
       doc.setFontSize(8)
-      doc.text("NOTES", margin + 16, y)
+      doc.text("NOTES", margin + 16, y, { charSpace: 0 })
       setText(colors.ink)
       doc.setFont("helvetica", "normal")
       doc.setFontSize(10)
-      doc.text(noteLines, margin + 16, y + 22)
+      noteLines.forEach((line, lineIndex) => {
+        doc.text(line, margin + 16, y + 22 + lineIndex * 13, { charSpace: 0 })
+      })
     }
 
     setText(colors.rust)
@@ -1054,7 +1078,7 @@ export default function AdminOrdersPage() {
                         {invoiceForm.lineItems.map((item, index) => (
                           <div key={index} className="space-y-3 border border-border bg-background p-4">
                             <Textarea
-                              placeholder={"Description\n• Addition one\n• Addition two"}
+                              placeholder={"Description\n* Addition one\n* Addition two"}
                               rows={3}
                               value={item.description}
                               onChange={(event) => updateLineItem(index, "description", event.target.value)}

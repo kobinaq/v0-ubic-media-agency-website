@@ -1,5 +1,5 @@
 {
-  "categories": ["All", "Photography", "Videography", "Web Design", "Brand Identity", "Social Media", "Print Design"],
+  "categories": ["All", "Photography", "Videography", "Web Design", "Brand Identity", "Social Media", "Print Design", "Marketing Consultation"],
   "projects": [
     {
       "id": "starbites-food",
@@ -117,6 +117,19 @@
       "challenge": "Corps Africa needed a compact story that could communicate the value and atmosphere of its training program.",
       "approach": "We focused on human moments, program context, and a documentary rhythm that could make the training feel tangible to viewers.",
       "outcome": "The mini documentary created a stronger storytelling asset for awareness, stakeholder updates, and program communication."
+    },
+    {
+      "id": "lurniq-marketing",
+      "title": "Lurniq — Marketing Consultation",
+      "category": "Marketing Consultation",
+      "image": "/portfolio-4.jpg",
+      "description": "We helped Lurniq grow their social media following and engagement by over 50%.",
+      "client": "Lurniq (lurniq.com) — EdTech / SaaS, university application platform",
+      "year": "2025",
+      "services": ["Marketing consultation", "Social media strategy", "Engagement growth"],
+      "challenge": "Lurniq needed sharper social presence and engagement to reach students navigating university applications — without losing credibility as an EdTech platform.",
+      "approach": "We audited their channels, refined content direction, and built a consultation-led rhythm that aligned messaging with what prospective students actually cared about.",
+      "outcome": "We helped Lurniq grow their social media following and engagement by over 50%."
     },
     {
       "id": "website",

@@ -14,14 +14,16 @@ export type ServiceItem = {
 }
 
 type ServicesPanelProps = {
-  services: ServiceItem[]
+  services?: ServiceItem[]
+  pillars?: ServiceItem[]
   formatPrice: (n: number) => string
 }
 
 /**
  * Horizontal scroll-pinned services gallery driven by ScrollTrigger.
  */
-export function ServicesPanel({ services, formatPrice }: ServicesPanelProps) {
+export function ServicesPanel({ services, pillars, formatPrice }: ServicesPanelProps) {
+  const items = pillars ?? services ?? []
   const sectionRef = useRef<HTMLElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
 
@@ -69,7 +71,7 @@ export function ServicesPanel({ services, formatPrice }: ServicesPanelProps) {
         )
       })
     },
-    { scope: sectionRef, dependencies: [services] },
+    { scope: sectionRef, dependencies: [items] },
   )
 
   return (
@@ -84,7 +86,7 @@ export function ServicesPanel({ services, formatPrice }: ServicesPanelProps) {
             <span className="md:hidden">Browse services below.</span>
             <span className="hidden md:inline">Scroll sideways, or keep scrolling.</span>
             <br />
-            dsgn / {String(services.length).padStart(2, "0")}
+            dsgn / {String(items.length).padStart(2, "0")}
           </p>
         </div>
       </div>
@@ -93,7 +95,7 @@ export function ServicesPanel({ services, formatPrice }: ServicesPanelProps) {
         ref={trackRef}
         className="flex flex-col gap-4 px-5 pb-24 md:h-scroll-panel md:flex-row md:gap-6 md:px-8 md:pb-28 lg:px-10"
       >
-        {services.map((service, index) => (
+        {items.map((service, index) => (
           <Link
             key={service.id}
             href="/services"

@@ -6,6 +6,8 @@ import portfolio from "@/content/portfolio.json"
 
 export { siteConfig, about, services, packages, portfolio }
 
+export const pillars = services.pillars
+
 export type Package = {
   id: string
   name: string
@@ -25,6 +27,8 @@ export type Service = {
   icon: string
   startingPrice: number
 }
+
+export type Pillar = Service
 
 export type PortfolioProject = {
   id: string

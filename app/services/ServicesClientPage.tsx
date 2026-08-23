@@ -33,19 +33,19 @@ const pillarIconMap = {
 
 const faqSchema = generateFAQSchema([
   {
-    question: "What service should I start with if my brand feels unclear?",
+    question: "What service should I start with if my website isn't working?",
     answer:
-      "Brand identity or brand strategy is usually the best starting point when the core message, look, and positioning are not yet working together.",
+      "Web design is usually the right starting point when your site doesn't explain the business clearly or convert visitors. If you need real product functionality — accounts, dashboards, tools — that's web app development.",
   },
   {
-    question: "Can Ubic handle both the brand and the website?",
+    question: "Can Ubic handle both the website and ongoing marketing?",
     answer:
-      "Yes. Ubic is structured to handle strategy, identity, website design and development, and supporting content so the final experience feels coherent.",
+      "Yes. Ubic is structured to handle web design, web app development, marketing consultation, and media production together so the final experience feels coherent.",
   },
   {
-    question: "How do services relate to packages?",
+    question: "How do the four pillars relate to packages?",
     answer:
-      "Services describe what we do. Packages are priced entry points for that work. Pick the outcome that matches your situation, then open packages filtered to that path.",
+      "The four pillars describe what we do. Packages are priced entry points for that work. Pick the outcome that matches your situation, then open packages filtered to that path.",
   },
   {
     question: "How quickly can a project start?",

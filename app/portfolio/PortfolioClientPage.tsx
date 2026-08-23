@@ -96,7 +96,7 @@ export default function PortfolioPage() {
             <>
               <span className="studio-label">Case studies</span>
               <span className="studio-label">{filteredProjects.length} projects</span>
-              <span className="studio-label">Strategy · Identity · Web · Social · Photo · Video · Print</span>
+              <span className="studio-label">Web Design · Web App Development · Marketing Consultation · Media Production</span>
             </>
           }
           title={
@@ -104,7 +104,7 @@ export default function PortfolioPage() {
               Selected work.
             </h1>
           }
-          description="Projects across strategy, identity, websites, social, photo, video, and print."
+          description="Projects across web design, web app development, marketing consultation, and media production."
           aside={
             <div>
               <p className="studio-label">Index by category</p>

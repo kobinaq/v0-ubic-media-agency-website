@@ -3,23 +3,22 @@ import HomePageClient from "./home-page-client"
 import { createPageMetadata } from "@/lib/seo"
 
 export const metadata: Metadata = createPageMetadata({
-  title: "Ubic Media Agency | Brand Identity, Websites & Creative Systems",
+  title: "Ubic Media Agency | Web Design, Web Apps, Marketing & Media Production",
   description:
-    "Ubic Media Agency helps ambitious businesses build sharper brands and clearer websites through strategy, design, and content-led creative execution.",
+    "Ubic Media Agency builds websites and web applications, guides marketing strategy, and produces media for ambitious businesses in Ghana and beyond.",
   path: "/",
-  ogTitle: "Ubic Media Agency | Build a Brand People Trust",
+  ogTitle: "Ubic Media Agency | Build What Your Business Runs On",
   ogDescription:
-    "Brand identity, websites, and content systems for ambitious businesses that need to look sharper and convert better.",
+    "Web design, web app development, marketing consultation, and media production for businesses that need more than a brochure site.",
   keywords: [
-    "brand development",
-    "brand identity agency",
-    "creative agency",
     "web design agency Ghana",
-    "social media management",
-    "web design",
+    "web app development Ghana",
+    "marketing consultation",
+    "media production",
+    "web application development",
+    "website design",
     "photography",
     "videography",
-    "brand strategy",
     "Ghana",
     "Africa",
   ],

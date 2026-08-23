@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og"
 
 export const runtime = "edge"
-export const alt = "Ubic Media Agency — Brand identity, websites, and creative systems"
+export const alt = "Ubic Media Agency — Web design, web apps, marketing consultation & media production"
 export const size = {
   width: 1200,
   height: 630,
@@ -42,10 +42,10 @@ export default async function OpenGraphImage() {
 
         <div style={{ display: "flex", flexDirection: "column", gap: 24, maxWidth: 920 }}>
           <div style={{ fontSize: 72, lineHeight: 1.02, fontWeight: 600, letterSpacing: "-0.04em" }}>
-            Brand identity, websites, and creative systems.
+            Web design, web apps, marketing & media production.
           </div>
           <div style={{ fontSize: 28, lineHeight: 1.35, opacity: 0.78, fontFamily: "ui-sans-serif, system-ui" }}>
-            Strategy, design, and content-led execution for ambitious businesses.
+            We build what businesses run on — for ambitious teams in Ghana and beyond.
           </div>
         </div>
 

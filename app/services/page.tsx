@@ -5,19 +5,18 @@ import { createPageMetadata } from "@/lib/seo"
 export const metadata: Metadata = createPageMetadata({
   title: "Services | Ubic Media Agency",
   description:
-    "Explore Ubic Media Agency services across brand identity, website design and development, social media support, strategy, and creative production.",
+    "Explore Ubic Media Agency's four pillars: web design, web app development, marketing consultation, and media production.",
   path: "/services",
   ogTitle: "Services | Ubic Media Agency",
-  ogDescription: "Brand identity, websites, and creative support structured around clarity, credibility, and growth.",
+  ogDescription: "Web design, web apps, marketing consultation, and media production — structured around clarity and growth.",
   keywords: [
-    "creative services",
-    "brand identity agency",
-    "social media management",
     "web design services",
+    "web app development",
+    "marketing consultation",
+    "media production",
     "photography services",
     "videography services",
-    "brand strategy",
-    "content creation",
+    "product development Ghana",
   ],
 })
 

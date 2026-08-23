@@ -5,10 +5,10 @@ import { createPageMetadata } from "@/lib/seo"
 export const metadata: Metadata = createPageMetadata({
   title: "Packages & Pricing | Ubic Media Agency",
   description:
-    "Compare Ubic Media Agency packages and starting prices for brand identity, websites, strategy, social media, and creative support.",
+    "Compare Ubic Media Agency packages and starting prices for web design, web app development, marketing consultation, and media production.",
   path: "/packages",
   ogTitle: "Packages & Pricing | Ubic Media Agency",
-  ogDescription: "Clear entry-point pricing for businesses planning a sharper brand or website.",
+  ogDescription: "Clear entry-point pricing for businesses planning a website, web app, or marketing push.",
 })
 
 type PackagesPageProps = {

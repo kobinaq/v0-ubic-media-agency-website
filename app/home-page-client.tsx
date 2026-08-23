@@ -43,12 +43,12 @@ const faqSchema = generateFAQSchema([
   {
     question: "What does Ubic Media Agency help clients with?",
     answer:
-      "We help businesses improve how they look, communicate, and convert through brand identity, websites, content systems, and creative production.",
+      "We help businesses ship real digital products: web design, web app development, marketing consultation, and media production.",
   },
   {
     question: "Do you only work on websites?",
     answer:
-      "No. We combine brand strategy, identity design, website design and development, social content, photography, and videography so the final experience feels consistent across channels.",
+      "No. We build web apps with real functionality (accounts, dashboards, tools), not just marketing pages, and we pair that with marketing consultation and media production so the whole experience holds together.",
   },
   {
     question: "Can I see pricing before reaching out?",
@@ -123,12 +123,13 @@ export default function HomePageClient() {
               </TextReveal>
               <FadeUp className="mt-8 space-y-5 text-base leading-8 text-muted-foreground md:text-lg md:leading-9">
                 <p>
-                  Ubic is the studio behind brands that need lift. We turn strategy, identity, websites, social, photo,
-                  video, and print into work that can leave the desk and hold up in the world.
+                  Ubic is the studio behind products that need to work. We turn web design, web app development,
+                  marketing consultation, and media production into things that leave the desk and hold up in the
+                  world.
                 </p>
                 <p>
-                  A lean team in Accra. Clear thinking, sharp craft, and enough firepower to get ambitious brands off
-                  the ground without the agency fog.
+                  A lean team in Accra. Clear thinking, sharp craft, and enough firepower to get ambitious products
+                  shipped without the agency fog.
                 </p>
               </FadeUp>
               <FadeUp className="mt-10 grid grid-cols-3 gap-4 border-t border-border pt-8" delay={0.1}>

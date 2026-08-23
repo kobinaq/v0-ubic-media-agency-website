@@ -34,22 +34,21 @@ const spaceMono = Space_Mono({
 })
 
 const rootPageMetadata = createPageMetadata({
-  title: `${siteConfig.siteName} | Brand Identity, Websites & Creative Systems`,
+  title: `${siteConfig.siteName} | Web Design, Web Apps, Marketing & Media Production`,
   description: siteConfig.description,
   path: "/",
-  ogTitle: `${siteConfig.siteName} | Build a Brand People Trust`,
+  ogTitle: `${siteConfig.siteName} | Build What Your Business Runs On`,
   ogDescription:
-    "Brand identity, websites, and content systems for ambitious businesses that need to look sharper and convert better.",
+    "Web design, web app development, marketing consultation, and media production for businesses that need more than a brochure site.",
   keywords: [
-    "brand development",
-    "brand agency Ghana",
-    "social media management",
-    "web design Ghana",
+    "web design agency Ghana",
+    "web app development Ghana",
+    "marketing consultation",
+    "media production",
+    "web application development",
     "photography services",
     "videography services",
-    "creative agency Africa",
-    "brand strategy",
-    "digital marketing",
+    "digital studio Africa",
     "Accra",
   ],
 })

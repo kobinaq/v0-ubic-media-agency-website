@@ -3,19 +3,33 @@
 import { useMemo, useState } from "react"
 import Link from "next/link"
 import Script from "next/script"
-import { ArrowRight, Check, MessageCircle } from "lucide-react"
+import { ArrowRight, Check, Camera, Code2, MessageCircle, Monitor, Target } from "lucide-react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { PageIntro } from "@/components/page-intro"
 import { FadeUp } from "@/components/home/text-reveal"
-import { services, siteConfig } from "@/lib/content"
+import { services, pillars, siteConfig } from "@/lib/content"
 import { useCurrency } from "@/lib/currency"
 import { OUTCOMES, type OutcomeId } from "@/lib/outcomes"
 import { generateServiceSchema, generateFAQSchema, generateBreadcrumbSchema } from "@/lib/schema"
 import { cn } from "@/lib/utils"
 
 const serviceById = Object.fromEntries(services.services.map((s) => [s.id, s]))
+
+const PILLAR_LINKS: Record<string, string> = {
+  "web-design": "/packages?path=website",
+  "web-app-development": "/contact",
+  "marketing-consultation": "/packages?path=strategy",
+  "media-production": "/packages?path=production",
+}
+
+const pillarIconMap = {
+  monitor: Monitor,
+  "code-2": Code2,
+  target: Target,
+  camera: Camera,
+} as const
 
 const faqSchema = generateFAQSchema([
   {
@@ -86,9 +100,8 @@ export function ServicesClientPage() {
           eyebrow="Services"
           meta={
             <>
-              <span className="studio-label">All services</span>
-              <span className="studio-label">Strategy · Identity · Web · Social</span>
-              <span className="studio-label">Photo · Video · Print</span>
+              <span className="studio-label">Four pillars</span>
+              <span className="studio-label">Web · Apps · Marketing · Media</span>
             </>
           }
           title={
@@ -96,8 +109,69 @@ export function ServicesClientPage() {
               What we do.
             </h1>
           }
-          description="Strategy, identity, websites, social, photo, video, and print. Pick what is stuck and we will show the right work."
+          description="Four pillars: web design, web apps, marketing consultation, and media production. Pick what is stuck and we will show the right work."
         />
+
+        {/* Four pillars */}
+        <section className="border-b border-border px-5 py-16 md:px-8 md:py-20 lg:px-10">
+          <div className="mx-auto max-w-[1400px]">
+            <FadeUp className="mb-10 max-w-xl">
+              <p className="studio-label-accent">How we work</p>
+              <h2 className="studio-display mt-3 text-3xl md:text-5xl">Four pillars</h2>
+              <p className="mt-4 text-sm leading-7 text-muted-foreground">
+                Our core offering, organized around what clients actually need — from marketing sites to full web apps.
+              </p>
+            </FadeUp>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              {pillars.map((pillar, index) => {
+                const Icon = pillarIconMap[pillar.icon as keyof typeof pillarIconMap] ?? Monitor
+                const href = PILLAR_LINKS[pillar.id] ?? "/contact"
+                const isContactOnly = pillar.id === "web-app-development"
+
+                return (
+                  <FadeUp key={pillar.id} delay={index * 0.06}>
+                    <div
+                      className="group flex h-full flex-col border border-border bg-card p-6 transition-colors hover:border-accent/40 hover:bg-accent/[0.03] md:p-8"
+                    >
+                      <Link href={href} data-cursor="hover" className="flex flex-1 flex-col">
+                        <div className="flex items-start justify-between gap-4">
+                          <span className="font-mono text-xs tracking-[0.16em] text-accent">
+                            00-{index + 1}
+                          </span>
+                          <Icon className="h-5 w-5 text-muted-foreground transition-colors group-hover:text-accent" />
+                        </div>
+                        <h3 className="mt-5 font-serif text-2xl font-semibold tracking-tight">{pillar.title}</h3>
+                        <p className="mt-3 flex-1 text-sm leading-7 text-muted-foreground">{pillar.description}</p>
+                        <div className="mt-6 flex items-end justify-between border-t border-border pt-5">
+                          <span className="font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">
+                            from {formatPrice(pillar.startingPrice)}
+                          </span>
+                          <span className="font-mono text-xs uppercase tracking-[0.14em] text-accent">
+                            {isContactOnly ? "contact us →" : "see packages →"}
+                          </span>
+                        </div>
+                      </Link>
+                      {pillar.id === "marketing-consultation" && (
+                        <p className="mt-4 border-t border-border pt-4 text-sm leading-7 text-foreground/90">
+                          <span className="font-semibold">Lurniq case study:</span> We helped Lurniq grow social
+                          following and engagement by over 50%.{" "}
+                          <Link
+                            href="/case-studies"
+                            className="text-accent underline-offset-4 hover:underline"
+                            data-cursor="hover"
+                          >
+                            View work →
+                          </Link>
+                        </p>
+                      )}
+                    </div>
+                  </FadeUp>
+                )
+              })}
+            </div>
+          </div>
+        </section>
 
         {/* Outcome map: accordion on mobile, list + sticky panel on desktop */}
         <section className="border-b border-border px-5 py-16 md:px-8 md:py-24 lg:px-10">

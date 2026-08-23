@@ -10,7 +10,7 @@ import { WorkHoverList } from "@/components/home/work-hover-list"
 import { ServicesPanel } from "@/components/home/services-panel"
 import { Marquee } from "@/components/home/marquee"
 import { TextReveal, FadeUp } from "@/components/home/text-reveal"
-import { about, packages, services, siteConfig } from "@/lib/content"
+import { about, packages, pillars, siteConfig } from "@/lib/content"
 import portfolioData from "@/content/portfolio.json"
 import { generateBreadcrumbSchema, generateFAQSchema } from "@/lib/schema"
 import { Magnetic } from "@/components/animations/magnetic"
@@ -18,17 +18,9 @@ import { MobileCtaBar } from "@/components/mobile-cta-bar"
 
 const formatGHS = (amount: number) => `GHS ${amount.toLocaleString("en-GH")}`
 
-const primaryServices = [
-  services.services.find((s) => s.id === "brand-identity"),
-  services.services.find((s) => s.id === "web-design"),
-  services.services.find((s) => s.id === "social-media"),
-  services.services.find((s) => s.id === "photography-videography"),
-  services.services.find((s) => s.id === "brand-strategy"),
-].filter(Boolean) as (typeof services.services)[number][]
-
 const featuredProjects = portfolioData.projects
   .filter((project) =>
-    ["nexus-it", "starbites-food", "victory-foods-social", "richkev-social", "gordon-university", "starbites-event-coverage"].includes(
+    ["lurniq-marketing", "nexus-it", "starbites-food", "victory-foods-social", "richkev-social", "gordon-university", "starbites-event-coverage"].includes(
       project.id,
     ),
   )
@@ -119,7 +111,7 @@ export default function HomePageClient() {
         </section>
 
         {/* Services */}
-        <ServicesPanel services={primaryServices} formatPrice={formatGHS} />
+        <ServicesPanel pillars={pillars} formatPrice={formatGHS} />
 
         {/* About */}
         <section className="border-t border-border px-5 py-24 md:px-8 md:py-32 lg:px-10">

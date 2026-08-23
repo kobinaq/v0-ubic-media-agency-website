@@ -31,12 +31,12 @@ export function AboutClientPage() {
     {
       question: "What is Ubic Media Agency?",
       answer:
-        "Ubic Media Agency is a full-service brand development agency that helps businesses transform ideas into meaningful, market-ready experiences through strategic design, creative storytelling, and digital innovation.",
+        "Ubic Media Agency is a digital studio built around four pillars: web design, web app development, marketing consultation, and media production. We help businesses ship real digital products, not just marketing pages.",
     },
     {
       question: "What services does Ubic offer?",
       answer:
-        "We offer social media content creation and management, website design and development, brand identity development, brand strategy consulting, and professional photography and videography services.",
+        "We offer web design, web application development, marketing consultation, and media production (photography and videography).",
     },
     {
       question: "How long has Ubic been in business?",
@@ -80,19 +80,19 @@ export function AboutClientPage() {
             <>
               <span className="studio-label">The studio</span>
               <span className="studio-label">Accra, Ghana</span>
-              <span className="studio-label">Strategy · Identity · Web · Social · Photo · Video · Print</span>
+              <span className="studio-label">Web Design · Web App Development · Marketing Consultation · Media Production</span>
             </>
           }
           title={
             <h1 className="studio-display text-[clamp(1.65rem,4.75vw,3.6rem)]">
-              A creative studio
-              <span className="mt-1 block font-serif italic text-accent">for full brand work.</span>
+              A digital studio
+              <span className="mt-1 block font-serif italic text-accent">built for real products, not just pretty pages.</span>
             </h1>
           }
           aside={
             <p className="max-w-md text-sm leading-7 text-muted-foreground md:text-base md:leading-7">
-              We handle strategy, identity, websites, social, photo, video, and print so your brand stays consistent
-              everywhere.
+              We design and build websites and web apps, guide marketing strategy, and produce the media that carries
+              it — so what you ship actually works.
             </p>
           }
         />

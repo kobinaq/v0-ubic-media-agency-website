@@ -98,11 +98,12 @@ export default function ContactPage() {
           aside={
             <div>
               <p className="text-lg leading-8 text-muted-foreground">
-                Strategy, identity, websites, social, photo, video, or print. Send a brief, WhatsApp us, or book a call.
+                Web design, web app development, marketing consultation, or media production. Send a brief, WhatsApp
+                us, or book a call.
               </p>
               <div className="mt-8 space-y-4">
                 {[
-                  "Any of our services, or a mix",
+                  "Any of our four pillars, or a mix",
                   "Rough budget and timeline help",
                   "We reply within one working day",
                 ].map((item) => (
@@ -121,13 +122,13 @@ export default function ContactPage() {
             <div>
               <p className="issue-label">How we work</p>
               <h2 className="mt-4 font-serif text-3xl font-semibold tracking-tight md:text-4xl">
-                A clear next step for your brand.
+                A clear next step for your product.
               </h2>
               <p className="mt-5 max-w-2xl text-base leading-8 text-muted-foreground">
-                Ubic Media Agency helps businesses in Accra and worldwide sharpen brand identity, launch clearer
-                websites, and build content systems that support growth. Whether you need a full rebrand, a focused
-                website rebuild, or ongoing creative support, tell us what you are trying to achieve and we will
-                recommend the right path.
+                Ubic Media Agency helps businesses in Accra and worldwide design and build websites and web apps,
+                sharpen marketing strategy, and produce media that supports a launch. Whether you need a product
+                built from scratch, a marketing consultation engagement, or focused media production, tell us what
+                you are trying to achieve and we will recommend the right path.
               </p>
             </div>
             <div className="space-y-5 border-t border-border pt-6 text-sm leading-7 text-muted-foreground md:border-t-0 md:border-l md:pl-10 md:pt-0">

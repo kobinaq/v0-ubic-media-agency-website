@@ -5,7 +5,7 @@
       "title": "Web Design",
       "description": "Marketing sites, landing pages, and redesigns that represent the brand clearly and convert visitors into leads.",
       "icon": "monitor",
-      "startingPrice": 2500
+      "startingPrice": 3000
     },
     {
       "id": "web-app-development",
@@ -19,14 +19,14 @@
       "title": "Marketing Consultation",
       "description": "Strategy, social growth, and channel clarity for businesses that need more than content calendars.",
       "icon": "target",
-      "startingPrice": 1500
+      "startingPrice": 2000
     },
     {
       "id": "media-production",
       "title": "Media Production",
       "description": "Photography, videography, and campaign design for brands that need strong visual assets.",
       "icon": "camera",
-      "startingPrice": 1200
+      "startingPrice": 1500
     }
   ],
   "services": [

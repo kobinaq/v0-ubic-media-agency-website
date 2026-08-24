@@ -40,9 +40,10 @@ const featuredProjects = portfolioData.projects
   }))
 
 const pricingHighlights = [
-  packages.packages.find((pkg) => pkg.id === "brand-starter"),
   packages.packages.find((pkg) => pkg.id === "website-starter"),
-  packages.packages.find((pkg) => pkg.id === "social-starter"),
+  packages.packages.find((pkg) => pkg.id === "webapp-starter"),
+  packages.packages.find((pkg) => pkg.id === "strategy-starter"),
+  packages.packages.find((pkg) => pkg.id === "brand-starter"),
 ].filter(Boolean) as NonNullable<(typeof packages.packages)[number]>[]
 
 const faqSchema = generateFAQSchema([
@@ -187,7 +188,7 @@ export default function HomePageClient() {
               </FadeUp>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-3">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {pricingHighlights.map((pkg, i) => (
                 <FadeUp key={pkg.id} delay={i * 0.08}>
                   <div className="flex h-full flex-col border border-border bg-card p-7 transition-colors hover:border-accent/40">
@@ -196,7 +197,15 @@ export default function HomePageClient() {
                     <p className="mt-3 flex-1 text-sm leading-7 text-muted-foreground">{pkg.description}</p>
                     <p className="mt-8 font-serif text-4xl font-semibold tracking-tight">{formatGHS(pkg.priceGHS)}</p>
                     <Link
-                      href="/packages"
+                      href={`/packages?path=${
+                        pkg.service === "Web App Development"
+                          ? "web-app"
+                          : pkg.service === "Marketing Consultation"
+                            ? "marketing"
+                            : pkg.service === "Brand Development"
+                              ? "media"
+                              : "web-design"
+                      }`}
                       className="mt-8 inline-flex border border-border px-5 py-3 font-mono text-xs uppercase tracking-[0.14em] transition-colors hover:border-accent hover:text-accent"
                       data-cursor="hover"
                     >

@@ -1,4 +1,34 @@
 {
+  "pillars": [
+    {
+      "id": "web-design",
+      "title": "Web Design",
+      "description": "Marketing sites, landing pages, and redesigns that represent the brand clearly and convert visitors into leads.",
+      "icon": "monitor",
+      "startingPrice": 2500
+    },
+    {
+      "id": "web-app-development",
+      "title": "Web App Development",
+      "description": "Functional web products with accounts, dashboards, and real user flows — not just marketing pages.",
+      "icon": "code-2",
+      "startingPrice": 8000
+    },
+    {
+      "id": "marketing-consultation",
+      "title": "Marketing Consultation",
+      "description": "Strategy, social growth, and channel clarity for businesses that need more than content calendars.",
+      "icon": "target",
+      "startingPrice": 1500
+    },
+    {
+      "id": "media-production",
+      "title": "Media Production",
+      "description": "Photography, videography, and campaign design for brands that need strong visual assets.",
+      "icon": "camera",
+      "startingPrice": 1200
+    }
+  ],
   "services": [
     {
       "id": "social-media",

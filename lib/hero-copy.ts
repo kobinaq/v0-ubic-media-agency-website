@@ -3,22 +3,19 @@
  * Service line covers the full offer on every major page.
  */
 
-/** Short labels for the full service set */
+/** Short labels for the four service pillars */
 export const SERVICE_LABELS = [
-  "Strategy",
-  "Identity",
-  "Websites",
-  "Social",
-  "Photo",
-  "Video",
-  "Print",
+  "Web Design",
+  "Web Apps",
+  "Marketing",
+  "Media",
 ] as const
 
 /** One-line list used in heroes and meta strips */
 export const SERVICE_LINE = SERVICE_LABELS.join(" · ")
 
-/** Compact meta strip (two lines) */
-export const SERVICE_META = "Strategy · Identity · Web · Social\nPhoto · Video · Print"
+/** Compact meta strip */
+export const SERVICE_META = "Web Design · Web Apps · Marketing · Media"
 
 export const heroCopy = {
   home: {
@@ -26,9 +23,9 @@ export const heroCopy = {
     metaRightLabel: "Based in",
     metaRightValue: "Accra, Ghana",
     eyebrow: "Creative agency",
-    line1: "We build brands.",
-    line2: "And everything around them.",
-    body: "Strategy, identity, websites, social, photo, video, and print. Built for businesses that need to look sharper.",
+    line1: "We build what",
+    line2: "your business runs on.",
+    body: "Web design, web app development, marketing consultation, and media production. Built for businesses that need to run, not just look the part.",
     ctaPrimary: "Book a call",
     ctaSecondary: "See work",
     scroll: "Scroll",
@@ -37,10 +34,10 @@ export const heroCopy = {
   services: {
     eyebrow: "Services",
     meta: ["All services", SERVICE_LINE, "Accra, Ghana"],
-    title: "What we do.",
+    title: "Four pillars. One studio.",
     titleAccent: "",
     description:
-      "Strategy, identity, websites, social, photo, video, and print. Pick what is stuck and we will show the right work.",
+      "Web design, web app development, marketing consultation, and media production. Pick what is stuck and we will show the right work.",
   },
   packages: {
     eyebrow: "Packages",
@@ -50,22 +47,22 @@ export const heroCopy = {
     titleStep2: (label: string) => label,
     titleStep2Accent: "Choose a package.",
     descriptionStep1:
-      "Packages for strategy, identity, websites, social, photo, video, and print. Start with a path to see only what matches.",
+      "Packages across web design, web apps, marketing consultation, and media production. Start with a path to see only what matches.",
   },
   about: {
     eyebrow: "About",
     meta: ["The studio", "Accra, Ghana", SERVICE_LINE],
     title: "A creative studio",
-    titleAccent: "for full brand work.",
+    titleAccent: "for the work your business runs on.",
     aside:
-      "We handle strategy, identity, websites, social, photo, video, and print so your brand stays consistent everywhere.",
+      "We handle web design, web apps, marketing consultation, and media production so the work stays consistent from site to campaign.",
   },
   work: {
     eyebrow: "Work",
     meta: (count: number) => ["Case studies", `${count} projects`, SERVICE_LINE],
     title: "Selected work.",
     description:
-      "Projects across strategy, identity, websites, social, photo, video, and print.",
+      "Projects across web design, web app development, marketing consultation, and media production.",
   },
   contact: {
     eyebrow: "Contact",
@@ -73,7 +70,7 @@ export const heroCopy = {
     title: "Tell us what you need.",
     titleAccent: "",
     aside:
-      "Strategy, identity, websites, social, photo, video, or print. Send a brief, WhatsApp us, or book a call.",
+      "Web design, web apps, marketing consultation, or media production. Send a brief, WhatsApp us, or book a call.",
     bullets: [
       "Any of our services, or a mix",
       "Rough budget and timeline help",

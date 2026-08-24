@@ -43,7 +43,7 @@ export function generateLocalBusinessSchema() {
     url: process.env.NEXT_PUBLIC_SITE_URL,
     priceRange: "$$",
     areaServed: ["GH", "Africa", "Global"],
-    serviceType: ["Brand Development", "Social Media Management", "Web Design", "Photography", "Videography"],
+    serviceType: ["Web Design", "Web App Development", "Marketing Consultation", "Media Production"],
   }
 }
 

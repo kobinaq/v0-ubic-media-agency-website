@@ -34,22 +34,23 @@ const spaceMono = Space_Mono({
 })
 
 const rootPageMetadata = createPageMetadata({
-  title: `${siteConfig.siteName} | Brand Identity, Websites & Creative Systems`,
-  description: siteConfig.description,
+  title: `${siteConfig.siteName} | Web Design, Web Apps, Marketing & Media — Accra, Ghana`,
+  description:
+    "Ubic builds websites, web apps, and brand systems for ambitious businesses in Ghana and beyond. Web design, web app development, marketing consultation, and media production.",
   path: "/",
-  ogTitle: `${siteConfig.siteName} | Build a Brand People Trust`,
+  ogTitle: `${siteConfig.siteName} | We build what your business runs on`,
   ogDescription:
-    "Brand identity, websites, and content systems for ambitious businesses that need to look sharper and convert better.",
+    "Web design, web app development, marketing consultation, and media production for ambitious businesses in Ghana and beyond.",
   keywords: [
-    "brand development",
-    "brand agency Ghana",
-    "social media management",
     "web design Ghana",
-    "photography services",
-    "videography services",
+    "web app development Ghana",
+    "marketing consultation Accra",
+    "media production Ghana",
     "creative agency Africa",
-    "brand strategy",
-    "digital marketing",
+    "website design Accra",
+    "web application development",
+    "photography videography Accra",
+    "Ubic Media Agency",
     "Accra",
   ],
 })

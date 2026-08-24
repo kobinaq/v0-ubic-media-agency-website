@@ -1,10 +1,13 @@
 import siteConfig from "@/content/site-config.json"
 import about from "@/content/about.json"
-import services from "@/content/services.json"
+import servicesData from "@/content/services.json"
 import packages from "@/content/packages.json"
 import portfolio from "@/content/portfolio.json"
 
-export { siteConfig, about, services, packages, portfolio }
+export const pillars = servicesData.pillars
+export const services = servicesData
+
+export { siteConfig, about, packages, portfolio }
 
 export type Package = {
   id: string
@@ -25,6 +28,8 @@ export type Service = {
   icon: string
   startingPrice: number
 }
+
+export type Pillar = Service
 
 export type PortfolioProject = {
   id: string

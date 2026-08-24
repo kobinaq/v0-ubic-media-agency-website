@@ -106,10 +106,7 @@ export function ServicesPanel({ services, formatPrice }: ServicesPanelProps) {
                 00-{index + 1}
               </span>
               <h3 className="mt-5 font-serif text-2xl font-semibold tracking-tight sm:mt-8 sm:text-3xl md:text-4xl">
-                {service.title
-                  .replace(" Content Creation & Management", "")
-                  .replace(" Design & Development", "")
-                  .replace(" Development", "")}
+                {service.title}
               </h3>
               <p className="mt-4 text-sm leading-7 text-muted-foreground sm:mt-5">{service.description}</p>
             </div>

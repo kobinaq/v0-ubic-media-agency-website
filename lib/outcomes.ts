@@ -93,7 +93,7 @@ export const PACKAGE_PATHS: PackagePath[] = [
     id: "web-design",
     label: "Web Design",
     short: "Web",
-    description: "Landing pages, marketing sites, and redesigns. From GHS 2,000.",
+    description: "Landing page GHS 2,000. Sites from GHS 3,000.",
     packageServices: ["Web Design"],
     recommended: true,
   },

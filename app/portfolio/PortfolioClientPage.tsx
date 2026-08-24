@@ -73,17 +73,24 @@ export default function PortfolioPage() {
     setSelectedProject(filteredProjects[newIndex])
   }
 
-  const getImageFitClass = (category: string) =>
-    category === "Social Media" ? "object-contain p-3 sm:p-5" : "object-cover"
+  const WEBSITE_CATEGORIES = new Set(["Web Design", "Web App Development", "Marketing Consultation"])
+  const CONTAIN_FIT_IDS = new Set(["victory-foods-social", "richkev-social", "sweat-to-gain-social"])
 
-  const getImageFrameClass = (category: string, context: "list" | "modal") =>
-    category === "Social Media"
-      ? context === "list"
-        ? "aspect-square lg:aspect-[4/3]"
-        : "aspect-square lg:aspect-[16/10]"
-      : context === "list"
-        ? "aspect-[5/4]"
-        : "aspect-[4/3]"
+  const projectImage = (src?: string) => src || "/placeholder.jpg"
+
+  const getImageFitClass = (project: { id: string; category: string }) => {
+    if (WEBSITE_CATEGORIES.has(project.category)) return "object-contain object-top"
+    if (CONTAIN_FIT_IDS.has(project.id)) return "object-contain p-3 sm:p-5"
+    return "object-cover"
+  }
+
+  const getImageFrameClass = (project: { id: string; category: string }, context: "list" | "modal") => {
+    if (WEBSITE_CATEGORIES.has(project.category)) return "aspect-[16/10] bg-muted"
+    if (CONTAIN_FIT_IDS.has(project.id)) {
+      return context === "list" ? "aspect-square lg:aspect-[4/3]" : "aspect-square lg:aspect-[16/10]"
+    }
+    return context === "list" ? "aspect-[5/4]" : "aspect-[4/3]"
+  }
 
   return (
     <>
@@ -96,7 +103,7 @@ export default function PortfolioPage() {
             <>
               <span className="studio-label">Case studies</span>
               <span className="studio-label">{filteredProjects.length} projects</span>
-              <span className="studio-label">Strategy · Identity · Web · Social · Photo · Video · Print</span>
+              <span className="studio-label">Web · Apps · Marketing · Media</span>
             </>
           }
           title={
@@ -104,7 +111,7 @@ export default function PortfolioPage() {
               Selected work.
             </h1>
           }
-          description="Projects across strategy, identity, websites, social, photo, video, and print."
+          description="Projects across web design, web app development, marketing consultation, and media production."
           aside={
             <div>
               <p className="studio-label">Index by category</p>
@@ -155,16 +162,16 @@ export default function PortfolioPage() {
                     >
                       <ImageReveal
                         className={`relative border border-border bg-card ${getImageFrameClass(
-                          project.category,
+                          project,
                           "list",
                         )}`}
                       >
                         <Image
-                          src={project.image || "/placeholder.svg"}
+                          src={projectImage(project.image)}
                           alt={project.title}
                           fill
                           sizes="(min-width: 1024px) 50vw, 100vw"
-                          className={`retro-image ${getImageFitClass(project.category)}`}
+                          className={`retro-image ${getImageFitClass(project)}`}
                         />
                         <div className="absolute left-4 top-4 z-10 border border-border bg-background px-3 py-1 font-mono text-xs uppercase tracking-[0.18em] text-foreground">
                           {project.category}
@@ -266,16 +273,16 @@ export default function PortfolioPage() {
               >
                 <div
                   className={`relative overflow-hidden border border-border bg-background ${getImageFrameClass(
-                    selectedProject.category,
+                    selectedProject,
                     "modal",
                   )}`}
                 >
                   <Image
-                    src={selectedProject.image || "/placeholder.svg"}
+                    src={projectImage(selectedProject.image)}
                     alt={selectedProject.title}
                     fill
                     sizes="(min-width: 1024px) 50vw, 100vw"
-                    className={getImageFitClass(selectedProject.category)}
+                    className={getImageFitClass(selectedProject)}
                   />
                 </div>
 

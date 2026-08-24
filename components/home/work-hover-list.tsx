@@ -161,7 +161,7 @@ export function WorkHoverList({ projects }: WorkHoverListProps) {
           >
             <div className="relative h-20 w-20 shrink-0 overflow-hidden border border-border bg-muted">
               <Image
-                src={project.image}
+                src={project.image || "/placeholder.jpg"}
                 alt=""
                 fill
                 sizes="80px"
@@ -227,11 +227,11 @@ export function WorkHoverList({ projects }: WorkHoverListProps) {
             )}
           >
             <Image
-              src={project.image}
+              src={project.image || "/placeholder.jpg"}
               alt=""
               fill
-              sizes="340px"
-              className="object-cover"
+              sizes="520px"
+              className="object-contain object-top"
               priority={project.id === projects[0]?.id}
             />
           </div>

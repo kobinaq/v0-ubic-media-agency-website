@@ -3,13 +3,13 @@
 import { useMemo, useState } from "react"
 import Link from "next/link"
 import Script from "next/script"
-import { ArrowRight, Check, MessageCircle } from "lucide-react"
+import { ArrowRight, Camera, Check, Code2, MessageCircle, Monitor, Target, type LucideIcon } from "lucide-react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { PageIntro } from "@/components/page-intro"
 import { FadeUp } from "@/components/home/text-reveal"
-import { services, siteConfig } from "@/lib/content"
+import { pillars, services, siteConfig } from "@/lib/content"
 import { useCurrency } from "@/lib/currency"
 import { OUTCOMES, type OutcomeId } from "@/lib/outcomes"
 import { generateServiceSchema, generateFAQSchema, generateBreadcrumbSchema } from "@/lib/schema"
@@ -17,21 +17,33 @@ import { cn } from "@/lib/utils"
 
 const serviceById = Object.fromEntries(services.services.map((s) => [s.id, s]))
 
+const PILLAR_ICONS: Record<string, LucideIcon> = {
+  monitor: Monitor,
+  "code-2": Code2,
+  target: Target,
+  camera: Camera,
+}
+
 const faqSchema = generateFAQSchema([
   {
-    question: "What service should I start with if my brand feels unclear?",
+    question: "What are Ubic’s four pillars?",
     answer:
-      "Brand identity or brand strategy is usually the best starting point when the core message, look, and positioning are not yet working together.",
+      "Web Design, Web App Development, Marketing Consultation, and Media Production. That is the work we take on: marketing sites, functional products, growth strategy, and visual production.",
   },
   {
-    question: "Can Ubic handle both the brand and the website?",
+    question: "What is the difference between Web Design and Web App Development?",
     answer:
-      "Yes. Ubic is structured to handle strategy, identity, website design and development, and supporting content so the final experience feels coherent.",
+      "Web Design is marketing sites, landing pages, and redesigns. Web App Development is functional product work: accounts, dashboards, and custom tools.",
   },
   {
-    question: "How do services relate to packages?",
+    question: "Do you only build websites?",
     answer:
-      "Services describe what we do. Packages are priced entry points for that work. Pick the outcome that matches your situation, then open packages filtered to that path.",
+      "No. Alongside Web Design and Web App Development we offer Marketing Consultation and Media Production so the site, the product, and the campaign can stay aligned.",
+  },
+  {
+    question: "How do the pillars relate to packages?",
+    answer:
+      "Pillars describe the work. Packages are priced starting points. Pick the pillar that matches, then we scope the right package or a custom path.",
   },
   {
     question: "How quickly can a project start?",
@@ -45,7 +57,7 @@ const breadcrumbSchema = generateBreadcrumbSchema([
   { name: "Services", url: `${process.env.NEXT_PUBLIC_SITE_URL}/services` },
 ])
 
-const serviceSchemas = services.services.map((service) => generateServiceSchema(service))
+const serviceSchemas = [...pillars, ...services.services].map((service) => generateServiceSchema(service))
 
 export function ServicesClientPage() {
   const { formatPrice } = useCurrency()
@@ -86,23 +98,66 @@ export function ServicesClientPage() {
           eyebrow="Services"
           meta={
             <>
-              <span className="studio-label">All services</span>
-              <span className="studio-label">Strategy · Identity · Web · Social</span>
-              <span className="studio-label">Photo · Video · Print</span>
+              <span className="studio-label">Four pillars</span>
+              <span className="studio-label">Web Design · Web Apps</span>
+              <span className="studio-label">Marketing · Media</span>
             </>
           }
           title={
             <h1 className="studio-display text-3xl sm:text-4xl md:text-6xl lg:text-[5.25rem]">
-              What we do.
+              Four pillars. One studio.
             </h1>
           }
-          description="Strategy, identity, websites, social, photo, video, and print. Pick what is stuck and we will show the right work."
+          description="Web design, web app development, marketing consultation, and media production. Pick what is stuck and we will show the right work."
         />
+
+        <section className="border-b border-border px-5 py-16 md:px-8 md:py-24 lg:px-10">
+          <div className="mx-auto max-w-[1400px]">
+            <FadeUp className="mb-10 max-w-2xl">
+              <p className="studio-label-accent">The studio</p>
+              <h2 className="studio-display mt-3 text-3xl md:text-5xl">Four ways in.</h2>
+              <p className="mt-4 text-sm leading-7 text-muted-foreground md:text-base">
+                Every engagement starts in one of these pillars. Mix them when the work needs more than one.
+              </p>
+            </FadeUp>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              {pillars.map((pillar, index) => {
+                const Icon = PILLAR_ICONS[pillar.icon] ?? Monitor
+                return (
+                  <FadeUp key={pillar.id} delay={index * 0.06}>
+                    <article className="flex h-full flex-col border border-border bg-card p-7 md:p-9">
+                      <div className="flex items-center justify-between gap-4">
+                        <span className="font-mono text-xs tracking-[0.18em] text-accent">
+                          00-{index + 1}
+                        </span>
+                        <Icon className="h-5 w-5 text-accent" aria-hidden="true" />
+                      </div>
+                      <h3 className="mt-8 font-serif text-3xl font-semibold tracking-tight md:text-4xl">
+                        {pillar.title}
+                      </h3>
+                      <p className="mt-4 flex-1 text-sm leading-7 text-muted-foreground md:text-base md:leading-8">
+                        {pillar.description}
+                      </p>
+                      <p className="mt-8 border-t border-border pt-5 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">
+                        From {formatPrice(pillar.startingPrice)}
+                      </p>
+                    </article>
+                  </FadeUp>
+                )
+              })}
+            </div>
+          </div>
+        </section>
 
         {/* Outcome map: accordion on mobile, list + sticky panel on desktop */}
         <section className="border-b border-border px-5 py-16 md:px-8 md:py-24 lg:px-10">
           <div className="mx-auto max-w-[1400px]">
             <p className="studio-label-accent mb-6">What is not working yet?</p>
+            <p className="mb-10 max-w-2xl text-sm leading-7 text-muted-foreground">
+              These paths map onto the four pillars. Tell us what is stuck; we will point you at Web Design, a web app,
+              marketing consultation, or media production.
+            </p>
 
             {/* Mobile accordion */}
             <div className="border-t border-border lg:hidden">
@@ -273,9 +328,10 @@ export function ServicesClientPage() {
           <div className="mx-auto max-w-[1400px]">
             <FadeUp className="mb-12 max-w-xl">
               <p className="studio-label-accent">Full index</p>
-              <h2 className="studio-display mt-3 text-3xl md:text-5xl">Everything we offer</h2>
+              <h2 className="studio-display mt-3 text-3xl md:text-5xl">Packages and supporting work</h2>
               <p className="mt-4 text-sm leading-7 text-muted-foreground">
-                Prefer browsing by service name? Same work, different door.
+                The four pillars are the offer. This index is the supporting catalogue — identity, social, print — still
+                available when a project needs it.
               </p>
             </FadeUp>
 

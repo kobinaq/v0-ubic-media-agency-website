@@ -10,7 +10,7 @@ import { WorkHoverList } from "@/components/home/work-hover-list"
 import { ServicesPanel } from "@/components/home/services-panel"
 import { Marquee } from "@/components/home/marquee"
 import { TextReveal, FadeUp } from "@/components/home/text-reveal"
-import { about, packages, services, siteConfig } from "@/lib/content"
+import { about, packages, pillars, siteConfig } from "@/lib/content"
 import portfolioData from "@/content/portfolio.json"
 import { generateBreadcrumbSchema, generateFAQSchema } from "@/lib/schema"
 import { Magnetic } from "@/components/animations/magnetic"
@@ -18,26 +18,24 @@ import { MobileCtaBar } from "@/components/mobile-cta-bar"
 
 const formatGHS = (amount: number) => `GHS ${amount.toLocaleString("en-GH")}`
 
-const primaryServices = [
-  services.services.find((s) => s.id === "brand-identity"),
-  services.services.find((s) => s.id === "web-design"),
-  services.services.find((s) => s.id === "social-media"),
-  services.services.find((s) => s.id === "photography-videography"),
-  services.services.find((s) => s.id === "brand-strategy"),
-].filter(Boolean) as (typeof services.services)[number][]
+const featuredIds = [
+  "writidian-app",
+  "cozyoven-web",
+  "lurniq-marketing",
+  "victory-foods-social",
+  "smn-app",
+  "sybilesi-web",
+]
 
 const featuredProjects = portfolioData.projects
-  .filter((project) =>
-    ["nexus-it", "starbites-food", "victory-foods-social", "richkev-social", "gordon-university", "starbites-event-coverage"].includes(
-      project.id,
-    ),
-  )
+  .filter((project) => featuredIds.includes(project.id))
+  .sort((a, b) => featuredIds.indexOf(a.id) - featuredIds.indexOf(b.id))
   .map((p) => ({
     id: p.id,
     title: p.title,
     category: p.category,
-    year: p.year,
-    image: p.image,
+    year: p.year ?? "Recent",
+    image: p.image || "/placeholder.jpg",
     description: p.description,
   }))
 
@@ -51,12 +49,12 @@ const faqSchema = generateFAQSchema([
   {
     question: "What does Ubic Media Agency help clients with?",
     answer:
-      "We help businesses improve how they look, communicate, and convert through brand identity, websites, content systems, and creative production.",
+      "We help businesses run on clearer websites, functional web apps, marketing consultation, and media production.",
   },
   {
     question: "Do you only work on websites?",
     answer:
-      "No. We combine brand strategy, identity design, website design and development, social content, photography, and videography so the final experience feels consistent across channels.",
+      "No. Web design is one of four pillars. We also build web apps, consult on marketing, and produce photography, video, and campaign assets.",
   },
   {
     question: "Can I see pricing before reaching out?",
@@ -119,7 +117,7 @@ export default function HomePageClient() {
         </section>
 
         {/* Services */}
-        <ServicesPanel services={primaryServices} formatPrice={formatGHS} />
+        <ServicesPanel services={pillars} formatPrice={formatGHS} />
 
         {/* About */}
         <section className="border-t border-border px-5 py-24 md:px-8 md:py-32 lg:px-10">
@@ -131,8 +129,8 @@ export default function HomePageClient() {
               </TextReveal>
               <FadeUp className="mt-8 space-y-5 text-base leading-8 text-muted-foreground md:text-lg md:leading-9">
                 <p>
-                  Ubic is the studio behind brands that need lift. We turn strategy, identity, websites, social, photo,
-                  video, and print into work that can leave the desk and hold up in the world.
+                  Ubic is the studio behind the work your business runs on. Websites, web apps, marketing consultation,
+                  and media production — built to leave the desk and hold up in the world.
                 </p>
                 <p>
                   A lean team in Accra. Clear thinking, sharp craft, and enough firepower to get ambitious brands off
@@ -141,9 +139,9 @@ export default function HomePageClient() {
               </FadeUp>
               <FadeUp className="mt-10 grid grid-cols-3 gap-4 border-t border-border pt-8" delay={0.1}>
                 {[
-                  { n: "123+", l: "Projects" },
-                  { n: "96+", l: "Clients" },
-                  { n: "5+", l: "Years" },
+                  { n: "6+", l: "Years" },
+                  { n: "100+", l: "Projects" },
+                  { n: "80+", l: "Clients" },
                 ].map((stat) => (
                   <div key={stat.l}>
                     <p className="font-serif text-3xl font-semibold tracking-tight md:text-4xl">{stat.n}</p>

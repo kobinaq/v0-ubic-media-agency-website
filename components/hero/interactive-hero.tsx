@@ -9,29 +9,28 @@ import { canUsePointerEffects, prefersReducedMotion } from "@/lib/gsap/prefers-r
 import { Magnetic } from "@/components/animations/magnetic"
 import { cn } from "@/lib/utils"
 
-/** Web + social work only. B&W floaters on the right, shifted toward the headline. */
+/** Recent client work. B&W floaters on the right, shifted toward the headline. */
 const FLOATERS = [
   {
-    src: "/portfolio-9.jpg",
-    alt: "Website design work",
-    label: "Web",
-    // Right half, closer to text. Width only; height follows natural image ratio.
+    src: "/case-smn.jpg",
+    alt: "Social Marketers Network web app",
+    label: "Web App",
     className: "left-[54%] top-[14%] w-[min(200px,22vw)] xl:left-[56%] xl:w-[220px]",
     depth: 36,
     rot: -7,
   },
   {
-    src: "/victory-foods.jpg",
-    alt: "Social media design work",
-    label: "Social",
+    src: "/case-cozyoven.jpg",
+    alt: "Cozy Oven website",
+    label: "Web Design",
     className: "left-[68%] top-[32%] w-[min(180px,20vw)] xl:left-[70%] xl:w-[200px]",
     depth: 48,
     rot: 6,
   },
   {
-    src: "/richkev.jpg",
-    alt: "Social media campaign work",
-    label: "Social",
+    src: "/victory-foods.jpg",
+    alt: "Victory Foods campaign",
+    label: "Media",
     className: "left-[58%] top-[56%] w-[min(190px,21vw)] xl:left-[60%] xl:w-[210px]",
     depth: 28,
     rot: -4,
@@ -286,7 +285,7 @@ export function InteractiveHero() {
         >
           <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between sm:gap-4">
             <p data-hero-meta className="studio-label max-w-[20rem] leading-relaxed text-foreground/70">
-              Strategy · Identity · Web · Social · Photo · Video · Print
+              Web Design · Web Apps · Marketing · Media
             </p>
             <p data-hero-meta className="studio-label sm:text-right">
               Based in <span className="text-foreground">Accra, Ghana</span>
@@ -306,20 +305,20 @@ export function InteractiveHero() {
             >
               <span className="block overflow-hidden pb-[0.06em]">
                 <span data-hero-line className="block will-change-transform">
-                  We build brands.
+                  We build what
                 </span>
               </span>
               <span className="mt-1 block overflow-hidden pb-[0.08em]">
                 <span data-hero-line className="block font-serif italic text-accent will-change-transform">
-                  And everything around them.
+                  your business runs on.
                 </span>
               </span>
             </h1>
 
             <div className="mt-6 flex max-w-md flex-col gap-5 md:mt-8">
               <p data-hero-cta className="text-sm leading-7 text-muted-foreground md:text-base md:leading-7">
-                Strategy, identity, websites, social, photo, video, and print. Built for businesses that need to look
-                sharper.
+                Web design, web app development, marketing consultation, and media production. Built for businesses
+                that need to run, not just look the part.
               </p>
               <div data-hero-cta className="flex flex-row flex-wrap items-center gap-3">
                 <Magnetic strength={0.3} className="min-h-11">

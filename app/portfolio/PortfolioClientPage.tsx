@@ -73,21 +73,24 @@ export default function PortfolioPage() {
     setSelectedProject(filteredProjects[newIndex])
   }
 
+  const WEBSITE_CATEGORIES = new Set(["Web Design", "Web App Development", "Marketing Consultation"])
   const CONTAIN_FIT_IDS = new Set(["victory-foods-social", "richkev-social", "sweat-to-gain-social"])
 
   const projectImage = (src?: string) => src || "/placeholder.jpg"
 
-  const getImageFitClass = (projectId: string) =>
-    CONTAIN_FIT_IDS.has(projectId) ? "object-contain p-3 sm:p-5" : "object-cover"
+  const getImageFitClass = (project: { id: string; category: string }) => {
+    if (WEBSITE_CATEGORIES.has(project.category)) return "object-contain object-top"
+    if (CONTAIN_FIT_IDS.has(project.id)) return "object-contain p-3 sm:p-5"
+    return "object-cover"
+  }
 
-  const getImageFrameClass = (projectId: string, context: "list" | "modal") =>
-    CONTAIN_FIT_IDS.has(projectId)
-      ? context === "list"
-        ? "aspect-square lg:aspect-[4/3]"
-        : "aspect-square lg:aspect-[16/10]"
-      : context === "list"
-        ? "aspect-[5/4]"
-        : "aspect-[4/3]"
+  const getImageFrameClass = (project: { id: string; category: string }, context: "list" | "modal") => {
+    if (WEBSITE_CATEGORIES.has(project.category)) return "aspect-[16/10] bg-muted"
+    if (CONTAIN_FIT_IDS.has(project.id)) {
+      return context === "list" ? "aspect-square lg:aspect-[4/3]" : "aspect-square lg:aspect-[16/10]"
+    }
+    return context === "list" ? "aspect-[5/4]" : "aspect-[4/3]"
+  }
 
   return (
     <>
@@ -159,7 +162,7 @@ export default function PortfolioPage() {
                     >
                       <ImageReveal
                         className={`relative border border-border bg-card ${getImageFrameClass(
-                          project.id,
+                          project,
                           "list",
                         )}`}
                       >
@@ -168,7 +171,7 @@ export default function PortfolioPage() {
                           alt={project.title}
                           fill
                           sizes="(min-width: 1024px) 50vw, 100vw"
-                          className={`retro-image ${getImageFitClass(project.id)}`}
+                          className={`retro-image ${getImageFitClass(project)}`}
                         />
                         <div className="absolute left-4 top-4 z-10 border border-border bg-background px-3 py-1 font-mono text-xs uppercase tracking-[0.18em] text-foreground">
                           {project.category}
@@ -270,7 +273,7 @@ export default function PortfolioPage() {
               >
                 <div
                   className={`relative overflow-hidden border border-border bg-background ${getImageFrameClass(
-                    selectedProject.id,
+                    selectedProject,
                     "modal",
                   )}`}
                 >
@@ -279,7 +282,7 @@ export default function PortfolioPage() {
                     alt={selectedProject.title}
                     fill
                     sizes="(min-width: 1024px) 50vw, 100vw"
-                    className={getImageFitClass(selectedProject.id)}
+                    className={getImageFitClass(selectedProject)}
                   />
                 </div>
 

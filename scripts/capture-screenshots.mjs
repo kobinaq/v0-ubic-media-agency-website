@@ -12,7 +12,7 @@ const sites = [
   { url: "https://lurniq.com", filename: "case-lurniq.jpg" },
   { url: "https://cozyoven.store", filename: "case-cozyoven.jpg" },
   { url: "https://thehaircessorize.com", filename: "case-haircessorize.jpg" },
-  { url: "https://sybilesi.com", filename: "case-sybilesi.jpg" },
+  { url: "https://www.sybilesi.com/", filename: "case-sybilesi.jpg" },
 ]
 
 /** Used only when a live capture fails. */
@@ -73,7 +73,10 @@ for (const site of sites) {
     } catch {
       await page.goto(site.url, { waitUntil: "domcontentloaded", timeout: 45000 })
     }
-    await new Promise((r) => setTimeout(r, 2000))
+    await page.evaluate(() => window.scrollTo(0, 0))
+    const settleMs = site.filename === "case-sybilesi.jpg" ? 5000 : 2000
+    await new Promise((r) => setTimeout(r, settleMs))
+    await page.evaluate(() => window.scrollTo(0, 0))
     const outPath = path.join(publicDir, site.filename)
     await page.screenshot({ path: outPath, type: "jpeg", quality: 85 })
     console.log(`✅ ${site.url} → public/${site.filename}`)

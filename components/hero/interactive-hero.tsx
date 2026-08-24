@@ -12,8 +12,8 @@ import { cn } from "@/lib/utils"
 /** Recent client work. B&W floaters on the right, shifted toward the headline. */
 const FLOATERS = [
   {
-    src: "/case-writidian.jpg",
-    alt: "Writidian web app",
+    src: "/case-smn.jpg",
+    alt: "Social Marketers Network web app",
     label: "Web App",
     className: "left-[54%] top-[14%] w-[min(200px,22vw)] xl:left-[56%] xl:w-[220px]",
     depth: 36,

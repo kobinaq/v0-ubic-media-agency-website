@@ -1,69 +1,182 @@
 {
   "packages": [
     {
-      "id": "website-starter",
-      "service": "Website Development",
-      "name": "Starter",
-      "description": "Perfect for small organization launching their online presence.",
+      "id": "website-landing",
+      "service": "Web Design",
+      "name": "Landing page",
+      "description": "One page, one offer, a clear next step.",
       "features": [
-        "3-page responsive website",
-        "Mobile optimization",
+        "Single-page landing site",
+        "Mobile-ready layout",
+        "Primary call to action",
+        "Contact or WhatsApp capture",
+        "Basic SEO setup"
+      ],
+      "priceGHS": 2000,
+      "priceUSD": 180,
+      "popular": false
+    },
+    {
+      "id": "website-starter",
+      "service": "Web Design",
+      "name": "Starter",
+      "description": "A marketing site for a small organisation getting online properly.",
+      "features": [
+        "Up to 3 pages",
+        "Mobile-ready layout",
         "Basic SEO setup",
-        "Contact form integration",
+        "Contact form",
         "1 month support"
       ],
       "priceGHS": 3000,
       "priceUSD": 270,
-      "popular": false
-    },
-    {
-      "id": "website-professional",
-      "service": "Website Development",
-      "name": "Professional",
-      "description": "Ideal for growing organizations with more complex needs.",
-      "features": [
-        "Up to 10 pages custom website",
-        "Advanced SEO optimization",
-        "Blog integration",
-        "Payment integration",
-        "Analytics setup",
-        "3 months support"
-      ],
-      "priceGHS": 5500,
-      "priceUSD": 495,
       "popular": true
     },
     {
-      "id": "website-enterprise",
-      "service": "Website Development",
-      "name": "Enterprise",
-      "description": "Comprehensive solution for established brands.",
+      "id": "website-professional",
+      "service": "Web Design",
+      "name": "Professional",
+      "description": "A fuller marketing site for a growing organisation.",
       "features": [
-        "Up to 20 pages",
-        "Full e-commerce integration",
-        "Advanced security features",
-        "Custom integrations",
-        "Performance optimization",
-        "6 months support"
+        "Up to 10 pages",
+        "SEO setup",
+        "Blog or updates section",
+        "Analytics",
+        "3 months support"
       ],
-      "priceGHS": 10000,
-      "priceUSD": 900,
+      "priceGHS": 5000,
+      "priceUSD": 450,
+      "popular": false
+    },
+    {
+      "id": "website-enterprise",
+      "service": "Web Design",
+      "name": "Custom",
+      "description": "E-commerce, redesigns, and sites that need a scoped proposal.",
+      "features": [
+        "Custom page count and structure",
+        "E-commerce or integrations",
+        "Performance and security as needed",
+        "Support window agreed in the proposal"
+      ],
+      "priceGHS": 0,
+      "priceUSD": 0,
+      "popular": false
+    },
+    {
+      "id": "webapp-starter",
+      "service": "Web App Development",
+      "name": "Starter",
+      "description": "A working product with accounts and one core flow.",
+      "features": [
+        "Sign-up and accounts",
+        "One primary user flow",
+        "Simple dashboard or admin",
+        "Staging and launch"
+      ],
+      "priceGHS": 8000,
+      "priceUSD": 720,
+      "popular": false
+    },
+    {
+      "id": "webapp-professional",
+      "service": "Web App Development",
+      "name": "Professional",
+      "description": "A product with more than one real workflow.",
+      "features": [
+        "Accounts and roles",
+        "Multiple user flows",
+        "Admin tools",
+        "Staging, launch, and a support window"
+      ],
+      "priceGHS": 15000,
+      "priceUSD": 1350,
+      "popular": true
+    },
+    {
+      "id": "webapp-custom",
+      "service": "Web App Development",
+      "name": "Contact sales",
+      "description": "Custom tools, larger products, and anything that needs a scoped build.",
+      "features": [
+        "Product workshop",
+        "Written scope and timeline",
+        "Build plan matched to the brief"
+      ],
+      "priceGHS": 0,
+      "priceUSD": 0,
+      "popular": false
+    },
+    {
+      "id": "strategy-starter",
+      "service": "Marketing Consultation",
+      "name": "Starter",
+      "description": "Direction before you spend more on channels or content.",
+      "features": [
+        "Channel and message audit",
+        "Priorities for the next 90 days",
+        "Positioning note",
+        "One working session"
+      ],
+      "priceGHS": 2000,
+      "priceUSD": 180,
+      "popular": true
+    },
+    {
+      "id": "strategy-enterprise",
+      "service": "Marketing Consultation",
+      "name": "Custom",
+      "description": "Ongoing consultation, retainers, and multi-channel work.",
+      "features": [
+        "Scoped after a short call",
+        "Cadence and deliverables in a proposal",
+        "Can include social direction"
+      ],
+      "priceGHS": 0,
+      "priceUSD": 0,
       "popular": false
     },
     {
       "id": "brand-starter",
-      "service": "Brand Identity",
+      "service": "Brand Development",
       "name": "Starter",
-      "description": "Essential branding for new businesses.",
+      "description": "A usable visual starting point for the brand.",
       "features": [
-        "Logo design (3 concepts)",
-        "Color palette",
-        "Typography guidelines",
-        "Basic brand guidelines",
-        "Social media templates"
+        "Logo direction (3 concepts)",
+        "Colour palette",
+        "Typography",
+        "Basic brand guidelines"
       ],
-      "priceGHS": 1000,
-      "priceUSD": 90,
+      "priceGHS": 1500,
+      "priceUSD": 135,
+      "popular": true
+    },
+    {
+      "id": "photo-starter",
+      "service": "Photography & Videography",
+      "name": "Contact sales",
+      "description": "Stills, video, and campaign shoots scoped to the brief.",
+      "features": [
+        "Shot list and usage agreed up front",
+        "Editing included",
+        "Digital delivery"
+      ],
+      "priceGHS": 0,
+      "priceUSD": 0,
+      "popular": false
+    },
+    {
+      "id": "print-starter",
+      "service": "Print & Collateral",
+      "name": "Contact sales",
+      "description": "Print and campaign collateral scoped to the job.",
+      "features": [
+        "Art direction for the piece",
+        "Print-ready files",
+        "Vendor coordination if needed"
+      ],
+      "priceGHS": 0,
+      "priceUSD": 0,
       "popular": false
     },
     {
@@ -81,7 +194,7 @@
       ],
       "priceGHS": 3000,
       "priceUSD": 270,
-      "popular": true
+      "hidden": true
     },
     {
       "id": "brand-enterprise",
@@ -99,7 +212,7 @@
       ],
       "priceGHS": 8500,
       "priceUSD": 765,
-      "popular": false
+      "hidden": true
     },
     {
       "id": "social-starter",
@@ -115,7 +228,7 @@
       ],
       "priceGHS": 1500,
       "priceUSD": 135,
-      "popular": false
+      "hidden": true
     },
     {
       "id": "social-professional",
@@ -132,7 +245,7 @@
       ],
       "priceGHS": 3500,
       "priceUSD": 315,
-      "popular": true
+      "hidden": true
     },
     {
       "id": "social-enterprise",
@@ -150,23 +263,7 @@
       ],
       "priceGHS": 7500,
       "priceUSD": 675,
-      "popular": false
-    },
-    {
-      "id": "strategy-starter",
-      "service": "Brand Strategy",
-      "name": "Starter",
-      "description": "Foundation for your brand strategy.",
-      "features": [
-        "Market research",
-        "Competitor analysis",
-        "Brand positioning",
-        "Strategy document",
-        "1 consultation session"
-      ],
-      "priceGHS": 2000,
-      "priceUSD": 180,
-      "popular": false
+      "hidden": true
     },
     {
       "id": "strategy-professional",
@@ -183,39 +280,7 @@
       ],
       "priceGHS": 4500,
       "priceUSD": 405,
-      "popular": true
-    },
-    {
-      "id": "strategy-enterprise",
-      "service": "Brand Strategy",
-      "name": "Enterprise",
-      "description": "Full strategic brand transformation.",
-      "features": [
-        "Complete brand audit",
-        "Market & consumer research",
-        "Competitive intelligence",
-        "Brand architecture",
-        "Go-to-market strategy",
-        "Implementation roadmap",
-        "Ongoing strategic guidance"
-      ],
-      "priceGHS": 9000,
-      "priceUSD": 810,
-      "popular": false
-    },
-    {
-      "id": "photo-starter",
-      "service": "Photography & Videography",
-      "name": "Starter",
-      "description": "Every project is unique and our pricing reflects that",
-      "features": [
-        "Basic editing included",
-        "Digital delivery",
-        "Usage rights included"
-      ],
-      "priceGHS": 0,
-      "priceUSD": 0,
-      "isHourly": true
+      "hidden": true
     },
     {
       "id": "photo-professional",
@@ -230,7 +295,8 @@
       ],
       "priceGHS": 0,
       "priceUSD": 0,
-      "isHourly": true
+      "isHourly": true,
+      "hidden": true
     },
     {
       "id": "photo-enterprise",
@@ -246,23 +312,8 @@
       ],
       "priceGHS": 0,
       "priceUSD": 0,
-      "isHourly": true
-    },
-    {
-      "id": "print-starter",
-      "service": "Print & Collateral",
-      "name": "Starter",
-      "description": "Essential print materials.",
-      "features": [
-        "Business cards (500 units)",
-        "Letterhead design",
-        "Envelope design",
-        "Print-ready files",
-        "1 revision round"
-      ],
-      "priceGHS": 800,
-      "priceUSD": 72,
-      "popular": false
+      "isHourly": true,
+      "hidden": true
     },
     {
       "id": "print-professional",
@@ -278,7 +329,7 @@
       ],
       "priceGHS": 2000,
       "priceUSD": 180,
-      "popular": true
+      "hidden": true
     },
     {
       "id": "print-enterprise",
@@ -295,7 +346,7 @@
       ],
       "priceGHS": 5000,
       "priceUSD": 450,
-      "popular": false
+      "hidden": true
     }
   ]
 }

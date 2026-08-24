@@ -19,6 +19,7 @@ export type Package = {
   service?: string
   popular?: boolean
   isHourly?: boolean
+  hidden?: boolean
 }
 
 export type Service = {

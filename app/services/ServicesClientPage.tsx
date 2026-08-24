@@ -15,7 +15,9 @@ import { OUTCOMES, type OutcomeId } from "@/lib/outcomes"
 import { generateServiceSchema, generateFAQSchema, generateBreadcrumbSchema } from "@/lib/schema"
 import { cn } from "@/lib/utils"
 
-const serviceById = Object.fromEntries(services.services.map((s) => [s.id, s]))
+const offerById = Object.fromEntries(
+  [...pillars, ...services.services].map((item) => [item.id, item]),
+)
 
 const PILLAR_ICONS: Record<string, LucideIcon> = {
   monitor: Monitor,
@@ -61,12 +63,12 @@ const serviceSchemas = [...pillars, ...services.services].map((service) => gener
 
 export function ServicesClientPage() {
   const { formatPrice } = useCurrency()
-  const [activeId, setActiveId] = useState<OutcomeId>("unclear-brand")
+  const [activeId, setActiveId] = useState<OutcomeId>("weak-website")
 
   const active = useMemo(() => OUTCOMES.find((o) => o.id === activeId) ?? OUTCOMES[0], [activeId])
 
   const activeServices = useMemo(
-    () => active.serviceIds.map((id) => serviceById[id]).filter(Boolean),
+    () => active.serviceIds.map((id) => offerById[id]).filter(Boolean),
     [active],
   )
 
@@ -163,7 +165,7 @@ export function ServicesClientPage() {
             <div className="border-t border-border lg:hidden">
               {OUTCOMES.map((outcome) => {
                 const isActive = outcome.id === activeId
-                const outcomeServices = outcome.serviceIds.map((id) => serviceById[id]).filter(Boolean)
+                const outcomeServices = outcome.serviceIds.map((id) => offerById[id]).filter(Boolean)
                 return (
                   <div key={outcome.id} className="border-b border-border">
                     <button

@@ -1,32 +1,20 @@
 /**
- * Shared outcome → service → package path mapping
+ * Shared outcome → pillar → package path mapping
  * for Services (outcome map) and Packages (path picker).
  */
 
-export type PackagePathId =
-  | "identity"
-  | "website"
-  | "content"
-  | "strategy"
-  | "production"
-  | "system"
+export type PackagePathId = "web-design" | "web-app" | "marketing" | "media"
 
-/** Package JSON `service` field values */
+/** Package JSON `service` field values shown on a path */
 export type PackageServiceName =
-  | "Brand Identity"
-  | "Website Development"
-  | "Social Media Management"
-  | "Brand Strategy"
+  | "Web Design"
+  | "Web App Development"
+  | "Marketing Consultation"
+  | "Brand Development"
   | "Photography & Videography"
   | "Print & Collateral"
 
-export type OutcomeId =
-  | "unclear-brand"
-  | "weak-website"
-  | "invisible-content"
-  | "no-strategy"
-  | "need-production"
-  | "full-system"
+export type OutcomeId = "weak-website" | "need-product" | "need-marketing" | "need-media"
 
 export type Outcome = {
   id: OutcomeId
@@ -48,128 +36,94 @@ export type PackagePath = {
   recommended?: boolean
 }
 
+const PATH_ALIASES: Record<string, PackagePathId> = {
+  website: "web-design",
+  identity: "media",
+  strategy: "marketing",
+  content: "marketing",
+  production: "media",
+  system: "web-design",
+}
+
 export const OUTCOMES: Outcome[] = [
   {
-    id: "unclear-brand",
-    number: "01",
-    title: "My brand looks unclear",
-    problem: "People don’t get what you do, or you look smaller than you are.",
-    outcome: "A sharper first impression: logo, system, and rules that hold together.",
-    serviceIds: ["brand-identity", "brand-strategy"],
-    pathId: "identity",
-    packageServices: ["Brand Identity", "Brand Strategy"],
-  },
-  {
     id: "weak-website",
-    number: "02",
+    number: "01",
     title: "My website isn’t working",
     problem: "The site is dated, unclear, or cannot take the next step from a visitor.",
-    outcome: "A Web Design engagement: marketing site, landing page, or redesign that converts.",
+    outcome: "Web Design: a landing page, marketing site, or redesign that converts.",
     serviceIds: ["web-design"],
-    pathId: "website",
-    packageServices: ["Website Development"],
+    pathId: "web-design",
+    packageServices: ["Web Design"],
   },
   {
-    id: "invisible-content",
+    id: "need-product",
+    number: "02",
+    title: "I need a real web app",
+    problem: "A marketing page is not enough. People need accounts, dashboards, or a custom tool.",
+    outcome: "Web App Development: a working product with real user flows.",
+    serviceIds: ["web-app-development"],
+    pathId: "web-app",
+    packageServices: ["Web App Development"],
+  },
+  {
+    id: "need-marketing",
     number: "03",
-    title: "We need content that shows up",
-    problem: "Social is inconsistent, or visuals don’t match the brand you want to be.",
-    outcome: "A content rhythm and assets that feel intentional across channels.",
-    serviceIds: ["social-media", "photography-videography"],
-    pathId: "content",
-    packageServices: ["Social Media Management", "Photography & Videography"],
-  },
-  {
-    id: "no-strategy",
-    number: "04",
     title: "We need direction before we spend",
     problem: "Channels are busy, but growth is unclear. Too many options, no priorities.",
     outcome: "Marketing Consultation: audience, message, and a plan you can act on.",
-    serviceIds: ["brand-strategy"],
-    pathId: "strategy",
-    packageServices: ["Brand Strategy"],
+    serviceIds: ["marketing-consultation"],
+    pathId: "marketing",
+    packageServices: ["Marketing Consultation"],
   },
   {
-    id: "need-production",
-    number: "05",
-    title: "We need production & campaign assets",
-    problem: "Photography, video, or campaign design feels ad-hoc or off-brand.",
-    outcome: "Media Production: stills, video, or campaign design that matches the rest of the work.",
-    serviceIds: ["photography-videography", "print-production"],
-    pathId: "production",
-    packageServices: ["Photography & Videography", "Print & Collateral"],
-  },
-  {
-    id: "full-system",
-    number: "06",
-    title: "We need the full system",
-    problem: "Website, product, marketing, and media are disconnected. You want one studio.",
-    outcome: "A coherent stack across our four pillars — without juggling vendors.",
-    serviceIds: ["brand-strategy", "brand-identity", "web-design", "social-media"],
-    pathId: "system",
-    packageServices: [
-      "Brand Strategy",
-      "Brand Identity",
-      "Website Development",
-      "Social Media Management",
-    ],
+    id: "need-media",
+    number: "04",
+    title: "We need brand and campaign assets",
+    problem: "The look is unfinished, or photography, video, and print are ad-hoc.",
+    outcome: "Media Production: brand development to start, then photo, video, and print on a scoped brief.",
+    serviceIds: ["media-production"],
+    pathId: "media",
+    packageServices: ["Brand Development", "Photography & Videography", "Print & Collateral"],
   },
 ]
 
 export const PACKAGE_PATHS: PackagePath[] = [
   {
-    id: "identity",
-    label: "Brand identity",
-    short: "Identity",
-    description: "Look and feel: logo, system, and guidelines.",
-    packageServices: ["Brand Identity"],
-  },
-  {
-    id: "website",
-    label: "Website",
-    short: "Website",
-    description: "A clearer digital presence that converts.",
-    packageServices: ["Website Development"],
+    id: "web-design",
+    label: "Web Design",
+    short: "Web",
+    description: "Landing pages, marketing sites, and redesigns. From GHS 2,000.",
+    packageServices: ["Web Design"],
     recommended: true,
   },
   {
-    id: "content",
-    label: "Content & social",
-    short: "Content",
-    description: "Ongoing presence and scroll-stopping assets.",
-    packageServices: ["Social Media Management"],
+    id: "web-app",
+    label: "Web App Development",
+    short: "Apps",
+    description: "Accounts, dashboards, and custom tools. From GHS 8,000.",
+    packageServices: ["Web App Development"],
   },
   {
-    id: "strategy",
-    label: "Strategy",
-    short: "Strategy",
-    description: "Positioning and direction before execution.",
-    packageServices: ["Brand Strategy"],
+    id: "marketing",
+    label: "Marketing Consultation",
+    short: "Marketing",
+    description: "Strategy, channel clarity, and growth direction. From GHS 2,000.",
+    packageServices: ["Marketing Consultation"],
   },
   {
-    id: "production",
-    label: "Photo, video & print",
-    short: "Production",
-    description: "Campaign visuals and physical collateral.",
-    packageServices: ["Photography & Videography", "Print & Collateral"],
-  },
-  {
-    id: "system",
-    label: "Full brand system",
-    short: "Full system",
-    description: "Strategy, identity, web, and content together.",
-    packageServices: [
-      "Brand Strategy",
-      "Brand Identity",
-      "Website Development",
-      "Social Media Management",
-    ],
+    id: "media",
+    label: "Media Production",
+    short: "Media",
+    description: "Brand development from GHS 1,500. Photo, video, and print on request.",
+    packageServices: ["Brand Development", "Photography & Videography", "Print & Collateral"],
   },
 ]
 
 export function getPathById(id: string | null | undefined): PackagePath | undefined {
   if (!id) return undefined
-  return PACKAGE_PATHS.find((p) => p.id === id)
+  const resolved = PATH_ALIASES[id] ?? (id as PackagePathId)
+  return PACKAGE_PATHS.find((p) => p.id === resolved)
 }
 
 export function getOutcomeById(id: string | null | undefined): Outcome | undefined {

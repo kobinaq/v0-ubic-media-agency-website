@@ -63,8 +63,9 @@ export default function PackagesClientPage({ initialPath = null }: PackagesClien
 
   const filteredPackages = useMemo(() => {
     if (!activePath) return []
-    return packages.packages.filter((pkg) =>
-      activePath.packageServices.includes(pkg.service as never),
+    return packages.packages.filter(
+      (pkg) =>
+        !pkg.hidden && activePath.packageServices.includes(pkg.service as never),
     )
   }, [activePath])
 
@@ -150,7 +151,7 @@ export default function PackagesClientPage({ initialPath = null }: PackagesClien
           }
           description={
             step === 1
-              ? "Packages for strategy, identity, websites, social, photo, video, and print. Start with a path to see only what matches."
+              ? "Packages across the four pillars. Pick Web Design, a web app, marketing consultation, or media production."
               : activePath?.description
           }
           aside={
@@ -207,7 +208,7 @@ export default function PackagesClientPage({ initialPath = null }: PackagesClien
         {step === 1 && (
           <section className="px-5 pb-24 md:px-8 lg:px-10">
             <div className="mx-auto max-w-[1400px]">
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {PACKAGE_PATHS.map((path, index) => (
                   <FadeUp key={path.id} delay={index * 0.05}>
                     <button
@@ -275,7 +276,11 @@ export default function PackagesClientPage({ initialPath = null }: PackagesClien
                       <div>
                         <p className="studio-label-accent">{serviceName}</p>
                         <h2 className="mt-2 font-serif text-2xl font-semibold tracking-tight md:text-3xl">
-                          Choose a starting tier
+                          {serviceName === "Brand Development"
+                            ? "Brand development"
+                            : serviceName === "Photography & Videography" || serviceName === "Print & Collateral"
+                              ? "Scoped on request"
+                              : "Choose a starting tier"}
                         </h2>
                       </div>
                       <p className="text-sm text-muted-foreground">
@@ -316,11 +321,7 @@ export default function PackagesClientPage({ initialPath = null }: PackagesClien
                                   <p className="font-serif text-4xl font-semibold tracking-tight">
                                     {formatPrice(amount, currency)}
                                   </p>
-                                  <p className="mt-1 text-xs text-muted-foreground">
-                                    {serviceName === "Social Media Management"
-                                      ? "Monthly starting point"
-                                      : "Starting package"}
-                                  </p>
+                                  <p className="mt-1 text-xs text-muted-foreground">Starting package</p>
                                 </>
                               )}
                             </div>
